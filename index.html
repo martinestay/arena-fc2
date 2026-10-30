@@ -1,0 +1,1975 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Arena FC-2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Juego de práctica para Física Computacional II: Python, NumPy, Matplotlib, Pandas, archivos, Unix y Git.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: consola de observatorio nocturno. Paneles oscuros como terminal; los gráficos salen en "papel" blanco como en un notebook. */
+:root{
+  --night:#0a0f1f; --panel:#111a31; --panel-2:#17223f; --rule:#273764; --fg:#e9edf8; --muted:#97a3c7;
+  --sol:#ffb547; --azul:#86b4ff; --roja:#ff5f57; --verde:#4fdc9b; --paper:#ffffff; --paper-ink:#1b1b1b;
+  --c-kw:#9bbcff; --c-str:#ffd27f; --c-num:#ff9f7d; --c-com:#6b79a3; --c-fn:#7fe3c4; --c-op:#c8d0ea;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--night);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#app{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--sol);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+code,.mono{font-family:var(--mono)}
+.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700}
+
+/* ---------- top bar ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;text-align:left}
+.brand .mark{width:38px;height:38px;flex:none}
+.brand b{font-family:var(--display);font-size:1.15rem;font-weight:800;letter-spacing:.02em;display:block;line-height:1.1}
+.brand small{color:var(--muted);font-size:.78rem}
+.tools{display:flex;gap:8px}
+.ghost{background:transparent;border:1px solid var(--rule);border-radius:10px;padding:7px 12px;color:var(--fg);font-size:.88rem}
+.ghost:hover{border-color:var(--muted)}
+.ghost[aria-pressed="false"]{color:var(--muted)}
+
+/* ---------- home ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:end;margin-bottom:26px}
+.hero h1{font-size:clamp(2rem,5.4vw,3.6rem);font-weight:800;line-height:1.02}
+.hero h1 em{font-style:normal;color:var(--sol)}
+.hero p{color:var(--muted);max-width:56ch;margin:14px 0 0}
+.hero-code{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:14px 16px;font-family:var(--mono);font-size:.82rem;line-height:1.65;min-width:0;overflow-x:auto;white-space:pre}
+.topics{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 26px;align-items:center}
+.chip{border:1px solid var(--rule);background:var(--panel);border-radius:999px;padding:6px 13px;font-size:.86rem;color:var(--muted);display:inline-flex;gap:7px;align-items:center}
+.chip[aria-pressed="true"]{color:var(--fg);border-color:var(--sol);background:color-mix(in srgb,var(--sol) 14%,var(--panel))}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
+.chip[aria-pressed="true"] .dot{background:var(--sol);opacity:1}
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.mode{position:relative;text-align:left;background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;transition:transform .15s,border-color .15s,background .15s;min-width:0}
+.mode:hover{transform:translateY(-2px);border-color:var(--azul);background:var(--panel-2)}
+.mode .ico{width:34px;height:34px;color:var(--sol)}
+.mode h3{font-size:1rem;font-weight:700}
+.mode p{margin:0;color:var(--muted);font-size:.92rem}
+.mode .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-radius:6px;padding:3px 7px;background:var(--panel-2);color:var(--azul);font-weight:700}
+.tag.hot{color:var(--sol)}
+.tag.vs{color:var(--roja)}
+.rec{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.foot{margin-top:28px;color:var(--muted);font-size:.84rem}
+
+/* ---------- setup ---------- */
+.setup{max-width:760px;margin:0 auto;background:var(--panel);border:1px solid var(--rule);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:22px}
+.setup h2{font-size:1.5rem}
+.setup .desc{color:var(--muted);margin:6px 0 0}
+.lifepick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.lp{background:var(--panel-2);border:1.5px solid var(--rule);border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.lp[aria-checked="true"]{border-color:var(--roja);background:color-mix(in srgb,var(--roja) 12%,var(--panel-2))}
+.lp .hrow{display:flex;gap:2px;min-height:22px;align-items:center;flex-wrap:wrap;justify-content:center}
+.lp .hrow svg{width:18px;height:18px}
+.lp b{font-size:.9rem}
+.lp small{color:var(--muted);font-size:.76rem;line-height:1.25}
+.fieldrow{display:flex;gap:12px;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:6px;flex:1 1 220px;min-width:0}
+.field input,.field textarea,.field select{background:var(--night);border:1px solid var(--rule);border-radius:10px;padding:9px 11px;color:var(--fg);font:inherit;width:100%}
+.field textarea{min-height:84px;resize:vertical}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:8px 14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--panel-2);color:var(--fg)}
+.toggle{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.92rem}
+.toggle input{width:18px;height:18px;accent-color:var(--sol)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.btn{background:var(--sol);color:#1d1404;border:0;border-radius:12px;padding:11px 20px;font-weight:700;font-size:.98rem}
+.btn:hover{filter:brightness(1.08)}
+.btn.alt{background:var(--panel-2);color:var(--fg);border:1px solid var(--rule)}
+.btn.blue{background:var(--azul);color:#08142c}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+kbd{font-family:var(--mono);font-size:.75em;border:1px solid currentColor;border-radius:4px;padding:0 4px;opacity:.75}
+
+/* ---------- HUD ---------- */
+#game{position:relative}
+.hud{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:12px 16px;margin-bottom:14px}
+.hud .who{display:flex;flex-direction:column;min-width:0}
+.hud .who b{font-family:var(--display);font-size:.95rem}
+.hud .who span{color:var(--muted);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbar{height:10px;background:var(--night);border-radius:99px;overflow:hidden;position:relative}
+.tbar i{position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,var(--azul),var(--sol));border-radius:99px;transition:background .3s}
+.tbar.low i{background:var(--roja)}
+.ttext{font-family:var(--mono);font-size:.8rem;color:var(--muted);text-align:center;margin-top:4px;font-variant-numeric:tabular-nums}
+.stats{display:flex;align-items:center;gap:16px}
+.stat{display:flex;flex-direction:column;align-items:flex-end;font-variant-numeric:tabular-nums}
+.stat small{font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.stat b{font-family:var(--mono);font-size:1.05rem}
+.quit{font-size:.8rem;padding:5px 10px}
+
+/* ---------- hearts ---------- */
+.lives{display:flex;gap:3px;align-items:center;position:relative}
+.heart{width:26px;height:26px;position:relative;flex:none}
+.heart svg{width:100%;height:100%;display:block;overflow:visible}
+.heart .full{fill:var(--roja);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--roja) 60%,transparent))}
+.heart .shine{fill:#fff;opacity:.55}
+.heart .empty{fill:none;stroke:var(--rule);stroke-width:1.8}
+.heart.beat svg{animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.14)}24%{transform:scale(.98)}36%{transform:scale(1.08)}}
+.heart .half{position:absolute;inset:0;pointer-events:none}
+.heart .half.l{clip-path:polygon(0 0,52% 0,44% 28%,58% 46%,42% 66%,54% 100%,0 100%);animation:fallL .9s cubic-bezier(.4,.1,.8,.6) forwards}
+.heart .half.r{clip-path:polygon(52% 0,100% 0,100% 100%,54% 100%,42% 66%,58% 46%,44% 28%);animation:fallR .9s cubic-bezier(.4,.1,.8,.6) forwards}
+@keyframes fallL{0%{transform:none;opacity:1}15%{transform:translate(-2px,-3px) rotate(-6deg)}100%{transform:translate(-18px,46px) rotate(-55deg);opacity:0}}
+@keyframes fallR{0%{transform:none;opacity:1}15%{transform:translate(2px,-3px) rotate(6deg)}100%{transform:translate(18px,46px) rotate(55deg);opacity:0}}
+.heart.crack svg{animation:crack .35s steps(2) 2}
+@keyframes crack{0%{transform:translateX(-2px) scale(1.1)}50%{transform:translateX(2px) scale(1.15);filter:brightness(2)}100%{transform:none}}
+.shard{position:absolute;left:50%;top:50%;width:5px;height:5px;background:var(--roja);border-radius:1px;pointer-events:none;animation:shard .8s ease-out forwards}
+@keyframes shard{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
+.heart.pop svg{animation:pop .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.inf{font-family:var(--mono);font-size:.9rem;color:var(--muted);margin-left:4px;font-variant-numeric:tabular-nums}
+.shake{animation:shake .42s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+#flash{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;background:radial-gradient(ellipse at center,transparent 45%,color-mix(in srgb,var(--roja) 55%,transparent))}
+#flash.on{animation:flash .55s}
+#flash.good{background:radial-gradient(ellipse at center,transparent 55%,color-mix(in srgb,var(--verde) 35%,transparent))}
+@keyframes flash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+
+/* ---------- stage ---------- */
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:18px;min-width:0}
+.prompt{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
+.prompt h3{font-family:var(--body);font-size:1.12rem;font-weight:700;letter-spacing:0;max-width:62ch}
+.topicpill{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--azul);background:var(--panel-2);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.code{background:#0d1428;border:1px solid var(--rule);border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:.92rem;line-height:1.75;overflow-x:auto;white-space:pre;tab-size:4;color:var(--c-op)}
+.k{color:var(--c-kw)}.s{color:var(--c-str)}.n{color:var(--c-num)}.c{color:var(--c-com);font-style:italic}.f{color:var(--c-fn)}
+input.blank{font-family:var(--mono);font-size:.9rem;background:#1b2648;border:0;border-bottom:2px solid var(--sol);border-radius:5px 5px 0 0;color:#fff;padding:1px 5px;margin:0 1px;min-width:3ch;text-align:center}
+input.blank:focus{background:#24325e;outline:none}
+input.blank.ok{border-color:var(--verde);background:color-mix(in srgb,var(--verde) 18%,#0d1428)}
+input.blank.bad{border-color:var(--roja);background:color-mix(in srgb,var(--roja) 18%,#0d1428)}
+input.blank.reveal{border-color:var(--azul);color:var(--azul)}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bank button{font-family:var(--mono);font-size:.86rem;background:var(--panel-2);border:1px solid var(--rule);border-radius:8px;padding:5px 10px}
+.bank button:hover{border-color:var(--sol)}
+.bank button.used{opacity:.3}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.row .grow{flex:1}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--panel-2);border:1.5px solid var(--rule);border-radius:12px;padding:12px 14px;font-family:var(--mono);font-size:.88rem;white-space:pre-wrap;word-break:break-word;min-width:0}
+.opt:hover{border-color:var(--azul)}
+.opt .key{flex:none;font-family:var(--body);font-weight:700;font-size:.75rem;color:var(--muted);border:1px solid var(--rule);border-radius:6px;padding:1px 6px;margin-top:1px}
+.opt.ok{border-color:var(--verde);background:color-mix(in srgb,var(--verde) 16%,var(--panel-2))}
+.opt.bad{border-color:var(--roja);background:color-mix(in srgb,var(--roja) 16%,var(--panel-2))}
+.opt[disabled]{cursor:default}
+.fb{margin-top:14px;border-radius:12px;padding:14px 16px;border:1px solid var(--rule);background:var(--panel-2);display:flex;flex-direction:column;gap:8px;animation:rise .25s ease-out}
+.fb.ok{border-color:color-mix(in srgb,var(--verde) 60%,var(--rule))}
+.fb.bad{border-color:color-mix(in srgb,var(--roja) 60%,var(--rule))}
+.fb b{font-family:var(--display);font-size:.95rem}
+.fb.ok b{color:var(--verde)}.fb.bad b{color:var(--roja)}
+.fb p{margin:0;color:var(--fg);max-width:75ch}
+.fb .code{font-size:.84rem;padding:10px 12px}
+@keyframes rise{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.toast{position:fixed;left:50%;top:84px;transform:translateX(-50%);background:var(--verde);color:#06261a;font-weight:700;border-radius:999px;padding:6px 16px;z-index:60;font-family:var(--mono);animation:toast 1s ease-out forwards;pointer-events:none}
+.toast.bad{background:var(--roja);color:#2b0705}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,8px)}15%{opacity:1;transform:translate(-50%,0)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
+.turn{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.turn .who{font-family:var(--display);font-size:1.25rem;color:var(--sol)}
+.turn .next{color:var(--muted);font-size:.88rem}
+.roster{display:flex;gap:6px;flex-wrap:wrap}
+.roster span{font-size:.8rem;border:1px solid var(--rule);border-radius:999px;padding:2px 10px;color:var(--muted)}
+.roster span.on{border-color:var(--sol);color:var(--fg)}
+
+/* ---------- order ---------- */
+.order{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.order .col{display:flex;flex-direction:column;gap:6px;min-height:120px;background:#0d1428;border:1px dashed var(--rule);border-radius:12px;padding:10px;min-width:0}
+.order .col .label{margin-bottom:4px}
+.ol{font-family:var(--mono);font-size:.84rem;text-align:left;background:var(--panel-2);border:1px solid var(--rule);border-radius:8px;padding:7px 10px;white-space:pre;overflow-x:auto}
+.ol:hover{border-color:var(--azul)}
+.ol.ok{border-color:var(--verde)}.ol.bad{border-color:var(--roja)}
+.ol .num{color:var(--muted);margin-right:8px}
+
+/* ---------- terminal ---------- */
+.term{background:#05080f;border:1px solid var(--rule);border-radius:12px;padding:14px;font-family:var(--mono);font-size:.9rem;min-height:220px;max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.term .ps{color:var(--verde)}.term .path{color:var(--azul)}
+.term .out{color:#c9d2ea;white-space:pre-wrap}
+.term .err{color:var(--roja);white-space:pre-wrap}
+.term .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.term input{flex:1;min-width:120px;background:transparent;border:0;color:#fff;font:inherit;outline:none;caret-color:var(--sol)}
+.task{display:flex;gap:10px;align-items:baseline;margin-bottom:10px}
+.task b{color:var(--sol);font-family:var(--mono)}
+
+/* ---------- lab ---------- */
+.lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:14px;align-items:start}
+.lab .left{display:flex;flex-direction:column;gap:12px;min-width:0}
+.codeview{background:#0d1428;border:1px solid var(--rule);border-radius:12px;padding:8px 0;font-family:var(--mono);font-size:.82rem;line-height:1.6;overflow-x:auto}
+.cl{display:flex;gap:0;padding:1px 12px 1px 0;border-left:3px solid transparent;white-space:pre;cursor:default}
+.cl .no{width:34px;flex:none;text-align:right;padding-right:12px;color:#4d5a82;user-select:none}
+.cl.run{background:color-mix(in srgb,var(--sol) 14%,transparent);border-left-color:var(--sol)}
+.cl.done .no{color:var(--muted)}
+.picking .cl{cursor:pointer}
+.picking .cl:hover{background:color-mix(in srgb,var(--azul) 14%,transparent);border-left-color:var(--azul)}
+.cl.bad{background:color-mix(in srgb,var(--roja) 20%,transparent);border-left-color:var(--roja)}
+.cl.found{background:color-mix(in srgb,var(--verde) 16%,transparent);border-left-color:var(--verde)}
+.cl.err{background:color-mix(in srgb,var(--roja) 26%,transparent);border-left-color:var(--roja)}
+.figwrap{position:relative;background:var(--paper);border-radius:12px;overflow:hidden;border:1px solid var(--rule)}
+.figwrap canvas{display:block;width:100%;aspect-ratio:4/3;max-width:100%}
+.figbar{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:#555;background:#f1f1ee;padding:5px 10px;font-family:var(--mono);gap:8px}
+.traceback{position:absolute;left:10px;right:10px;bottom:10px;background:#fff0ef;border:1px solid #f3b6b1;border-radius:8px;color:#9c1c12;font-family:var(--mono);font-size:.78rem;padding:10px 12px;white-space:pre-wrap;animation:rise .25s}
+.goal{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:center}
+.goal .mini{background:var(--paper);border-radius:8px;overflow:hidden;border:1px solid var(--rule)}
+.goal .mini canvas{display:block;width:100%;aspect-ratio:4/3}
+.goal p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
+.vars{background:#0d1428;border:1px solid var(--rule);border-radius:12px;padding:8px 12px;font-family:var(--mono);font-size:.76rem;display:flex;flex-direction:column;gap:2px;max-height:150px;overflow:auto}
+.vars div{display:flex;gap:10px;white-space:nowrap}
+.vars .vn{color:var(--c-fn);min-width:70px}
+.vars .vv{color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.vars .fresh{animation:fresh .8s}
+@keyframes fresh{from{background:color-mix(in srgb,var(--sol) 30%,transparent)}to{background:transparent}}
+.step{display:flex;gap:10px;align-items:center;font-size:.92rem;color:var(--muted)}
+.step b{color:var(--fg)}
+.step .label{white-space:nowrap}
+.fixes{display:flex;flex-direction:column;gap:8px}
+.fixes .opt{font-size:.8rem}
+
+/* ---------- duel ---------- */
+.duel{display:grid;grid-template-columns:200px minmax(0,1fr) 200px;gap:14px;align-items:stretch}
+.side{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;transition:border-color .2s,background .2s}
+.side.p1{--team:var(--roja)}.side.p2{--team:var(--azul)}
+.side h3{font-size:.95rem;color:var(--team);overflow-wrap:anywhere}
+.side .rep{font-size:.84rem;color:var(--muted)}
+.side .pts{font-family:var(--display);font-size:2.6rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.side .pts small{font-size:.9rem;color:var(--muted);font-weight:500}
+.pad{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.pad button{background:var(--panel-2);border:1.5px solid var(--rule);border-radius:12px;padding:14px 4px;font-family:var(--display);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pad button:hover{border-color:var(--team)}
+.pad button small{font-family:var(--mono);font-size:.68rem;color:var(--muted);font-weight:400}
+.side.locked{opacity:.55}
+.side.won{border-color:var(--verde);background:color-mix(in srgb,var(--verde) 10%,var(--panel))}
+.side.lost{border-color:var(--roja)}
+.side .lives .heart{width:22px;height:22px}
+.duel .center{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dopts{display:flex;flex-direction:column;gap:8px}
+.dopt{display:flex;gap:10px;align-items:flex-start;background:var(--panel-2);border:1.5px solid var(--rule);border-radius:12px;padding:10px 12px;font-family:var(--mono);font-size:.86rem;white-space:pre-wrap;word-break:break-word}
+.dopt .key{font-family:var(--display);font-weight:700;color:var(--sol);flex:none;width:18px}
+.dopt.ok{border-color:var(--verde)}
+.dopt .mk{margin-left:auto;font-family:var(--body);font-size:.75rem;font-weight:700;display:flex;gap:4px;flex:none}
+.dopt .mk span{border-radius:4px;padding:0 5px}
+.mk .m1{background:var(--roja);color:#2b0705}.mk .m2{background:var(--azul);color:#08142c}
+
+/* ---------- end ---------- */
+.end{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.end .big{font-family:var(--display);font-size:clamp(2rem,6vw,3.4rem);font-weight:800;line-height:1}
+.end .sub{color:var(--muted)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:14px}
+.kpi small{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.kpi b{font-family:var(--mono);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.newrec{display:inline-block;background:var(--sol);color:#1d1404;font-weight:700;border-radius:8px;padding:3px 10px;font-size:.85rem;animation:pop .6s cubic-bezier(.3,1.6,.5,1)}
+table.t{width:100%;border-collapse:collapse;font-size:.92rem}
+table.t th,table.t td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:left;font-variant-numeric:tabular-nums}
+table.t th{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+.nota{font-family:var(--display);font-size:4rem;font-weight:800;line-height:1}
+.bar{height:8px;border-radius:99px;background:var(--night);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--azul)}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .lab{grid-template-columns:1fr}
+  .duel{grid-template-columns:1fr 1fr}
+  .duel .center{grid-column:1/-1;order:-1}
+}
+@media (max-width:560px){
+  .hud{grid-template-columns:1fr auto;grid-template-areas:"who stats" "timer timer"}
+  .hud .who{grid-area:who}.hud .stats{grid-area:stats}.hud .tw{grid-area:timer}
+  .stats{gap:10px}
+  .heart{width:22px;height:22px}
+  .opts{grid-template-columns:1fr}
+  .order{grid-template-columns:1fr}
+  .lifepick{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .goal{grid-template-columns:110px minmax(0,1fr)}
+  .code{font-size:.82rem}
+  .pad button{padding:12px 2px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}
+}
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="app">
+  <header class="top">
+    <button class="brand" id="homeBtn" aria-label="Volver al inicio">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="10" fill="#111a31" stroke="#273764"/><circle cx="20" cy="20" r="7" fill="#ffb547"/><ellipse cx="20" cy="20" rx="15" ry="5" fill="none" stroke="#86b4ff" stroke-width="1.6" transform="rotate(-24 20 20)"/><circle cx="32" cy="14.5" r="2" fill="#86b4ff"/></svg>
+      <span><b>ARENA FC-2</b><small>Física Computacional II · repaso jugable</small></span>
+    </button>
+    <div class="tools">
+      <button class="ghost" id="soundBtn" aria-pressed="true">Sonido: sí</button>
+    </div>
+  </header>
+
+  <section id="home"></section>
+  <section id="setup" hidden></section>
+  <section id="game" hidden>
+    <div class="hud" id="hud">
+      <div class="who"><b id="hudMode">Modo</b><span id="hudSub">—</span></div>
+      <div class="tw"><div class="tbar" id="tbar"><i id="tfill"></i></div><div class="ttext" id="ttext">—</div></div>
+      <div class="stats">
+        <div class="lives" id="hudLives"></div>
+        <div class="stat"><small>Puntos</small><b id="hudScore">0</b></div>
+        <div class="stat"><small>Racha</small><b id="hudStreak">0</b></div>
+        <button class="ghost quit" id="quitBtn">Salir</button>
+      </div>
+    </div>
+    <div id="stage"></div>
+  </section>
+  <section id="end" hidden></section>
+</div>
+<div id="flash"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   Utilidades
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const h = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const k of kids.flat()) if (k != null && k !== false) e.append(k.nodeType ? k : document.createTextNode(k));
+  return e;
+};
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('arenafc2.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('arenafc2.' + k, JSON.stringify(v)); } catch {} }
+};
+
+const TOPICS = { unix: 'Terminal', git: 'Git', py: 'Python básico', cls: 'Clases', np: 'NumPy', plt: 'Matplotlib', pd: 'Pandas', io: 'Archivos' };
+const S = {
+  topics: store.get('topics', Object.keys(TOPICS)),
+  sound: store.get('sound', true),
+};
+
+/* =====================================================================
+   Banco de preguntas (contenidos de clases 1–5 y tareas 1–5)
+   ⟦respuesta|alternativa⟧ marca un espacio para completar
+   ===================================================================== */
+const FILL = [
+  // NumPy
+  { t: 'np', q: 'Convierte la lista de luminosidades en un arreglo NumPy.', c: 'L = np.⟦array⟧([1.0, 2.5, 0.8, 5.0, 10.0])', ex: '<code>np.array</code> convierte listas en arreglos para operar elemento a elemento.' },
+  { t: 'np', q: 'Arreglo temporal de 10 años con 500 mediciones equidistantes (Tarea 2).', c: 't = np.⟦linspace⟧(0, 10, ⟦500⟧)', ex: '<code>np.linspace(inicio, fin, n)</code> incluye ambos extremos y entrega n puntos.' },
+  { t: 'np', q: 'Crea el generador con tu semilla.', c: 'rng = np.random.⟦default_rng⟧(seed=2026)', ex: 'Con la misma semilla, <code>default_rng</code> reproduce los mismos números.' },
+  { t: 'np', q: 'Agrega ruido gaussiano de desviación 0.002 al flujo.', c: 'flujo = 1 + rng.⟦normal⟧(loc=0, scale=⟦0.002⟧, size=500)', ex: '<code>rng.normal(loc, scale, size)</code>: loc es la media y scale la desviación estándar.' },
+  { t: 'np', q: 'Índice de la estrella con mayor flujo.', c: 'i_max = np.⟦argmax⟧(flujo)', ex: '<code>argmax</code> devuelve el índice; <code>max</code> devolvería el valor.' },
+  { t: 'np', q: 'Ordena los índices de mayor a menor flujo.', c: 'orden = np.⟦argsort⟧(flujo)⟦[::-1]⟧', ex: '<code>argsort</code> ordena de menor a mayor; <code>[::-1]</code> invierte el arreglo.' },
+  { t: 'np', q: 'Máscara booleana de estrellas detectables (límite 1e-11 W/m²).', c: 'mascara = flujo ⟦>=⟧ 1e-11\ndetectadas = np.⟦where|nonzero⟧(mascara)[0]', ex: 'Una comparación produce un arreglo booleano; <code>np.where(mascara)[0]</code> da los índices True.' },
+  { t: 'np', q: 'Umbral de detección de tránsitos: F̄ − 3σ.', c: 'umbral = flujo.⟦mean⟧() - 3 * flujo.⟦std⟧()', ex: 'Los métodos <code>.mean()</code> y <code>.std()</code> existen en todo ndarray.' },
+  { t: 'np', q: 'Selecciona los tiempos dentro del tránsito.', c: 'en_transito = (t >= 4.5) ⟦&⟧ (t <= 5.0)', ex: 'Con arreglos se usa <code>&amp;</code> (no <code>and</code>) y cada condición va entre paréntesis.' },
+  { t: 'np', q: 'Razón de radios a partir de la profundidad del tránsito.', c: 'Rp_Rs = np.⟦sqrt⟧(delta_F)', ex: 'R<sub>p</sub>/R<sub>⋆</sub> = √ΔF.' },
+  { t: 'np', q: 'NumPy trabaja en radianes. Calcula cos(180°).', c: 'np.cos(np.⟦deg2rad|radians⟧(180))   # -1.0', ex: '<code>np.deg2rad</code> convierte grados a radianes.' },
+  { t: 'np', q: 'Obtén la primera columna de la matriz.', c: 'a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\nprimera_col = a[⟦:⟧, 0]   # array([1, 4, 7])', ex: '<code>:</code> toma todas las filas; el 0 elige la columna.' },
+  { t: 'np', q: 'Dimensiones de la matriz.', c: 'a.⟦shape⟧   # (3, 3)', ex: '<code>shape</code> es un atributo, sin paréntesis.' },
+  { t: 'np', q: 'Aplana la matriz a 1D.', c: 'plano = a.⟦ravel|flatten⟧()   # array([1, 2, ..., 9])', ex: '<code>ravel()</code> y <code>flatten()</code> devuelven un arreglo 1D.' },
+  { t: 'np', q: 'Convierte la matriz en una columna.', c: 'columna = np.reshape(a, (⟦-1⟧, 1))   # forma (9, 1)', ex: 'El -1 le pide a NumPy que calcule esa dimensión.' },
+  { t: 'np', q: 'Apila dos arreglos de 4 elementos como filas: forma (2, 4).', c: 'unos, ceros = np.ones(4), np.zeros(4)\nnp.⟦stack|vstack⟧([unos, ceros], axis=0)', ex: '<code>np.stack(..., axis=0)</code> crea un eje nuevo al inicio.' },
+  { t: 'np', q: 'Detecta valores indefinidos tras un logaritmo.', c: 'log_vals = np.log10(datos)\nhay_nan = np.⟦isnan⟧(log_vals)', ex: 'nan significa <em>not a number</em>; aparece con log10 de negativos.' },
+  { t: 'np', q: 'Reemplaza los nan por 0.', c: 'limpio = np.⟦nan_to_num⟧(log_vals, nan=0)', ex: '<code>np.nan_to_num</code> sustituye nan (e infinitos) por números.' },
+  { t: 'np', q: 'Arreglo de unos con la misma forma que otro.', c: 'unos = np.⟦ones_like⟧(arreglo)', ex: 'También existe <code>np.zeros_like</code>.' },
+  { t: 'np', q: 'Ley de Stefan-Boltzmann (Tarea 4).', c: 'L = 4 * np.pi * R**2 * sigma_SB * T**⟦4⟧', ex: 'L = 4πR²σT⁴: la temperatura entra a la cuarta potencia.' },
+  { t: 'np', q: 'Flujo observado a distancia d.', c: 'F = L / (4 * np.pi * d**⟦2⟧)', ex: 'El flujo cae con el cuadrado de la distancia.' },
+  { t: 'np', q: 'Posiciones aleatorias de 5 estrellas en [-5, 5] (Tarea 3).', c: 'x0 = rng.⟦uniform⟧(-5, 5, 5)\ny0 = rng.⟦uniform⟧(-5, 5, 5)', ex: '<code>rng.uniform(low, high, size)</code>.' },
+  { t: 'np', q: 'Malla 2D para evaluar la imagen.', c: 'x = np.linspace(-5, 5, 200)\nX, Y = np.⟦meshgrid⟧(x, x)', ex: '<code>meshgrid</code> genera las coordenadas de cada píxel.' },
+  { t: 'np', q: 'Perfil gaussiano de una estrella.', c: 'I = I0 * np.⟦exp⟧(⟦-⟧((X - x0)**2 + (Y - y0)**2) / (2 * sigma**2))', ex: 'Sin el signo menos la "estrella" crece hacia los bordes.' },
+  { t: 'np', q: 'Suma sobre el primer eje de un arreglo de forma (4, 3, 5).', c: 'cubo = rng.uniform(0, 10, size=(4, 3, 5))\nnp.sum(cubo, axis=⟦0⟧).shape   # (3, 5)', ex: 'Sumar sobre un eje lo elimina de la forma.' },
+  { t: 'np', q: 'Mediana del flujo (Tarea 2).', c: 'mediana = np.⟦median⟧(flujo)', ex: 'La mediana es robusta frente a valores extremos.' },
+  // Python básico
+  { t: 'py', q: 'Imprime los impares entre 1 y 30 (Tarea 1).', c: 'for i in range(1, 31):\n    if i % 2 == ⟦1⟧:\n        print(i)', ex: 'El resto de dividir un impar por 2 es 1.' },
+  { t: 'py', q: 'f-string para mostrar una variable.', c: 'x = 1\nprint(⟦f⟧"el valor de x = {x}")', ex: 'La f antes de las comillas activa las llaves {}.' },
+  { t: 'py', q: 'Energía cinética Ek = ½mv² (Tarea 1).', c: 'def energia_cinetica(m, v):\n    return 0.5 * m * v⟦**⟧2', ex: 'En Python la potencia es <code>**</code>; <code>^</code> es XOR.' },
+  { t: 'py', q: 'Convierte 2 km/h a m/s.', c: 'v = 2 / ⟦3.6⟧   # m/s', ex: '1 m/s = 3.6 km/h.' },
+  { t: 'py', q: 'Recorre clave y valor de un diccionario.', c: 'datos = {"entero": 1, "real": 2.5, "lista": [1, 2], "tupla": (1, 2)}\nfor clave, valor in datos.⟦items⟧():\n    print(clave, valor)', ex: '<code>.items()</code> entrega pares (clave, valor).' },
+  { t: 'py', q: 'Lista por comprensión de cuadrados.', c: 'cuadrados = [x**2 ⟦for⟧ x ⟦in⟧ range(10)]', ex: 'Estructura: [expresión for variable in iterable].' },
+  { t: 'py', q: 'Índice y elemento a la vez.', c: 'for i, letra in ⟦enumerate⟧("abcdef"):\n    print(i, letra)', ex: '<code>enumerate</code> devuelve pares (índice, elemento).' },
+  { t: 'py', q: 'Importa NumPy como se recomienda en clase.', c: 'import numpy ⟦as⟧ ⟦np⟧', ex: 'Así no se sobrescriben funciones como <code>max</code> o <code>min</code>.' },
+  { t: 'py', q: 'Detén el programa si dos arreglos difieren.', c: '⟦assert⟧ np.array_equal(a, b), "Los arreglos difieren"', ex: '<code>assert condición, mensaje</code> lanza AssertionError si es falsa.' },
+  { t: 'py', q: 'Función anónima para clasificar.', c: 'clasifica = ⟦lambda⟧ x: "alto" if x > 5 ⟦else⟧ "bajo"', ex: 'lambda crea una función de una línea.' },
+  // Clases
+  { t: 'cls', q: 'Constructor de la clase Estrella.', c: 'class Estrella:\n    def ⟦__init__⟧(self, nombre, masa):\n        ⟦self⟧.nombre = nombre\n        self.masa = masa', ex: '<code>__init__</code> se ejecuta al crear el objeto; <code>self</code> es la instancia.' },
+  { t: 'cls', q: 'Método que calcula el flujo de la estrella.', c: 'class Estrella:\n    ...\n    def calcular_flujo(⟦self⟧):\n        return self.luminosidad / (4 * np.pi * ⟦self⟧.distancia**2)', ex: 'Todo método recibe <code>self</code> como primer parámetro.' },
+  { t: 'cls', q: 'Crea una instancia y lee un atributo.', c: 'sol = ⟦Estrella⟧(nombre="Sol", masa=1.0)\nprint(sol.⟦masa⟧)   # 1.0', ex: 'Se instancia llamando a la clase como una función.' },
+  { t: 'cls', q: 'El constructor debe limpiar el catálogo automáticamente (Tarea 5).', c: 'class CatalogoEstelar:\n    def __init__(self, ruta_csv):\n        self.datos = pd.read_csv(ruta_csv)\n        self.⟦limpiar_datos⟧()', ex: 'Un método se llama desde dentro de la clase con <code>self.metodo()</code>.' },
+  // Pandas
+  { t: 'pd', q: 'Tabla a partir de un diccionario.', c: 'df = pd.⟦DataFrame⟧({"id": ids, "radio": R, "distancia": d})', ex: 'Cada clave del diccionario se vuelve una columna.' },
+  { t: 'pd', q: 'Muestra las primeras diez filas del catálogo (Tarea 4).', c: 'df.⟦head⟧(10)', ex: '<code>head(n)</code> muestra las primeras n filas.' },
+  { t: 'pd', q: 'Estadísticas descriptivas.', c: 'df.⟦describe⟧()', ex: 'Entrega count, mean, std, min, cuartiles y max.' },
+  { t: 'pd', q: 'Fila por posición y fila por etiqueta.', c: 'df.⟦iloc⟧[0]      # primera fila\ndf.⟦loc⟧["a"]    # fila con índice "a"', ex: 'iloc usa posiciones enteras; loc usa etiquetas.' },
+  { t: 'pd', q: 'Filtra con dos condiciones.', c: 'df[(df["bajos"] > 2) ⟦&⟧ (df["altos"] > 15)]', ex: 'Igual que en NumPy: <code>&amp;</code>, <code>|</code> y paréntesis.' },
+  { t: 'pd', q: 'Filas cuya letra sea "i" o "j".', c: 'df[df["letras"].⟦isin⟧(["i", "j"])]', ex: '<code>isin</code> compara contra una lista de valores.' },
+  { t: 'pd', q: 'Aplica una función a cada elemento.', c: 'df["cuadrado"] = df["altos"].⟦apply⟧(cuadrado)', ex: '<code>apply</code> llama la función para cada valor.' },
+  { t: 'pd', q: 'Trata los datos faltantes.', c: 'sin_nan = df.⟦dropna⟧()       # elimina filas con NaN\nrelleno = df.⟦fillna⟧(200)    # reemplaza NaN por 200', ex: 'dropna borra filas; fillna rellena.' },
+  { t: 'pd', q: 'Ordena de mayor a menor flujo.', c: 'df.sort_values("flujo", ascending=⟦False⟧)', ex: 'Por defecto <code>ascending=True</code>.' },
+  { t: 'pd', q: 'Cuenta cuántas estrellas hay por clase.', c: 'df["clase"].⟦value_counts⟧()', ex: 'Cuenta las apariciones de cada valor.' },
+  { t: 'pd', q: 'Clasifica y calcula el porcentaje de detectadas (Tarea 4).', c: 'df["Clasificacion"] = np.⟦where⟧(df["flujo"] >= F_lim, "Detectada", "No detectada")\nporcentaje = 100 * (df["Clasificacion"] == "Detectada").⟦mean⟧()', ex: 'El promedio de un booleano es la fracción de True.' },
+  { t: 'pd', q: 'Promedios por categoría.', c: 'df.⟦groupby⟧("Clasificacion")[["flujo", "distancia"]].mean()', ex: '<code>groupby</code> separa la tabla por categoría antes de promediar.' },
+  { t: 'pd', q: 'Guarda la tabla sin la columna del índice.', c: 'df.to_csv("catalogo.csv", ⟦index⟧=False)', ex: 'Sin <code>index=False</code> aparece la columna "Unnamed: 0" al leer.' },
+  { t: 'pd', q: 'Lee el catálogo desde CSV.', c: 'catalogo = pd.⟦read_csv⟧("catalogo.csv")', ex: 'pandas detecta los tipos de cada columna al leer.' },
+  // Archivos
+  { t: 'io', q: 'Escribe un archivo de texto.', c: 'with ⟦open⟧(ruta_txt, "w", encoding="utf-8") as archivo:\n    archivo.⟦write⟧("Objeto: EST-001\\n")', ex: '<code>with</code> cierra el archivo aunque haya un error.' },
+  { t: 'io', q: 'Agrega una línea al final sin borrar lo anterior.', c: 'with open(ruta_txt, "⟦a⟧", encoding="utf-8") as archivo:\n    archivo.write("Comentario: cielo despejado\\n")', ex: '"w" sobrescribe, "a" agrega, "r" lee.' },
+  { t: 'io', q: 'Guarda un diccionario como JSON legible.', c: 'with open(ruta_json, "w", encoding="utf-8") as archivo:\n    json.⟦dump⟧(configuracion, archivo, ⟦indent⟧=2, ensure_ascii=False)', ex: '<code>ensure_ascii=False</code> conserva á, é, ñ.' },
+  { t: 'io', q: 'Pickle usa modo binario.', c: 'with open(ruta_pkl, "⟦wb⟧") as archivo:\n    pickle.dump(objeto, archivo)', ex: '"wb" escribe en binario y "rb" lee. Nunca abras pickles de origen desconocido.' },
+  { t: 'io', q: 'Guarda y recupera un arreglo .npy (Tarea 5).', c: 'np.⟦save⟧("resultados/temperaturas.npy", T)\nT2 = np.⟦load⟧("resultados/temperaturas.npy")', ex: '.npy conserva dtype y forma exactos.' },
+  { t: 'io', q: 'Varios arreglos comprimidos en un solo archivo.', c: 'np.⟦savez_compressed⟧("catalogo.npz", L=L, d=d, T=T)', ex: 'Al cargar el .npz, los nombres funcionan como claves.' },
+  { t: 'io', q: 'Crea la carpeta de resultados si no existe.', c: 'CARPETA = Path.cwd() / "resultados"\nCARPETA.mkdir(parents=True, ⟦exist_ok⟧=True)', ex: '<code>exist_ok=True</code> evita el error si ya existe.' },
+  { t: 'io', q: 'Construye una ruta con pathlib.', c: 'ruta_figura = CARPETA ⟦/⟧ "figura.png"\nplt.⟦savefig⟧(ruta_figura)', ex: 'Path sobrecarga el operador / para unir rutas.' },
+  { t: 'io', q: 'Lee un archivo y sepáralo en líneas.', c: 'lineas = ruta_notas.⟦read_text⟧(encoding="utf-8").⟦splitlines⟧()', ex: 'Ojo: <code>write_text</code> reemplaza el contenido previo.' },
+  { t: 'io', q: 'CSV con el módulo estándar.', c: 'escritor = csv.⟦DictWriter⟧(archivo, fieldnames=["id", "temperatura_K"])\nescritor.⟦writeheader⟧()\nescritor.writerows(filas)', ex: 'Al leer con DictReader, cada campo llega como str.' },
+  { t: 'io', q: 'Compara números leídos desde texto.', c: 'np.⟦allclose⟧(arreglo, arreglo_txt)   # True dentro de una tolerancia', ex: 'Para floats guardados como texto usa allclose; array_equal exige igualdad exacta.' },
+  // Matplotlib
+  { t: 'plt', q: 'Histograma de temperaturas.', c: 'plt.⟦hist⟧(temperaturas, bins=20)', ex: 'Un histograma muestra la distribución de frecuencias.' },
+  { t: 'plt', q: 'Línea horizontal en el límite de detección.', c: 'plt.⟦axhline⟧(F_lim, color="k", ls="--", label="Límite")', ex: '<code>axhline</code> horizontal, <code>axvline</code> vertical.' },
+  { t: 'plt', q: 'Marca el inicio del tránsito.', c: 'plt.⟦axvline⟧(4.5, color="tab:red", ls=":")', ex: 'Útil para marcar intervalos en el tiempo.' },
+  { t: 'plt', q: 'Escala logarítmica en el eje del flujo.', c: 'plt.⟦yscale⟧("log")', ex: 'Indispensable cuando los datos cubren varios órdenes de magnitud.' },
+  { t: 'plt', q: 'Temperaturas de mayor a menor en el eje x (diagrama HR).', c: 'plt.gca().⟦invert_xaxis⟧()', ex: '<code>gca()</code> obtiene los ejes actuales.' },
+  { t: 'plt', q: 'Cuadrícula 2×2 con ejes compartidos (Tarea 3).', c: 'fig, axs = plt.⟦subplots⟧(2, 2, sharex=True, sharey=True)', ex: '<code>axs</code> es un arreglo 2×2 de ejes.' },
+  { t: 'plt', q: 'Imagen con coordenadas físicas y barra de color.', c: 'im = ax.⟦imshow⟧(I, extent=[-5, 5, -5, 5], origin="lower")\nplt.⟦colorbar⟧(im, label="Intensidad")', ex: '<code>extent</code> pone los ejes en x, y en lugar de índices.' },
+  { t: 'plt', q: 'Etiqueta con tamaño de fuente 14.', c: 'plt.xlabel("Tiempo [años]", ⟦fontsize⟧=14)', ex: 'fontsize también sirve en legend y title.' },
+  { t: 'plt', q: 'Dispersión y leyenda.', c: 'plt.⟦scatter⟧(d, F, c="tab:blue", label="Estrellas")\nplt.⟦legend⟧(fontsize=14)', ex: 'La leyenda usa los <code>label</code> de cada llamada.' },
+  { t: 'plt', q: 'Numera cada estrella en la imagen.', c: 'for i in range(5):\n    ax.⟦text|annotate⟧(x0[i], y0[i], str(i + 1), color="w")', ex: '<code>ax.text(x, y, texto)</code> escribe en coordenadas de datos.' },
+];
+
+// o[0] siempre es la correcta; se baraja al mostrar
+const MCQ = [
+  { t: 'py', q: '¿Qué imprime?', c: 'lista = [1, 2, 3]\nprint(lista * 2)', o: ['[1, 2, 3, 1, 2, 3]', '[2, 4, 6]', 'TypeError', '[[1, 2, 3], [1, 2, 3]]'], ex: 'Multiplicar una lista la repite. Con NumPy sí se multiplica cada elemento.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'a = np.array([1, 2, 3])\nprint(a * 2)', o: ['[2 4 6]', '[1 2 3 1 2 3]', '[1, 2, 3, 1, 2, 3]', '12'], ex: 'Las operaciones en NumPy son vectorizadas.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\na[1, :2]', o: ['array([4, 5])', 'array([2, 5])', 'array([4, 5, 6])', 'array([1, 2])'], ex: 'Fila 1 (la segunda) y columnas 0 y 1.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\na[:, 0]', o: ['array([1, 4, 7])', 'array([1, 2, 3])', 'array([[1], [4], [7]])', 'array([7, 8, 9])'], ex: 'Todas las filas, columna 0.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\nprint(np.shape(a), np.ndim(a), np.size(a))', o: ['(3, 3) 2 9', '(3, 3) 3 9', '(9,) 1 9', '(3, 3) 2 3'], ex: 'shape = forma, ndim = número de ejes, size = total de elementos.' },
+  { t: 'np', q: '¿Cómo queda x?', c: 'x = np.array([[1, 2, 3], [3, 2, 1]])\nx[x <= 1] = 100', o: ['[[100 2 3] [3 2 100]]', '[[100 100 3] [3 100 100]]', '[[1 2 3] [3 2 1]]', '[[100 2 3] [3 2 1]]'], ex: 'La máscara selecciona solo los elementos ≤ 1.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'x = np.array([[1, 2, 3], [3, 2, 1]])\nnp.where(x <= 2, 0, 1)', o: ['[[0 0 1] [1 0 0]]', '[[1 1 0] [0 1 1]]', '(array([0, 0, 1, 1]), array([0, 1, 1, 2]))', '[[0 0 3] [3 0 0]]'], ex: 'np.where(cond, si_true, si_false) reemplaza elemento a elemento.' },
+  { t: 'np', q: '¿Qué forma tiene el resultado?', c: 'np.stack([np.ones(4), np.zeros(4)], axis=1).shape', o: ['(4, 2)', '(2, 4)', '(8,)', '(4, 4)'], ex: 'axis=1 pone los arreglos como columnas.' },
+  { t: 'np', q: '¿Qué forma tiene el resultado?', c: 'np.concat([np.ones(4), np.zeros(4)], axis=0).shape', o: ['(8,)', '(2, 4)', '(4, 2)', '(4,)'], ex: 'concat une a lo largo de un eje existente; no crea uno nuevo.' },
+  { t: 'np', q: '¿Cuánto vale aproximadamente?', c: 'np.cos(180)', o: ['-0.598', '-1.0', '0.0', '1.0'], ex: 'NumPy interpreta 180 como radianes. Para grados usa np.deg2rad(180).' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'np.log10(-5)', o: ['nan (con RuntimeWarning)', '-0.699', 'ValueError', '0'], ex: 'El log de un negativo no está definido en los reales: nan.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'np.argsort(np.array([30, 10, 20]))', o: ['array([1, 2, 0])', 'array([10, 20, 30])', 'array([2, 0, 1])', 'array([0, 2, 1])'], ex: 'Son los índices que ordenarían el arreglo de menor a mayor.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'np.argmax(np.array([3, 9, 2, 9]))', o: ['1', '3', '9', '[1, 3]'], ex: 'Si hay empate devuelve la primera aparición.' },
+  { t: 'np', q: '¿Qué forma tiene?', c: 'cubo = rng.uniform(0, 10, size=(4, 3, 5))\nnp.sum(cubo, axis=1).shape', o: ['(4, 5)', '(3, 5)', '(4, 3)', '(5,)'], ex: 'Se elimina el eje 1 (tamaño 3).' },
+  { t: 'np', q: '¿Cuántos elementos tiene?', c: 'np.linspace(0, 10, 11)', o: ['11, con paso 1.0', '10, con paso 1.0', '11, con paso 0.9', '10, con paso 1.1'], ex: 'linspace incluye los extremos 0 y 10.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.median([1, 100, 2]))', o: ['2.0', '34.33', '100', '1.0'], ex: 'Ordena: 1, 2, 100. El del medio es 2.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'r1 = np.random.default_rng(0).uniform()\nr2 = np.random.default_rng(0).uniform()\nprint(r1 == r2)', o: ['True', 'False', 'Depende del computador', 'Error'], ex: 'Misma semilla, misma secuencia. Por eso cada tarea pide fijar la semilla.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.allclose([1.0, np.nan], [1.0, np.nan]))', o: ['False', 'True', 'nan', 'Error'], ex: 'nan ≠ nan. Hay que pasar equal_nan=True.' },
+  { t: 'np', q: 'Si la distancia a una estrella se duplica, su flujo…', c: 'F = L / (4 * np.pi * d**2)', o: ['se divide por 4', 'se divide por 2', 'no cambia', 'se multiplica por 4'], ex: 'F ∝ 1/d², así que (2d)² = 4d².' },
+  { t: 'np', q: 'Con R fija, si T se duplica, L se multiplica por…', c: 'L = 4 * np.pi * R**2 * sigma_SB * T**4', o: ['16', '4', '2', '8'], ex: '2⁴ = 16.' },
+  { t: 'np', q: 'Si la profundidad del tránsito es ΔF = 0.01, ¿cuánto vale Rp/R⋆?', c: 'Rp_Rs = np.sqrt(delta_F)', o: ['0.1', '0.01', '0.0001', '1.0'], ex: '√0.01 = 0.1.' },
+  { t: 'py', q: '¿Qué imprime?', c: 'i = 7\nprint(f"EST-{i:03d}")', o: ['EST-007', 'EST-7', 'EST-  7', 'EST-{i:03d}'], ex: ':03d rellena con ceros hasta 3 dígitos.' },
+  { t: 'py', q: '¿Qué imprime?', c: 'print([l for i, l in enumerate("abcdef") if i < 3])', o: ["['a', 'b', 'c']", "['a', 'b', 'c', 'd']", '[0, 1, 2]', "[(0, 'a'), (1, 'b'), (2, 'c')]"], ex: 'enumerate da (índice, letra); se guardan las letras con índice < 3.' },
+  { t: 'py', q: '¿Qué pasa?', c: 'assert True == False, "True no es False"', o: ['AssertionError: True no es False', 'No pasa nada', 'Imprime "True no es False"', 'SyntaxError'], ex: 'assert lanza AssertionError con el mensaje si la condición es falsa.' },
+  { t: 'py', q: '¿Qué devuelve con x = 5?', c: 'f = lambda x: "alto" if x > 5 else "bajo"\nf(5)', o: ["'bajo'", "'alto'", 'None', 'True'], ex: '5 > 5 es False.' },
+  { t: 'py', q: '¿Qué valor tiene Ek en joules?', c: 'm, v = 4, 2 / 3.6\nEk = 0.5 * m * v**2', o: ['≈ 0.617', '8.0', '≈ 1.11', '≈ 2.22'], ex: 'v ≈ 0.556 m/s, v² ≈ 0.309, Ek = 2·0.309 ≈ 0.617 J.' },
+  { t: 'cls', q: '¿Qué imprime?', c: 'class Estrella:\n    def __init__(self, nombre, masa):\n        self.nombre = nombre\n        self.masa = masa\n\nsirio = Estrella("Sirio A", 2.06)\nprint(sirio.masa)', o: ['2.06', 'Sirio A', 'masa', 'AttributeError'], ex: 'El atributo quedó guardado en self.masa.' },
+  { t: 'cls', q: '¿Qué pasa al llamar e.info()?', c: 'class Estrella:\n    def info():\n        print("hola")\n\ne = Estrella()\ne.info()', o: ['TypeError: info() takes 0 positional arguments but 1 was given', 'Imprime hola', 'NameError', 'AttributeError'], ex: 'Python pasa la instancia automáticamente; falta self.' },
+  { t: 'cls', q: '¿Qué es self?', c: null, o: ['La instancia particular del objeto', 'El nombre de la clase', 'Una palabra reservada que importa la clase', 'El método constructor'], ex: 'self apunta al objeto concreto sobre el que se llama el método.' },
+  { t: 'pd', q: '¿Qué forma tiene?', c: 'lista_1 = list(range(10))\nlista_2 = list(range(10, 20))\nlista_3 = list("abcdefghij")\npd.DataFrame([lista_1, lista_2, lista_3]).shape', o: ['(3, 10)', '(10, 3)', '(30,)', '(3, 3)'], ex: 'Cada lista es una fila. Con .T queda (10, 3).' },
+  { t: 'pd', q: '¿Cuántas filas quedan?', c: 'df = pd.DataFrame({"n": range(10)})\ndf[df["n"] > 2]', o: ['7', '8', '3', '2'], ex: 'Quedan 3, 4, …, 9: siete filas.' },
+  { t: 'pd', q: 'Una columna tiene un NaN en una fila. ¿Qué hace df.dropna()?', c: null, o: ['Elimina solo esa fila', 'Elimina esa columna', 'Reemplaza el NaN por 0', 'Elimina todo el DataFrame'], ex: 'Por defecto dropna elimina las filas que tengan algún NaN.' },
+  { t: 'pd', q: '¿Qué devuelve?', c: 's = pd.Series(["A", "B", "A", "C", "A"])\ns.value_counts()["A"]', o: ['3', '1', '0', "'A'"], ex: 'value_counts cuenta cada valor.' },
+  { t: 'pd', q: '¿Cuál es la diferencia entre loc e iloc?', c: null, o: ['loc usa etiquetas; iloc usa posiciones enteras', 'loc es para columnas; iloc para filas', 'iloc es más rápido pero hace lo mismo', 'loc ordena; iloc filtra'], ex: 'df.loc["a"] busca la etiqueta "a"; df.iloc[0] toma la primera fila.' },
+  { t: 'pd', q: 'Guardaste con df.to_csv("x.csv") sin index=False. Al leer…', c: null, o: ['Aparece una columna extra "Unnamed: 0"', 'Se pierde la primera fila', 'Las columnas cambian de orden', 'No pasa nada distinto'], ex: 'El índice se escribió como columna.' },
+  { t: 'pd', q: '¿Qué hace la línea?', c: 'df.sort_values("flujo", ascending=False)', o: ['Devuelve una copia ordenada; df no cambia', 'Ordena df en su lugar', 'Ordena solo la columna flujo', 'Elimina los duplicados'], ex: 'Hay que asignarlo: df = df.sort_values(...).' },
+  { t: 'io', q: 'Leíste un CSV con csv.DictReader. ¿De qué tipo es fila["temperatura_K"]?', c: null, o: ['str', 'int', 'float', 'numpy.float64'], ex: 'El módulo csv no conserva tipos: hay que convertir con int() o float().' },
+  { t: 'io', q: '¿Qué pasa?', c: 'json.dump({"a": np.array([1, 2])}, archivo)', o: ['TypeError: el ndarray no es serializable', 'Guarda [1, 2]', 'Guarda el arreglo en binario', 'Guarda "array([1, 2])"'], ex: 'Convierte antes con arreglo.tolist().' },
+  { t: 'io', q: '¿Qué contiene el archivo al final?', c: 'ruta.write_text("A")\nruta.write_text("B")\nruta.read_text()', o: ["'B'", "'AB'", "'A'", "'A\\nB'"], ex: 'write_text reemplaza el contenido previo.' },
+  { t: 'io', q: '¿Por qué no abrir un .pkl de origen desconocido?', c: null, o: ['Cargarlo puede ejecutar código', 'Es más lento que CSV', 'Pierde los tipos de datos', 'Solo funciona en Windows'], ex: 'pickle.load puede ejecutar código arbitrario.' },
+  { t: 'io', q: '¿Qué formato conviene para varios arreglos NumPy en un archivo?', c: null, o: ['.npz', '.npy', '.txt', '.csv'], ex: '.npy guarda un solo arreglo; .npz guarda varios con nombre.' },
+  { t: 'io', q: 'Guardaste con np.savetxt(fmt="%.12e") y recargaste. ¿Qué es más probable?', c: null, o: ['allclose True, array_equal puede ser False', 'Ambos True siempre', 'Ambos False', 'allclose False, array_equal True'], ex: 'Al pasar por texto se pierden decimales.' },
+  { t: 'io', q: '¿Para qué sirve with open(...) as f?', c: null, o: ['Cierra el archivo automáticamente, incluso si hay un error', 'Abre el archivo más rápido', 'Crea la carpeta si no existe', 'Solo sirve para leer'], ex: 'Es la forma recomendada de trabajar con archivos.' },
+  { t: 'plt', q: '¿Qué hace plt.yscale("log")?', c: null, o: ['Pone el eje y en escala logarítmica', 'Calcula el log de los datos y los reemplaza', 'Invierte el eje y', 'Agrega una leyenda'], ex: 'Los datos no cambian; cambia cómo se dibuja el eje.' },
+  { t: 'plt', q: '¿Qué dibuja?', c: 'plt.axvline(4.5)', o: ['Una línea vertical en x = 4.5', 'Una línea horizontal en y = 4.5', 'Un punto en (4.5, 4.5)', 'Un histograma con 4.5 bins'], ex: 'v de vertical.' },
+  { t: 'plt', q: '¿Qué hace extent en imshow?', c: 'plt.imshow(I, extent=[-5, 5, -5, 5], origin="lower")', o: ['Pone los ejes en coordenadas x, y', 'Recorta la imagen', 'Cambia la paleta de colores', 'Agranda la figura'], ex: 'Sin extent, los ejes muestran índices del arreglo.' },
+  { t: 'unix', q: '¿Qué comando muestra el directorio de trabajo actual?', c: null, o: ['pwd', 'ls', 'cd', 'echo'], ex: 'print working directory.' },
+  { t: 'unix', q: '¿Qué hace rm?', c: null, o: ['Elimina archivos', 'Mueve archivos', 'Renombra carpetas', 'Muestra un archivo'], ex: 'Cuidado: no hay papelera.' },
+  { t: 'unix', q: '¿Qué hace mv viejo.txt nuevo.txt?', c: null, o: ['Renombra el archivo', 'Copia el archivo', 'Borra viejo.txt', 'Crea un enlace'], ex: 'mv mueve o renombra.' },
+  { t: 'git', q: '¿Cuál es el orden correcto para subir cambios?', c: null, o: ['git add → git commit → git push', 'git commit → git add → git push', 'git push → git add → git commit', 'git pull → git push → git add'], ex: 'Preparar, guardar en el historial local y luego subir.' },
+  { t: 'git', q: '¿Qué comando muestra el historial de commits?', c: null, o: ['git log', 'git status', 'git diff', 'git branch'], ex: 'git status muestra el estado actual; git log, el historial.' },
+  { t: 'git', q: '¿Qué hace git pull?', c: null, o: ['Descarga y combina cambios del remoto', 'Sube tus commits', 'Crea un repositorio', 'Borra la rama actual'], ex: 'Lo contrario de push.' },
+  { t: 'unix', q: '¿Qué hace conda activate compii?', c: null, o: ['Activa el ambiente compii', 'Instala Python 3.12', 'Crea el ambiente compii', 'Actualiza conda'], ex: 'El ambiente se crea con conda create -n compii ….' },
+  { t: 'unix', q: '¿Qué es Overleaf?', c: null, o: ['Una plataforma en línea para escribir y compilar LaTeX', 'Un gestor de paquetes de Python', 'Un cliente de Git', 'Un kernel de Jupyter'], ex: 'Permite trabajar en LaTeX sin instalarlo y colaborar.' },
+];
+
+// Ordena el código: líneas en el orden correcto
+const ORDER = [
+  { t: 'io', q: 'Escribe un archivo y luego léelo.', l: ['ruta = CARPETA / "observaciones.txt"', 'with open(ruta, "w", encoding="utf-8") as archivo:', '    archivo.write("Objeto: EST-001\\n")', 'with open(ruta, "r", encoding="utf-8") as archivo:', '    contenido = archivo.read()', 'print(contenido)'], ex: 'Primero se define la ruta, luego se escribe y finalmente se lee.' },
+  { t: 'np', q: 'Simula un tránsito y detecta los puntos bajo 3σ (Tarea 2).', l: ['rng = np.random.default_rng(seed=123)', 't = np.linspace(0, 10, 500)', 'flujo = 1 + rng.normal(0, 0.002, t.size)', 'mask = (t >= 4.5) & (t <= 5.0)', 'flujo[mask] -= 0.02', 'umbral = flujo.mean() - 3 * flujo.std()', 'candidatos = t[flujo < umbral]'], ex: 'El umbral se calcula después de insertar el tránsito.' },
+  { t: 'cls', q: 'Define la clase Estrella y úsala.', l: ['class Estrella:', '    def __init__(self, nombre, luminosidad, distancia):', '        self.nombre = nombre', '        self.luminosidad = luminosidad', '        self.distancia = distancia', 'sol = Estrella("Sol", 3.828e26, 1.496e11)'], ex: 'Clase, constructor, atributos y recién entonces la instancia.' },
+  { t: 'git', q: 'Entrega la tarea por GitHub.', l: ['git clone https://github.com/usuario/fiscompii', 'cd fiscompii', 'mkdir -p tareas/tarea5', 'git add .', 'git commit -m "Tarea 5"', 'git push'], ex: 'Clonar, entrar, crear la carpeta, preparar, guardar y subir.' },
+  { t: 'plt', q: 'Construye y guarda la figura.', l: ['fig, ax = plt.subplots(figsize=(8, 5))', 'ax.plot(t, flujo, ".", label="Curva de luz")', 'ax.axhline(umbral, color="tab:red", ls="--", label="F̄ − 3σ")', 'ax.set_xlabel("Tiempo [años]", fontsize=14)', 'ax.legend(fontsize=14)', 'fig.savefig(CARPETA / "curva_luz.png")'], ex: 'La leyenda va después de las curvas con label; se guarda al final.' },
+  { t: 'pd', q: 'Lee, limpia, filtra y exporta (Clase 5).', l: ['datos = pd.read_csv("catalogo.csv")', 'datos = datos.dropna()', 'calientes = datos.loc[datos["temperatura_K"] > 7000].copy()', 'calientes = calientes.sort_values("temperatura_K", ascending=False)', 'calientes.to_csv("estrellas_calientes.csv", index=False)'], ex: 'Primero limpiar, luego filtrar, ordenar y exportar.' },
+  { t: 'unix', q: 'Prepara tu ambiente de trabajo.', l: ['conda create -n compii python=3.12 numpy pandas matplotlib notebook', 'conda activate compii', 'python --version', 'jupyter notebook'], ex: 'El ambiente se crea una vez y se activa antes de usarlo.' },
+  { t: 'py', q: 'Función documentada para el flujo (formato de clase).', l: ['def flujo(L, d):', '    """Calcula el flujo observado en W/m^2."""', '    L_W = L * 3.828e26', '    d_m = d * 3.0857e16', '    return L_W / (4 * np.pi * d_m**2)', 'F = flujo(np.array([1.0, 2.5]), np.array([10, 25]))'], ex: 'Docstring justo bajo el def; conversión de unidades antes del cálculo.' },
+  { t: 'io', q: 'Guarda varios arreglos en .npz y recupera uno.', l: ['ruta_npz = CARPETA / "catalogo.npz"', 'np.savez_compressed(ruta_npz, luminosidad=L, distancia=d)', 'with np.load(ruta_npz, allow_pickle=False) as archivo:', '    L2 = archivo["luminosidad"].copy()', 'assert np.array_equal(L, L2)'], ex: '.copy() dentro del with, porque el archivo se cierra al salir.' },
+  { t: 'pd', q: 'Catálogo de la Tarea 4: genera, calcula y clasifica.', l: ['rng = np.random.default_rng(seed=42)', 'R = rng.uniform(0.5, 5, 100)', 'df = pd.DataFrame({"R": R, "T": rng.uniform(3000, 10000, 100)})', 'df["L"] = df["R"]**2 * (df["T"] / 5772)**4', 'df["F"] = df["L"] * L_SOL / (4 * np.pi * (d * PC)**2)', 'df["Clasificacion"] = np.where(df["F"] >= F_lim, "Detectada", "No detectada")'], ex: 'Cada columna depende de la anterior.' },
+];
+
+// Terminal Rush
+const TERM = [
+  { t: 'unix', q: 'Muestra el directorio de trabajo actual.', a: ['pwd'], out: '/home/estudiante/fiscompii' },
+  { t: 'unix', q: 'Lista el contenido del directorio.', a: ['ls', 'ls -l', 'ls -la', 'ls -a', 'ls -lh'], out: 'LEEME.md  clases  tareas' },
+  { t: 'unix', q: 'Crea el directorio resultados.', a: ['mkdir resultados', 'mkdir -p resultados'], out: '' },
+  { t: 'unix', q: 'Crea tareas/tarea5, incluyendo las carpetas padre si faltan.', a: ['mkdir -p tareas/tarea5'], out: '' },
+  { t: 'unix', q: 'Entra a la carpeta tareas.', a: ['cd tareas', 'cd tareas/', 'cd ./tareas'], out: '' },
+  { t: 'unix', q: 'Sube un nivel de directorio.', a: ['cd ..', 'cd ../'], out: '' },
+  { t: 'unix', q: 'Escribe hola en la salida estándar.', a: ['echo hola', 'echo "hola"'], out: 'hola' },
+  { t: 'unix', q: 'Copia datos.csv a respaldo.csv.', a: ['cp datos.csv respaldo.csv'], out: '' },
+  { t: 'unix', q: 'Renombra viejo.txt como nuevo.txt.', a: ['mv viejo.txt nuevo.txt'], out: '' },
+  { t: 'unix', q: 'Elimina temporal.txt.', a: ['rm temporal.txt', 'rm -f temporal.txt'], out: '' },
+  { t: 'unix', q: 'Muestra notas.txt página por página.', a: ['more notas.txt', 'less notas.txt'], out: 'Línea 1: adquisición\nLínea 2: calibración' },
+  { t: 'unix', q: 'Consulta la versión de Python.', a: ['python --version', 'python3 --version', 'python -V', 'python3 -V'], out: 'Python 3.12.7' },
+  { t: 'unix', q: 'Instala numpy con pip.', a: ['pip install numpy', 'pip3 install numpy', 'python -m pip install numpy'], out: 'Successfully installed numpy-2.1.3' },
+  { t: 'unix', q: 'Activa el ambiente conda compii.', a: ['conda activate compii'], out: '(compii)' },
+  { t: 'git', q: 'Prepara todos los cambios para el commit.', a: ['git add .', 'git add -A', 'git add --all'], out: '' },
+  { t: 'git', q: 'Guarda los cambios con el mensaje "tarea 5".', a: ['git commit -m "tarea 5"'], out: '[main 3f2c1ab] tarea 5\n 1 file changed, 120 insertions(+)' },
+  { t: 'git', q: 'Sube tus commits al repositorio remoto.', a: ['git push', 'git push origin main'], out: 'To github.com:estudiante/fiscompii.git\n   a1b2c3d..3f2c1ab  main -> main' },
+  { t: 'git', q: 'Descarga y combina los cambios más recientes del remoto.', a: ['git pull', 'git pull origin main'], out: 'Already up to date.' },
+  { t: 'git', q: 'Revisa qué archivos cambiaron y cuáles están preparados.', a: ['git status'], out: 'On branch main\nChanges not staged for commit:\n  modified:   tareas/tarea5/tarea5.ipynb' },
+  { t: 'git', q: 'Muestra el historial de commits.', a: ['git log', 'git log --oneline'], out: '3f2c1ab tarea 5\na1b2c3d tarea 4' },
+  { t: 'git', q: 'Muestra las ramas existentes.', a: ['git branch', 'git branch -a'], out: '* main\n  entrega' },
+  { t: 'git', q: 'Cambia a la rama entrega.', a: ['git checkout entrega', 'git switch entrega'], out: "Switched to branch 'entrega'" },
+  { t: 'git', q: 'Muestra las diferencias con la última versión guardada.', a: ['git diff'], out: '- rng = np.random.default_rng(seed=1)\n+ rng = np.random.default_rng(seed=2026)' },
+  { t: 'git', q: 'Clona el repositorio del curso: https://github.com/felavila/fiscompii', a: ['git clone https://github.com/felavila/fiscompii', 'git clone https://github.com/felavila/fiscompii.git'], out: "Cloning into 'fiscompii'..." },
+];
+
+/* =====================================================================
+   Generador pseudoaleatorio con semilla (para datos de los gráficos)
+   ===================================================================== */
+const R = (() => {
+  let s = 1;
+  const f = {
+    seed(n) { s = (n * 2654435761) >>> 0 || 1; },
+    rand() { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; },
+    uniform(a, b) { return a + (b - a) * f.rand(); },
+    normal(m = 0, sd = 1) { let u = 0; while (!u) u = f.rand(); return m + sd * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * f.rand()); },
+    arr(n, g) { return Array.from({ length: n }, g); }
+  };
+  return f;
+})();
+const linspace = (a, b, n) => Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
+const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+const std = a => { const m = mean(a); return Math.sqrt(mean(a.map(x => (x - m) ** 2))); };
+
+/* =====================================================================
+   Laboratorio de gráficos: código con un error que se ve en la figura
+   build(ok) devuelve las líneas; cada línea trae las operaciones de dibujo
+   ===================================================================== */
+const O = {
+  v: (n, val) => ({ k: 'var', n, val }),
+  line: (x, y, o = {}) => ({ k: 'line', x: [...x], y: [...y], ...o }),
+  sc: (x, y, o = {}) => ({ k: 'scatter', x: [...x], y: [...y], ...o }),
+  hist: (d, o = {}) => ({ k: 'hist', d: [...d], ...o }),
+  bar: (cats, vals, o = {}) => ({ k: 'bar', cats: [...cats], vals: [...vals], ...o }),
+  hl: (y, o = {}) => ({ k: 'hl', y, ...o }),
+  vl: (x, o = {}) => ({ k: 'vl', x, ...o }),
+  title: s => ({ k: 'title', s }), xl: s => ({ k: 'xl', s }), yl: s => ({ k: 'yl', s }),
+  legend: () => ({ k: 'legend' }), ylog: () => ({ k: 'ylog' }), invx: () => ({ k: 'invx' }), invy: () => ({ k: 'invy' }),
+  img: (z, ext, o = {}) => ({ k: 'img', z, ext, ...o }), cbar: s => ({ k: 'cbar', s }),
+  err: msg => ({ k: 'err', msg }),
+};
+const L_SOL = 3.828e26, PC = 3.0857e16;
+const tempColor = T => { // color aproximado de una estrella según su temperatura (RdYlBu)
+  const stops = [[3000, [215, 48, 39]], [4500, [252, 141, 89]], [6000, [254, 224, 144]], [7500, [145, 191, 219]], [10000, [69, 117, 180]]];
+  for (let i = 1; i < stops.length; i++) if (T <= stops[i][0]) { const [a, ca] = stops[i - 1], [b, cb] = stops[i]; const u = (T - a) / (b - a); return `rgb(${ca.map((c, j) => Math.round(c + (cb[j] - c) * u)).join(',')})`; }
+  return 'rgb(69,117,180)';
+};
+
+function transitData(sign) {
+  R.seed(7);
+  const t = linspace(0, 10, 500);
+  const f0 = t.map(() => 1 + R.normal(0, 0.002));
+  const m = t.map(x => x >= 4.5 && x <= 5.0);
+  const f = f0.map((v, i) => m[i] ? v + sign * 0.02 : v);
+  return { t, f0, m, f, u: mean(f) - 3 * std(f) };
+}
+
+const PLOTS = [
+  {
+    id: 'transito', t: 'np', titulo: 'El tránsito que sube',
+    obj: 'La curva de luz debe mostrar una caída de 0.02 entre t = 4.5 y 5.0 años, con la línea F̄ − 3σ por debajo del ruido.',
+    build(ok) {
+      const { t, f0, m, f, u } = transitData(ok ? -1 : 1);
+      return [
+        { c: 't = np.linspace(0, 10, 500)', ops: [O.v('t', t)] },
+        { c: 'rng = np.random.default_rng(seed=7)', ops: [O.v('rng', 'Generator(PCG64)')] },
+        { c: 'flujo = 1 + rng.normal(0, 0.002, 500)', ops: [O.v('flujo', f0)] },
+        { c: 'mask = (t >= 4.5) & (t <= 5.0)', ops: [O.v('mask', m)] },
+        { c: ok ? 'flujo[mask] -= 0.02' : 'flujo[mask] += 0.02', ops: [O.v('flujo', f)], bug: true },
+        { c: 'umbral = flujo.mean() - 3 * flujo.std()', ops: [O.v('umbral', u)] },
+        { c: 'plt.plot(t, flujo, ".", ms=2, label="Curva de luz")', ops: [O.line(t, f, { mk: '.', ls: 'none', color: 'tab:blue', label: 'Curva de luz' })] },
+        { c: 'plt.axhline(umbral, color="tab:red", ls="--", label="F̄ − 3σ")', ops: [O.hl(u, { color: 'tab:red', dash: true, label: 'F̄ − 3σ' })] },
+        { c: 'plt.xlabel("Tiempo [años]")', ops: [O.xl('Tiempo [años]')] },
+        { c: 'plt.ylabel("Flujo normalizado")', ops: [O.yl('Flujo normalizado')] },
+        { c: 'plt.legend()', ops: [O.legend()] },
+      ];
+    },
+    fixes: ['flujo[mask] -= 0.02', 'flujo[~mask] -= 0.02', 'flujo[mask] = 0.02', 'flujo -= 0.02'],
+    ex: 'Un tránsito bloquea luz: el flujo baja. <code>~mask</code> afectaría todo lo que está fuera del tránsito.'
+  },
+  {
+    id: 'seno', t: 'np', titulo: 'Un seno con demasiadas vueltas',
+    obj: 'Debe verse exactamente un período de sin(x), de 0 a 2π.',
+    build(ok) {
+      const x = ok ? linspace(0, 2 * Math.PI, 200) : linspace(0, 360, 200);
+      const y = x.map(Math.sin);
+      return [
+        { c: ok ? 'x = np.linspace(0, 2*np.pi, 200)' : 'x = np.linspace(0, 360, 200)', ops: [O.v('x', x)], bug: true },
+        { c: 'y = np.sin(x)', ops: [O.v('y', y)] },
+        { c: 'plt.plot(x, y, color="tab:orange")', ops: [O.line(x, y, { color: 'tab:orange' })] },
+        { c: 'plt.axhline(0, color="gray", lw=0.8)', ops: [O.hl(0, { color: 'gray', lw: 0.8 })] },
+        { c: 'plt.xlabel("x [rad]")', ops: [O.xl('x [rad]')] },
+        { c: 'plt.title("Un período de sin(x)")', ops: [O.title('Un período de sin(x)')] },
+      ];
+    },
+    fixes: ['x = np.linspace(0, 2*np.pi, 200)', 'x = np.linspace(0, np.pi, 200)', 'x = np.linspace(0, 360, 2)', 'x = np.deg2rad(np.linspace(0, 2*np.pi, 200))'],
+    ex: 'np.sin trabaja en radianes: 360 radianes son más de 57 vueltas. Un período completo es 2π.'
+  },
+  {
+    id: 'campana', t: 'np', titulo: 'La campana plana',
+    obj: 'El histograma debe tener forma de campana centrada en 10 con σ = 2.',
+    build(ok) {
+      R.seed(5);
+      const d = ok ? R.arr(1000, () => R.normal(10, 2)) : R.arr(1000, () => R.uniform(2, 10));
+      return [
+        { c: 'rng = np.random.default_rng(seed=0)', ops: [O.v('rng', 'Generator(PCG64)')] },
+        { c: ok ? 'datos = rng.normal(loc=10, scale=2, size=1000)' : 'datos = rng.uniform(10, 2, size=1000)', ops: [O.v('datos', d)], bug: true },
+        { c: 'plt.hist(datos, bins=25, color="tab:blue")', ops: [O.hist(d, { bins: 25, color: 'tab:blue' })] },
+        { c: 'plt.xlabel("Valor")', ops: [O.xl('Valor')] },
+        { c: 'plt.ylabel("Frecuencia")', ops: [O.yl('Frecuencia')] },
+        { c: 'plt.title("Distribución normal (μ = 10, σ = 2)")', ops: [O.title('Distribución normal (μ = 10, σ = 2)')] },
+      ];
+    },
+    fixes: ['datos = rng.normal(loc=10, scale=2, size=1000)', 'datos = rng.normal(loc=2, scale=10, size=1000)', 'datos = rng.uniform(8, 12, size=1000)', 'datos = np.linspace(2, 10, 1000)'],
+    ex: 'uniform reparte los valores por igual en un intervalo. La campana viene de rng.normal(loc=media, scale=σ).'
+  },
+  {
+    id: 'energia', t: 'py', titulo: 'Energía cinética en línea recta',
+    obj: 'Ek = ½ m v² con m = 4 kg: la curva debe ser una parábola que llega a 200 J en v = 10 m/s.',
+    build(ok) {
+      const v = linspace(0, 10, 60);
+      const Ek = v.map(x => ok ? 0.5 * 4 * x ** 2 : 0.5 * 4 * x * 2);
+      return [
+        { c: 'm = 4                         # kg', ops: [O.v('m', 4)] },
+        { c: 'v = np.linspace(0, 10, 60)    # m/s', ops: [O.v('v', v)] },
+        { c: ok ? 'Ek = 0.5 * m * v**2' : 'Ek = 0.5 * m * v*2', ops: [O.v('Ek', Ek)], bug: true },
+        { c: 'plt.plot(v, Ek, color="tab:purple", lw=2)', ops: [O.line(v, Ek, { color: 'tab:purple', lw: 2.4 })] },
+        { c: 'plt.xlabel("v [m/s]")', ops: [O.xl('v [m/s]')] },
+        { c: 'plt.ylabel("Energía cinética [J]")', ops: [O.yl('Energía cinética [J]')] },
+        { c: 'plt.title("Eₖ = ½ m v²")', ops: [O.title('Eₖ = ½ m v²')] },
+      ];
+    },
+    fixes: ['Ek = 0.5 * m * v**2', 'Ek = 0.5 * m**2 * v', 'Ek = (0.5 * m * v)**2', 'Ek = 0.5 * m * 2**v'],
+    ex: '<code>v*2</code> multiplica por 2; la potencia es <code>v**2</code>. (0.5·m·v)² también es parábola, pero llega a 400 J.'
+  },
+  {
+    id: 'hr', t: 'plt', titulo: 'Diagrama HR al revés',
+    obj: 'Diagrama luminosidad–temperatura con L en escala log y las estrellas calientes (azules) a la IZQUIERDA.',
+    build(ok) {
+      R.seed(11);
+      const N = 120, T = R.arr(N, () => R.uniform(3000, 10000)), Rr = R.arr(N, () => R.uniform(0.5, 5));
+      const L = T.map((x, i) => Rr[i] ** 2 * (x / 5772) ** 4);
+      return [
+        { c: 'T = rng.uniform(3000, 10000, 120)   # K', ops: [O.v('T', T)] },
+        { c: 'R = rng.uniform(0.5, 5, 120)        # R☉', ops: [O.v('R', Rr)] },
+        { c: 'L = R**2 * (T / 5772)**4            # L☉', ops: [O.v('L', L)] },
+        { c: 'plt.scatter(T, L, c=T, cmap="RdYlBu", s=14)', ops: [O.sc(T, L, { colors: T.map(tempColor) })] },
+        { c: 'plt.yscale("log")', ops: [O.ylog()] },
+        { c: ok ? 'plt.gca().invert_xaxis()' : 'plt.gca().invert_yaxis()', ops: [ok ? O.invx() : O.invy()], bug: true },
+        { c: 'plt.xlabel("T_eff [K]")', ops: [O.xl('T_eff [K]')] },
+        { c: 'plt.ylabel("L [L☉]")', ops: [O.yl('L [L☉]')] },
+      ];
+    },
+    fixes: ['plt.gca().invert_xaxis()', 'plt.xscale("log")', 'plt.xlim(3000, 10000)', 'plt.yscale("linear")'],
+    ex: 'Por convención el eje de temperatura va de mayor a menor: <code>invert_xaxis()</code>. invert_yaxis dejó las estrellas brillantes abajo.'
+  },
+  {
+    id: 'deteccion', t: 'np', titulo: 'Detectadas al revés',
+    obj: 'Las estrellas sobre la línea del límite (F ≥ F_lim) deben ser verdes y quedar como "Detectada".',
+    build(ok) {
+      R.seed(3);
+      const N = 100, d = R.arr(N, () => R.uniform(50, 500)), L = R.arr(N, () => R.uniform(1, 100));
+      const F = L.map((l, i) => l * L_SOL / (4 * Math.PI * (d[i] * PC) ** 2));
+      const Flim = 2e-11;
+      const det = F.map(f => ok ? f >= Flim : f <= Flim);
+      const pick = (a, want) => a.filter((_, i) => det[i] === want);
+      return [
+        { c: 'L_SOL, PC = 3.828e26, 3.0857e16', ops: [O.v('L_SOL', L_SOL), O.v('PC', PC)] },
+        { c: 'd = rng.uniform(50, 500, 100)       # pc', ops: [O.v('d', d)] },
+        { c: 'L = rng.uniform(1, 100, 100)        # L☉', ops: [O.v('L', L)] },
+        { c: 'F = L * L_SOL / (4 * np.pi * (d * PC)**2)', ops: [O.v('F', F)] },
+        { c: 'F_lim = 2e-11                       # W/m²', ops: [O.v('F_lim', Flim)] },
+        { c: ok ? 'det = F >= F_lim' : 'det = F <= F_lim', ops: [O.v('det', det)], bug: true },
+        { c: 'plt.scatter(d[det], F[det], c="tab:green", label="Detectada")', ops: [O.sc(pick(d, true), pick(F, true), { color: 'tab:green', label: 'Detectada' })] },
+        { c: 'plt.scatter(d[~det], F[~det], c="tab:gray", label="No detectada")', ops: [O.sc(pick(d, false), pick(F, false), { color: 'tab:gray', label: 'No detectada' })] },
+        { c: 'plt.axhline(F_lim, color="k", ls="--", label="Límite")', ops: [O.hl(Flim, { color: 'k', dash: true, label: 'Límite' })] },
+        { c: 'plt.yscale("log")', ops: [O.ylog()] },
+        { c: 'plt.xlabel("Distancia [pc]")', ops: [O.xl('Distancia [pc]')] },
+        { c: 'plt.ylabel("Flujo [W m⁻²]")', ops: [O.yl('Flujo [W m⁻²]')] },
+        { c: 'plt.legend()', ops: [O.legend()] },
+      ];
+    },
+    fixes: ['det = F >= F_lim', 'det = F == F_lim', 'det = d >= F_lim', 'det = ~(F >= F_lim)'],
+    ex: 'El telescopio detecta lo que tiene flujo igual o superior al límite. La máscara invertida pinta de verde justo lo que no se ve.'
+  },
+  {
+    id: 'estrellas', t: 'np', titulo: 'Estrellas que explotan',
+    obj: 'Imagen con cinco estrellas gaussianas (I0 = 100, σ = 0.5) brillantes en el centro y oscuras alrededor (Tarea 3).',
+    build(ok) {
+      R.seed(21);
+      const n = 90, x = linspace(-5, 5, n);
+      const x0 = R.arr(5, () => R.uniform(-4.2, 4.2)), y0 = R.arr(5, () => R.uniform(-4.2, 4.2));
+      const z = [];
+      for (let r = 0; r < n; r++) { const row = []; for (let c = 0; c < n; c++) { let s = 0; for (let i = 0; i < 5; i++) { const q = ((x[c] - x0[i]) ** 2 + (x[r] - y0[i]) ** 2) / (2 * 0.25); s += 100 * Math.exp(ok ? -q : q); } row.push(s); } z.push(row); }
+      return [
+        { c: 'I0, sigma = 100, 0.5', ops: [O.v('I0', 100), O.v('sigma', 0.5)] },
+        { c: 'x = np.linspace(-5, 5, 90)', ops: [O.v('x', x)] },
+        { c: 'X, Y = np.meshgrid(x, x)', ops: [O.v('X', '(90, 90)'), O.v('Y', '(90, 90)')] },
+        { c: 'x0 = rng.uniform(-5, 5, 5)', ops: [O.v('x0', x0)] },
+        { c: 'y0 = rng.uniform(-5, 5, 5)', ops: [O.v('y0', y0)] },
+        { c: 'I = np.zeros_like(X)', ops: [O.v('I', '(90, 90) ceros')] },
+        { c: 'for i in range(5):', ops: [] },
+        { c: ok ? '    I += I0 * np.exp(-((X - x0[i])**2 + (Y - y0[i])**2) / (2 * sigma**2))' : '    I += I0 * np.exp(((X - x0[i])**2 + (Y - y0[i])**2) / (2 * sigma**2))', ops: [O.v('I', `(90, 90) máx ≈ ${ok ? Math.max(...z.flat()).toFixed(1) : Math.max(...z.flat()).toExponential(1)}`)], bug: true },
+        { c: 'plt.imshow(I, extent=[-5, 5, -5, 5], origin="lower", cmap="inferno")', ops: [O.img(z, [-5, 5, -5, 5])] },
+        { c: 'plt.colorbar(label="Intensidad")', ops: [O.cbar('Intensidad')] },
+        { c: 'plt.xlabel("x")', ops: [O.xl('x')] },
+        { c: 'plt.ylabel("y")', ops: [O.yl('y')] },
+      ];
+    },
+    fixes: ['    I += I0 * np.exp(-((X - x0[i])**2 + (Y - y0[i])**2) / (2 * sigma**2))', '    I += I0 * np.exp(((X - x0[i])**2 + (Y - y0[i])**2) / (2 * sigma)**2)', '    I += I0 * np.log(((X - x0[i])**2 + (Y - y0[i])**2) / (2 * sigma**2))', '    I = I0 * np.exp(((X - x0[i])**2 + (Y - y0[i])**2) / (2 * sigma**2))'],
+    ex: 'Sin el signo menos la exponencial crece con la distancia: el máximo queda en las esquinas y las estrellas desaparecen.'
+  },
+  {
+    id: 'pdhist', t: 'pd', titulo: 'El histograma que era una línea',
+    obj: 'Queremos el histograma de la columna "normal" (Clase 4).',
+    build(ok) {
+      R.seed(9);
+      const d = R.arr(300, () => R.normal(10, 2));
+      return [
+        { c: 'df = pd.DataFrame({"normal": rng.normal(10, 2, 300)})', ops: [O.v('df', 'DataFrame (300, 1)')] },
+        { c: ok ? 'df["normal"].hist(bins=20)' : 'df["normal"].plot()', ops: [ok ? O.hist(d, { bins: 20, color: 'tab:blue' }) : O.line(d.map((_, i) => i), d, { color: 'tab:blue', lw: 1 })], bug: true },
+        { c: 'plt.title("df[\'normal\']")', ops: [O.title("df['normal']")] },
+      ];
+    },
+    fixes: ['df["normal"].hist(bins=20)', 'df.plot("normal")', 'df["normal"].sort_values().plot()', 'df["normal"].value_counts()'],
+    ex: '<code>.plot()</code> dibuja los valores contra el índice. <code>.hist()</code> cuenta cuántos caen en cada intervalo.'
+  },
+  {
+    id: 'barras', t: 'pd', titulo: 'Barras en el orden equivocado',
+    obj: 'Barras del flujo de cada estrella (Tarea 2), ordenadas de MAYOR a MENOR.',
+    build(ok) {
+      const nombres = ['C', 'A', 'E', 'B', 'D'];
+      const Ld = { A: [1.0, 10], B: [2.5, 25], C: [0.8, 15], D: [5.0, 40], E: [10.0, 60] };
+      const F = nombres.map(n => Ld[n][0] * L_SOL / (4 * Math.PI * (Ld[n][1] * PC) ** 2) / 1e-9);
+      let idx = nombres.map((_, i) => i).sort((a, b) => ok ? F[b] - F[a] : F[a] - F[b]);
+      return [
+        { c: 'df = pd.DataFrame({"estrella": list("CAEBD"), "flujo": F})', ops: [O.v('df', 'DataFrame (5, 2)')] },
+        { c: ok ? 'df = df.sort_values("flujo", ascending=False)' : 'df = df.sort_values("flujo", ascending=True)', ops: [O.v('df.estrella', idx.map(i => nombres[i]).join(' '))], bug: true },
+        { c: 'plt.bar(df["estrella"], df["flujo"] / 1e-9, color="tab:orange")', ops: [O.bar(idx.map(i => nombres[i]), idx.map(i => F[i]), { color: 'tab:orange' })] },
+        { c: 'plt.ylabel("Flujo [10⁻⁹ W m⁻²]")', ops: [O.yl('Flujo [10⁻⁹ W m⁻²]')] },
+        { c: 'plt.title("De mayor a menor flujo")', ops: [O.title('De mayor a menor flujo')] },
+      ];
+    },
+    fixes: ['df = df.sort_values("flujo", ascending=False)', 'df.sort_values("flujo", ascending=False)', 'df = df.sort_values("estrella", ascending=False)', 'df = df.sort_index(ascending=False)'],
+    ex: 'ascending=False ordena de mayor a menor. Ojo: sin <code>df = </code> el resultado ordenado se pierde.'
+  },
+  {
+    id: 'candidatos', t: 'plt', titulo: 'Candidatos que no calzan',
+    obj: 'Resaltar en rojo los puntos con F < F̄ − 3σ y marcar el inicio y fin del tránsito (Tarea 3).',
+    build(ok) {
+      const { t, f, u } = transitData(-1);
+      const cand = f.map(x => x < u);
+      const tc = t.filter((_, i) => cand[i]), fc = f.filter((_, i) => cand[i]);
+      return [
+        { c: '# t, flujo y umbral ya calculados', ops: [O.v('t', t), O.v('flujo', f), O.v('umbral', u)] },
+        { c: 'cand = flujo < umbral', ops: [O.v('cand', cand)] },
+        { c: 'plt.plot(t, flujo, ".", color="0.6", ms=2)', ops: [O.line(t, f, { mk: '.', ls: 'none', color: '0.6' })] },
+        ok ? { c: 'plt.plot(t[cand], flujo[cand], "o", color="tab:red", label="Candidatos")', ops: [O.line(tc, fc, { mk: 'o', ls: 'none', color: 'tab:red', label: 'Candidatos' })], bug: true }
+          : { c: 'plt.plot(t[cand], flujo, "o", color="tab:red", label="Candidatos")', ops: [O.err(`Traceback (most recent call last):\n  plt.plot(t[cand], flujo, "o", ...)\nValueError: x and y must have same first dimension, but have shapes (${tc.length},) and (500,)`)], bug: true },
+        { c: 'plt.axvline(4.5, color="k", ls=":")', ops: [O.vl(4.5, { color: 'k', dash: true })] },
+        { c: 'plt.axvline(5.0, color="k", ls=":")', ops: [O.vl(5.0, { color: 'k', dash: true })] },
+        { c: 'plt.xlabel("Tiempo [años]")', ops: [O.xl('Tiempo [años]')] },
+        { c: 'plt.legend()', ops: [O.legend()] },
+      ];
+    },
+    fixes: ['plt.plot(t[cand], flujo[cand], "o", color="tab:red", label="Candidatos")', 'plt.plot(t, flujo[cand], "o", color="tab:red", label="Candidatos")', 'plt.plot(cand, flujo, "o", color="tab:red", label="Candidatos")', 'plt.plot(t[cand], flujo[~cand], "o", color="tab:red", label="Candidatos")'],
+    ex: 'x e y deben tener el mismo largo: la misma máscara se aplica a ambos arreglos.'
+  },
+];
+
+/* =====================================================================
+   Resaltado de sintaxis Python
+   ===================================================================== */
+const KW = new Set('def class return if else elif for in while import from as with not and or is lambda True False None assert try except pass break continue yield'.split(' '));
+function hl(code) {
+  const re = /(#[^\n]*)|([fFrRbB]?"(?:[^"\\\n]|\\.)*"?|[fFrRbB]?'(?:[^'\\\n]|\\.)*'?)|(\b\d[\d_]*\.?\d*(?:e[-+]?\d+)?)|([A-Za-z_\u0001][\w\u0001]*)|([\s\S])/g;
+  let out = '', m;
+  while ((m = re.exec(code))) {
+    if (m[1]) out += `<span class="c">${esc(m[1])}</span>`;
+    else if (m[2]) out += `<span class="s">${esc(m[2])}</span>`;
+    else if (m[3]) out += `<span class="n">${esc(m[3])}</span>`;
+    else if (m[4]) {
+      const w = m[4];
+      if (KW.has(w)) out += `<span class="k">${w}</span>`;
+      else if (code[re.lastIndex] === '(') out += `<span class="f">${esc(w)}</span>`;
+      else out += esc(w);
+    } else out += esc(m[5]);
+  }
+  return out;
+}
+
+/* =====================================================================
+   Sonido
+   ===================================================================== */
+const Snd = {
+  ctx: null,
+  init() { if (!this.ctx) { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch {} } },
+  tone(f, d, type = 'sine', vol = 0.07, f2) {
+    if (!S.sound || !this.ctx) return;
+    const t = this.ctx.currentTime, o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g).connect(this.ctx.destination); o.start(t); o.stop(t + d + 0.02);
+  },
+  ok() { this.tone(660, .09, 'triangle'); setTimeout(() => this.tone(990, .14, 'triangle'), 75); },
+  bad() { this.tone(220, .28, 'sawtooth', .05, 90); },
+  heart() { this.tone(520, .08, 'square', .04); setTimeout(() => this.tone(260, .35, 'square', .04, 70), 90); },
+  gain() { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => this.tone(f, .12, 'triangle', .05), i * 70)); },
+  tick() { this.tone(1400, .03, 'square', .02); },
+  win() { [392, 523, 659, 784, 1046].forEach((f, i) => setTimeout(() => this.tone(f, .18, 'triangle', .06), i * 110)); },
+  over() { [440, 392, 330, 262].forEach((f, i) => setTimeout(() => this.tone(f, .25, 'sawtooth', .04), i * 160)); },
+};
+
+/* =====================================================================
+   Vidas animadas
+   ===================================================================== */
+const HEART = 'M12 21.2s-7.6-4.7-9.7-9.5C.8 8.1 3 4.3 6.7 4.3c2.1 0 3.7 1.2 5.3 3.2 1.6-2 3.2-3.2 5.3-3.2 3.7 0 5.9 3.8 4.4 7.4-2.1 4.8-9.7 9.5-9.7 9.5z';
+const heartSVG = (cls = 'full') => `<svg viewBox="0 0 24 24" aria-hidden="true"><path class="${cls}" d="${HEART}"/>${cls === 'full' ? '<ellipse class="shine" cx="7.6" cy="8.4" rx="1.9" ry="1.2" transform="rotate(-35 7.6 8.4)"/>' : ''}</svg>`;
+
+class LifeBar {
+  constructor(el, n) {
+    this.el = el; this.max = n; this.n = n; this.inf = n === Infinity; this.errors = 0;
+    this.render();
+  }
+  render() {
+    this.el.innerHTML = '';
+    if (this.inf) {
+      this.heart = h('div', { class: 'heart beat', html: heartSVG() });
+      this.count = h('span', { class: 'inf', title: 'Errores' }, '∞');
+      this.el.append(this.heart, this.count);
+      this.el.setAttribute('aria-label', 'Vidas ilimitadas');
+      return;
+    }
+    this.slots = [];
+    for (let i = 0; i < this.max; i++) {
+      const s = h('div', { class: 'heart' + (i < this.n ? ' beat' : ''), html: heartSVG(i < this.n ? 'full' : 'empty') });
+      s.style.animationDelay = (i * .12) + 's';
+      this.slots.push(s); this.el.append(s);
+    }
+    this.el.setAttribute('aria-label', `${this.n} de ${this.max} vidas`);
+  }
+  lose() {
+    Snd.heart(); flash();
+    if (this.inf) {
+      this.errors++;
+      this.heart.classList.remove('crack'); void this.heart.offsetWidth; this.heart.classList.add('crack');
+      this.count.textContent = '∞ · ' + this.errors + (this.errors === 1 ? ' error' : ' errores');
+      shards(this.heart);
+      return true;
+    }
+    if (this.n <= 0) return false;
+    this.n--;
+    const s = this.slots[this.n];
+    s.classList.remove('beat');
+    s.innerHTML = heartSVG('empty');
+    const l = h('div', { class: 'half l', html: heartSVG() }), r = h('div', { class: 'half r', html: heartSVG() });
+    s.append(l, r);
+    shards(s);
+    setTimeout(() => { l.remove(); r.remove(); }, 950);
+    this.el.setAttribute('aria-label', `${this.n} de ${this.max} vidas`);
+    return this.n > 0;
+  }
+  gain() {
+    if (this.inf || this.n >= this.max) return false;
+    const s = this.slots[this.n];
+    s.innerHTML = heartSVG('full'); s.classList.add('beat', 'pop');
+    setTimeout(() => s.classList.remove('pop'), 650);
+    this.n++; Snd.gain(); toast('+1 vida');
+    return true;
+  }
+  get alive() { return this.inf || this.n > 0; }
+}
+function shards(el) {
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.random() * .4, d = 22 + Math.random() * 22;
+    const sp = h('span', { class: 'shard' });
+    sp.style.setProperty('--dx', Math.cos(a) * d + 'px'); sp.style.setProperty('--dy', (Math.sin(a) * d + 18) + 'px');
+    el.append(sp); setTimeout(() => sp.remove(), 850);
+  }
+}
+function flash(good) {
+  const f = $('#flash'); f.className = good ? 'good' : ''; void f.offsetWidth; f.classList.add('on');
+  if (!good) { const g = $('#game'); g.classList.remove('shake'); void g.offsetWidth; g.classList.add('shake'); }
+}
+function toast(msg, bad) { const t = h('div', { class: 'toast' + (bad ? ' bad' : '') }, msg); document.body.append(t); setTimeout(() => t.remove(), 1050); }
+
+/* =====================================================================
+   Temporizador
+   ===================================================================== */
+const Timer = {
+  run: false, left: 0, total: 1, onEnd: null, last: 0, lastSec: -1, raf: 0,
+  start(sec, onEnd) { this.total = sec; this.left = sec; this.onEnd = onEnd; this.run = true; this.last = performance.now(); this.lastSec = -1; $('#tbar').hidden = false; cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(t => this.tick(t)); },
+  tick(now) {
+    if (this.run) {
+      this.left -= (now - this.last) / 1000;
+      if (this.left <= 0) { this.left = 0; this.run = false; this.draw(); const f = this.onEnd; this.onEnd = null; f && f(); return; }
+      const s = Math.ceil(this.left); if (s <= 5 && s !== this.lastSec) { this.lastSec = s; Snd.tick(); }
+    }
+    this.last = now; this.draw();
+    this.raf = requestAnimationFrame(t => this.tick(t));
+  },
+  draw() {
+    $('#tfill').style.width = (100 * this.left / this.total) + '%';
+    $('#tbar').classList.toggle('low', this.left <= Math.min(5, this.total * .25));
+    const s = Math.ceil(this.left);
+    $('#ttext').textContent = s >= 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : s + ' s';
+  },
+  pause() { this.run = false; },
+  resume() { if (this.left > 0 && this.onEnd) { this.run = true; this.last = performance.now(); } },
+  add(s) { this.left = Math.max(0.01, this.left + s); if (this.left > this.total) this.total = this.left; this.draw(); },
+  stop() { this.run = false; this.onEnd = null; cancelAnimationFrame(this.raf); },
+  none(text) { this.stop(); $('#tfill').style.width = '100%'; $('#tbar').classList.remove('low'); $('#ttext').textContent = text || 'sin reloj'; },
+};
+
+/* =====================================================================
+   Mazos de preguntas
+   ===================================================================== */
+const inTopics = q => S.topics.includes(q.t);
+function deck(pool) {
+  let src = pool.filter(inTopics); if (!src.length) src = pool;
+  let cards = [];
+  return () => { if (!cards.length) cards = shuffle(src); return cards.pop(); };
+}
+
+/* =====================================================================
+   Renderizadores de preguntas
+   ===================================================================== */
+const norm = s => s.replace(/\s+/g, '').replace(/'/g, '"');
+function parseFill(code) {
+  const answers = [];
+  const marked = code.replace(/⟦([^⟧]+)⟧/g, (_, a) => { answers.push(a.split('|')); return '\u0001' + (answers.length - 1) + '\u0001'; });
+  return { marked, answers };
+}
+
+// Completar código
+function renderFill(box, q, { bank = true, onDone, hint = true }) {
+  const { marked, answers } = parseFill(q.c);
+  let html = hl(marked).replace(/\u0001(\d+)\u0001/g, (_, i) => {
+    const w = Math.max(...answers[i].map(a => a.length)) + 1;
+    return `<input class="blank" data-i="${i}" id="blank${i}" style="width:calc(${w}ch + 12px)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Espacio ${+i + 1}">`;
+  });
+  const card = h('div', { class: 'card' },
+    h('div', { class: 'prompt' }, h('h3', {}, q.q), h('span', { class: 'topicpill' }, TOPICS[q.t])),
+    h('div', { class: 'code', html }));
+  const inputs = $$('input.blank', card);
+  let usedHint = false, done = false;
+  let bankEl = null;
+  if (bank) {
+    const all = FILL.filter(o => o.t === q.t && o !== q).flatMap(o => parseFill(o.c).answers.map(a => a[0]));
+    const mine = answers.map(a => a[0]);
+    const extra = shuffle([...new Set(all)].filter(a => !mine.includes(a))).slice(0, Math.max(2, 5 - mine.length));
+    bankEl = h('div', { class: 'bank', 'aria-label': 'Banco de palabras' });
+    for (const w of shuffle([...mine, ...extra])) {
+      const b = h('button', { type: 'button', onclick: () => {
+        const target = inputs.find(i => i === document.activeElement && !i.value) || inputs.find(i => !i.value) || inputs.find(i => i === lastFocus);
+        if (!target) return;
+        target.value = w; b.classList.add('used');
+        const nxt = inputs.find(i => !i.value); (nxt || target).focus();
+      } }, w);
+      bankEl.append(b);
+    }
+    card.append(bankEl);
+  }
+  let lastFocus = inputs[0];
+  inputs.forEach((inp, k) => {
+    inp.addEventListener('focus', () => lastFocus = inp);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); if (k < inputs.length - 1 && !inputs[k + 1].value) inputs[k + 1].focus(); else check(); }
+    });
+    inp.addEventListener('input', () => { inp.classList.remove('bad'); if (bankEl) $$('button', bankEl).forEach(b => b.classList.toggle('used', inputs.some(i => i.value === b.textContent))); });
+  });
+  const hintBtn = h('button', { class: 'btn alt', type: 'button', onclick: () => {
+    const i = inputs.find(x => !answers[+x.dataset.i].some(a => norm(a) === norm(x.value)));
+    if (!i) return;
+    usedHint = true; const a = answers[+i.dataset.i][0];
+    i.value = a.slice(0, Math.max(1, Math.ceil(a.length / 3))); i.focus();
+    toast('Pista: vale menos puntos');
+  } }, 'Pista');
+  const checkBtn = h('button', { class: 'btn', type: 'button', onclick: () => check() }, 'Comprobar ', h('kbd', {}, '⏎'));
+  card.append(h('div', { class: 'row' }, hint ? hintBtn : null, h('span', { class: 'grow' }), checkBtn));
+  box.append(card);
+  setTimeout(() => inputs[0] && inputs[0].focus({ preventScroll: true }), 30);
+
+  function check(timeout) {
+    if (done) return; done = true;
+    let ok = true;
+    inputs.forEach(i => {
+      const good = answers[+i.dataset.i].some(a => norm(a) === norm(i.value));
+      i.classList.add(good ? 'ok' : 'bad'); i.readOnly = true;
+      if (!good) ok = false;
+    });
+    if (timeout) ok = false;
+    if (!ok) setTimeout(() => inputs.forEach(i => { if (!i.classList.contains('ok')) { i.value = answers[+i.dataset.i][0]; i.classList.replace('bad', 'reveal'); } }), 550);
+    hintBtn.disabled = true; checkBtn.disabled = true;
+    if (bankEl) bankEl.remove();
+    onDone({ ok, partial: usedHint, answer: answers.map(a => a[0]).join('  ·  '), ex: q.ex, card });
+  }
+  return { check, card, focus: () => inputs[0] && inputs[0].focus() };
+}
+
+// Opción múltiple
+function renderMCQ(box, q, { onDone }) {
+  const order = shuffle(q.o.map((_, i) => i));
+  const card = h('div', { class: 'card' }, h('div', { class: 'prompt' }, h('h3', {}, q.q), h('span', { class: 'topicpill' }, TOPICS[q.t])));
+  if (q.c) card.append(h('div', { class: 'code', html: hl(q.c) }));
+  const opts = h('div', { class: 'opts' });
+  let done = false;
+  const btns = order.map((oi, k) => h('button', { class: 'opt', type: 'button', onclick: () => pick(k) }, h('span', { class: 'key' }, String(k + 1)), h('span', {}, q.o[oi])));
+  opts.append(...btns); card.append(opts); box.append(card);
+  function pick(k, timeout) {
+    if (done) return; done = true;
+    const right = order.indexOf(0);
+    btns.forEach(b => b.disabled = true);
+    if (k != null) btns[k].classList.add(k === right ? 'ok' : 'bad');
+    btns[right].classList.add('ok');
+    onDone({ ok: !timeout && k === right, answer: q.o[0], ex: q.ex, card });
+  }
+  return { pick, check: () => pick(null, true), keys: k => pick(k), card };
+}
+
+// Ordenar líneas
+function renderOrder(box, q, { onDone, onMiss }) {
+  const card = h('div', { class: 'card' }, h('div', { class: 'prompt' }, h('h3', {}, q.q), h('span', { class: 'topicpill' }, TOPICS[q.t])));
+  const pool = h('div', { class: 'col' }, h('div', { class: 'label' }, 'Líneas disponibles · toca para agregar'));
+  const sol = h('div', { class: 'col' }, h('div', { class: 'label' }, 'Tu programa · toca para quitar'));
+  card.append(h('div', { class: 'order' }, pool, sol));
+  const checkBtn = h('button', { class: 'btn', type: 'button', disabled: true, onclick: () => check() }, 'Comprobar orden');
+  card.append(h('div', { class: 'row' }, h('span', { class: 'grow', style: 'color:var(--muted);font-size:.88rem' }, 'Cada intento fallido cuesta una vida.'), checkBtn));
+  box.append(card);
+  let done = false;
+  const items = shuffle(q.l.map((txt, i) => ({ txt, i })));
+  const placed = [];
+  function mk(it) {
+    return h('button', { class: 'ol', type: 'button', html: hl(it.txt) });
+  }
+  function draw(marks) {
+    $$('.ol', pool).forEach(e => e.remove()); $$('.ol', sol).forEach(e => e.remove());
+    items.filter(it => !placed.includes(it)).forEach(it => { const b = mk(it); b.onclick = () => { if (done) return; placed.push(it); draw(); }; pool.append(b); });
+    placed.forEach((it, k) => { const b = mk(it); b.prepend(h('span', { class: 'num' }, String(k + 1).padStart(2, ' '))); if (marks) b.classList.add(marks[k] ? 'ok' : 'bad'); b.onclick = () => { if (done) return; placed.splice(k, 1); draw(); }; sol.append(b); });
+    checkBtn.disabled = done || placed.length !== items.length;
+  }
+  draw();
+  function check(timeout) {
+    if (done) return;
+    if (timeout) { done = true; placed.length = 0; placed.push(...q.l.map(txt => items.find(it => it.txt === txt))); draw(q.l.map(() => true)); onDone({ ok: false, ex: q.ex, card }); return; }
+    const marks = placed.map((it, k) => it.txt === q.l[k]);
+    if (marks.every(Boolean)) { done = true; draw(marks); onDone({ ok: true, ex: q.ex, card }); }
+    else { draw(marks); onMiss && onMiss(marks.filter(Boolean).length); }
+  }
+  return { check, card, finish: () => { done = true; checkBtn.disabled = true; } };
+}
+
+// Terminal
+const termNorm = s => s.trim().replace(/\s+/g, ' ').replace(/'/g, '"').replace(/\/$/, '');
+function renderTerm(box, q, { onDone }) {
+  const card = h('div', { class: 'card' });
+  card.append(h('div', { class: 'prompt' }, h('div', { class: 'task' }, h('b', {}, '$'), h('h3', {}, q.q)), h('span', { class: 'topicpill' }, TOPICS[q.t])));
+  const term = h('div', { class: 'term' });
+  const input = h('input', { id: 'termInput', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Comando' });
+  const ps = () => h('span', {}, h('span', { class: 'ps' }, 'estudiante@fc2'), ':', h('span', { class: 'path' }, '~/fiscompii'), '$');
+  const line = h('div', { class: 'line' }, ps(), input);
+  term.append(h('div', { class: 'out' }, 'Escribe el comando y presiona Enter.'), line);
+  card.append(term); box.append(card);
+  setTimeout(() => input.focus({ preventScroll: true }), 30);
+  let done = false;
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); check(); } });
+  term.addEventListener('click', () => input.focus());
+  function check(timeout) {
+    if (done) return; done = true;
+    const v = input.value;
+    const ok = !timeout && q.a.some(a => termNorm(a) === termNorm(v));
+    const echo = h('div', { class: 'line' }, ps(), h('span', {}, v || ''));
+    line.replaceWith(echo);
+    if (ok) { if (q.out) term.append(h('div', { class: 'out' }, q.out)); }
+    else { term.append(h('div', { class: 'err' }, timeout ? '^C  (se acabó el tiempo)' : `bash: no hace lo pedido`), h('div', { class: 'out' }, '# correcto: ' + q.a[0])); }
+    term.scrollTop = term.scrollHeight;
+    onDone({ ok, answer: q.a[0], ex: q.a.length > 1 ? 'También vale: ' + q.a.slice(1).join(' · ') : '', card });
+  }
+  return { check, card };
+}
+
+function feedback(card, { ok, title, ex, answer, showAnswer, next, nextLabel = 'Siguiente' }) {
+  const fb = h('div', { class: 'fb ' + (ok ? 'ok' : 'bad') }, h('b', {}, title || (ok ? 'Correcto' : 'Incorrecto')));
+  if (!ok && showAnswer && answer) fb.append(h('div', { class: 'code', html: hl(answer) }));
+  if (ex) fb.append(h('p', { html: ex }));
+  let fired = false;
+  const go = () => { if (fired) return; fired = true; cleanup(); next(); };
+  if (next) { const b = h('button', { class: 'btn', type: 'button', onclick: go }, nextLabel + ' ', h('kbd', {}, '⏎')); fb.append(h('div', { class: 'row', style: 'margin-top:4px' }, b)); setTimeout(() => b.focus({ preventScroll: true }), 50); }
+  card.append(fb);
+  fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  const key = e => { const tag = document.activeElement?.tagName; if ((e.key === 'Enter' || e.key === ' ') && next && tag !== 'INPUT' && tag !== 'BUTTON' && tag !== 'TEXTAREA') { e.preventDefault(); go(); } };
+  const cleanup = () => document.removeEventListener('keydown', key);
+  setTimeout(() => document.addEventListener('keydown', key), 120);
+  Game.cleanups.push(cleanup);
+  return fb;
+}
+
+/* =====================================================================
+   Estado de juego y HUD
+   ===================================================================== */
+const Game = {
+  mode: null, cfg: null, score: 0, streak: 0, best: 0, ok: 0, bad: 0, lives: null, cleanups: [], keyHandler: null,
+  reset() { this.cleanups.forEach(f => f()); this.cleanups = []; if (this.keyHandler) document.removeEventListener('keydown', this.keyHandler); this.keyHandler = null; Timer.stop(); this.score = 0; this.streak = 0; this.best = 0; this.ok = 0; this.bad = 0; },
+  onKeys(fn) { if (this.keyHandler) document.removeEventListener('keydown', this.keyHandler); this.keyHandler = fn; document.addEventListener('keydown', fn); },
+  hud() { $('#hudScore').textContent = this.score; $('#hudStreak').textContent = this.streak >= 2 ? `${this.streak} ×${this.mult()}` : this.streak; },
+  mult() { return Math.min(5, 1 + Math.floor(this.streak / 3)); },
+  right(base, timeFrac = 0, partial = false) {
+    this.ok++; this.streak++; this.best = Math.max(this.best, this.streak);
+    let pts = Math.round((base + base * timeFrac) * this.mult() * (partial ? .5 : 1));
+    this.score += pts; this.hud(); Snd.ok(); flash(true); toast('+' + pts);
+    if (this.streak % 5 === 0 && this.lives) this.lives.gain();
+    return pts;
+  },
+  wrong() { this.bad++; this.streak = 0; this.hud(); Snd.bad(); return this.lives ? this.lives.lose() : true; },
+};
+
+function show(id) { for (const s of ['home', 'setup', 'game', 'end']) $('#' + s).hidden = s !== id; window.scrollTo({ top: 0 }); }
+function setHud(mode, sub, { lives = true, timer = true, stats = true } = {}) {
+  $('#hud').hidden = false;
+  $('#hudMode').textContent = mode; $('#hudSub').textContent = sub || '';
+  $('#hudLives').hidden = !lives; $('.tw').style.visibility = timer ? 'visible' : 'hidden';
+  $$('.stat').forEach(s => s.hidden = !stats);
+  Game.hud();
+}
+
+/* =====================================================================
+   Modos
+   ===================================================================== */
+const ICONS = {
+  clock: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="16" cy="17" r="11"/><path d="M16 11v6l4 3M12 3h8"/></svg>',
+  team: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="4"/><circle cx="22" cy="12" r="3.4"/><path d="M3 27c0-5 3.6-8 8-8s8 3 8 8M18 21c1-1 2.5-1.6 4-1.6 3.6 0 6 2.6 6 6.6"/></svg>',
+  chart: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v24h24"/><path d="M8 20l5-7 5 4 8-10"/><circle cx="26" cy="7" r="1.6" fill="currentColor"/></svg>',
+  vs: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l13 13M5 5h5M5 5v5M27 5L14 18M27 5h-5M27 5v5M9 22l-4 4M23 22l4 4M12 19l-3 3M20 19l3 3"/></svg>',
+  eye: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 16s5-9 14-9 14 9 14 9-5 9-14 9S2 16 2 16z"/><circle cx="16" cy="16" r="4"/></svg>',
+  list: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 8h16M11 16h12M11 24h14"/><path d="M4 6l2 2-2 2M4 14l2 2-2 2M4 22l2 2-2 2"/></svg>',
+  term: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="26" height="22" rx="3"/><path d="M8 12l4 4-4 4M15 21h8"/></svg>',
+  grade: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z"/><path d="M20 3v6h6M11 16l3 3 6-6M11 24h10"/></svg>',
+};
+
+const MODES = [
+  { id: 'reloj', name: 'Contrarreloj', ico: 'clock', desc: 'Completa el código antes de que se acabe el tiempo. Cada 3 aciertos sube el nivel y baja el reloj.', tags: [['Contra reloj', 'hot'], ['Solo']] },
+  { id: 'grupo', name: 'Equipo contra el reloj', ico: 'team', desc: 'Un reloj y unas vidas compartidas. Se turnan para completar código; cada acierto suma segundos.', tags: [['Contra reloj', 'hot'], ['Grupo']] },
+  { id: 'lab', name: 'Laboratorio de gráficos', ico: 'chart', desc: 'El código corre línea a línea y la figura se construye ante tus ojos. Encuentra el error y arréglalo.', tags: [['Depurar'], ['Visual']] },
+  { id: 'duelo', name: 'Duelo', ico: 'vs', desc: '1 contra 1 o equipo contra equipo en el mismo teclado. El primero en acertar se lleva el punto.', tags: [['VS', 'vs'], ['1v1 · equipos']] },
+  { id: 'oraculo', name: '¿Qué imprime?', ico: 'eye', desc: 'Lee el código y predice el resultado sin ejecutarlo. Rápido, con trampas típicas de NumPy y pandas.', tags: [['Contra reloj', 'hot'], ['Solo']] },
+  { id: 'orden', name: 'Ordena el programa', ico: 'list', desc: 'Las líneas llegan desordenadas. Arma el programa en el orden en que debe ejecutarse.', tags: [['Lógica'], ['Solo']] },
+  { id: 'terminal', name: 'Terminal Rush', ico: 'term', desc: 'Comandos de Unix y Git escritos en una terminal simulada, con el reloj encima.', tags: [['Contra reloj', 'hot'], ['Unix · Git']] },
+  { id: 'simulacro', name: 'Simulacro de prueba', ico: 'grade', desc: '15 preguntas mezcladas en 12 minutos. Sin vidas: al final recibes una nota de 1,0 a 7,0.', tags: [['Prueba 1 · 10 nov'], ['Nota']] },
+];
+const LIFE_OPTS = [
+  { n: 1, name: 'Muerte súbita', sub: 'Un error y se acaba' },
+  { n: 3, name: '3 vidas', sub: 'Clásico' },
+  { n: 5, name: '5 vidas', sub: 'Con margen' },
+  { n: Infinity, name: 'Ilimitadas', sub: 'Práctica libre' },
+];
+const lifeKey = n => n === Infinity ? 'inf' : String(n);
+const recKey = (m, n) => `rec.${m}.${lifeKey(n)}`;
+
+/* ---------- Inicio ---------- */
+function renderHome() {
+  const home = $('#home'); home.innerHTML = '';
+  const sample = hl('t = np.linspace(0, 10, 500)\nflujo = 1 + rng.normal(0, 0.002, 500)\nflujo[(t >= 4.5) & (t <= 5.0)] -= 0.02\numbral = flujo.mean() - 3 * flujo.std()\n# ¿cuántos puntos caen bajo el umbral?');
+  home.append(
+    h('div', { class: 'hero' },
+      h('div', {}, h('h1', { html: 'Repasa FC-2 <em>jugando</em>.' }), h('p', {}, 'Ocho modos con la materia del curso: terminal y Git, Python, clases, NumPy, Matplotlib, pandas y lectura de archivos. Elige los temas, el modo y cuántas vidas te das.')),
+      h('div', { class: 'hero-code', html: sample })),
+    h('div', { class: 'label' }, 'Temas en juego'));
+  const tp = h('div', { class: 'topics' });
+  for (const [k, v] of Object.entries(TOPICS)) {
+    const b = h('button', { class: 'chip', type: 'button', 'aria-pressed': String(S.topics.includes(k)), onclick: () => {
+      const on = S.topics.includes(k);
+      if (on && S.topics.length === 1) { toast('Deja al menos un tema', true); return; }
+      S.topics = on ? S.topics.filter(x => x !== k) : [...S.topics, k];
+      b.setAttribute('aria-pressed', String(!on)); store.set('topics', S.topics);
+    } }, h('span', { class: 'dot' }), v);
+    tp.append(b);
+  }
+  tp.append(h('button', { class: 'ghost', type: 'button', style: 'font-size:.8rem', onclick: () => { S.topics = Object.keys(TOPICS); store.set('topics', S.topics); renderHome(); } }, 'Todos'));
+  home.append(tp, h('div', { class: 'label', style: 'margin-bottom:10px' }, 'Modos de juego'));
+  const grid = h('div', { class: 'modes' });
+  for (const m of MODES) {
+    const recs = LIFE_OPTS.map(o => [o, store.get(recKey(m.id, o.n), null)]).filter(([, r]) => r != null);
+    let recTxt = 'Sin récord todavía';
+    if (m.id === 'simulacro') { const r = store.get('rec.simulacro', null); if (r) recTxt = `Mejor nota: ${r.toFixed(1).replace('.', ',')}`; }
+    else if (m.id === 'duelo') { const r = store.get('rec.duelo', null); if (r) recTxt = `Último: ${r}`; }
+    else if (recs.length) { const [o, r] = recs.reduce((a, b) => b[1] > a[1] ? b : a); recTxt = `Récord: ${r} pts · ${o.name.toLowerCase()}`; }
+    grid.append(h('button', { class: 'mode', type: 'button', onclick: () => { Snd.init(); openSetup(m); } },
+      h('span', { class: 'ico', html: ICONS[m.ico] }),
+      h('h3', {}, m.name), h('p', {}, m.desc),
+      h('div', { class: 'tags' }, m.tags.map(([t, c]) => h('span', { class: 'tag ' + (c || '') }, t))),
+      h('span', { class: 'rec' }, recTxt)));
+  }
+  home.append(grid, h('p', { class: 'foot' }, 'Contenidos de Física Computacional II (USACH, 2026), clases 1 a 5 y tareas 1 a 5. Teclado: Enter para comprobar y avanzar, 1–4 para elegir opciones.'));
+}
+
+/* ---------- Configuración ---------- */
+function lifePicker(def = 3) {
+  let val = store.get('lastLives', def); if (val === 'inf') val = Infinity;
+  const wrap = h('div', { class: 'lifepick', role: 'radiogroup', 'aria-label': 'Vidas' });
+  const btns = LIFE_OPTS.map(o => {
+    const hearts = o.n === Infinity ? heartSVG() + '<span style="font-family:var(--mono);margin-left:3px">∞</span>' : Array.from({ length: o.n }, () => heartSVG()).join('');
+    const b = h('button', { class: 'lp', type: 'button', role: 'radio', 'aria-checked': String(o.n === val), onclick: () => { val = o.n; btns.forEach((x, i) => x.setAttribute('aria-checked', String(LIFE_OPTS[i].n === val))); store.set('lastLives', lifeKey(val)); } },
+      h('span', { class: 'hrow heart', style: 'width:auto;height:auto', html: hearts }), h('b', {}, o.name), h('small', {}, o.sub));
+    return b;
+  });
+  wrap.append(...btns);
+  return { el: wrap, get: () => val };
+}
+function namesFrom(text, fallback) { const n = text.split(/[\n,]+/).map(s => s.trim()).filter(Boolean); return n.length ? n : fallback; }
+
+function openSetup(m) {
+  const box = $('#setup'); box.innerHTML = '';
+  const card = h('div', { class: 'setup' }, h('div', {}, h('div', { class: 'label' }, 'Modo'), h('h2', {}, m.name), h('p', { class: 'desc' }, m.desc)));
+  let lp = null, extra = {};
+  if (m.id !== 'simulacro') { lp = lifePicker(); card.append(h('div', { class: 'label' }, m.id === 'duelo' ? 'Vidas de cada lado' : (m.id === 'grupo' ? 'Vidas del equipo' : 'Vidas')), lp.el); }
+  if (['reloj', 'grupo'].includes(m.id)) {
+    const cb = h('input', { type: 'checkbox', id: 'bankChk' }); cb.checked = store.get('bank', true);
+    cb.onchange = () => store.set('bank', cb.checked);
+    card.append(h('label', { class: 'toggle', for: 'bankChk' }, cb, 'Mostrar banco de palabras (más fácil). Sin él hay que escribir cada respuesta.'));
+    extra.bank = () => cb.checked;
+  }
+  if (m.id === 'grupo') {
+    const ta = h('textarea', { id: 'grpNames' }); ta.value = store.get('grpNames', 'Antonia\nBenjamín\nCatalina');
+    const sel = h('select', { id: 'grpTime' }, ...[90, 150, 240].map(s => h('option', { value: s }, `${s} segundos`))); sel.value = store.get('grpTime', 150);
+    card.append(h('div', { class: 'fieldrow' },
+      h('label', { class: 'field', for: 'grpNames' }, h('span', { class: 'label' }, 'Integrantes (uno por línea)'), ta),
+      h('label', { class: 'field', for: 'grpTime' }, h('span', { class: 'label' }, 'Reloj inicial'), sel, h('small', { style: 'color:var(--muted)' }, 'Acierto: +8 s. Pasar turno: −5 s.'))));
+    extra.players = () => { store.set('grpNames', ta.value); return namesFrom(ta.value, ['Jugador 1', 'Jugador 2']); };
+    extra.time = () => { store.set('grpTime', +sel.value); return +sel.value; };
+  }
+  if (m.id === 'duelo') {
+    let kind = store.get('duelKind', '1v1');
+    const seg = h('div', { class: 'seg', role: 'group', 'aria-label': 'Tipo de duelo' });
+    const b1 = h('button', { type: 'button', 'aria-pressed': String(kind === '1v1') }, '1 contra 1');
+    const b2 = h('button', { type: 'button', 'aria-pressed': String(kind === 'eq') }, 'Equipos');
+    seg.append(b1, b2);
+    const f1 = h('div', { class: 'fieldrow' });
+    const draw = () => {
+      b1.setAttribute('aria-pressed', String(kind === '1v1')); b2.setAttribute('aria-pressed', String(kind === 'eq')); store.set('duelKind', kind);
+      f1.innerHTML = '';
+      if (kind === '1v1') {
+        f1.append(h('label', { class: 'field', for: 'p1' }, h('span', { class: 'label' }, 'Jugador rojo · teclas Q W E R'), h('input', { id: 'p1', value: store.get('p1', 'Rocío') })),
+          h('label', { class: 'field', for: 'p2' }, h('span', { class: 'label' }, 'Jugador azul · teclas U I O P'), h('input', { id: 'p2', value: store.get('p2', 'Tomás') })));
+      } else {
+        const t1 = h('textarea', { id: 't1' }); t1.value = store.get('t1', 'Rocío\nIgnacia\nMatías');
+        const t2 = h('textarea', { id: 't2' }); t2.value = store.get('t2', 'Tomás\nFernanda\nDiego');
+        f1.append(h('label', { class: 'field', for: 't1' }, h('span', { class: 'label' }, 'Gigantes Rojas · Q W E R'), t1),
+          h('label', { class: 'field', for: 't2' }, h('span', { class: 'label' }, 'Enanas Azules · U I O P'), t2));
+      }
+    };
+    b1.onclick = () => { kind = '1v1'; draw(); }; b2.onclick = () => { kind = 'eq'; draw(); };
+    draw();
+    const tgt = h('select', { id: 'duelTarget' }, ...[5, 7, 10].map(n => h('option', { value: n }, `Gana quien llegue a ${n} puntos`))); tgt.value = store.get('duelTarget', 7);
+    card.append(h('div', { class: 'label' }, 'Formato'), seg, f1, h('label', { class: 'field', for: 'duelTarget' }, h('span', { class: 'label' }, 'Meta'), tgt),
+      h('p', { class: 'desc', style: 'margin:0' }, 'Respuesta equivocada: pierdes una vida y quedas bloqueado esa ronda. Si un lado se queda sin vidas, pierde el duelo. En pantalla táctil, cada lado tiene sus botones.'));
+    extra.duel = () => {
+      store.set('duelTarget', +tgt.value);
+      if (kind === '1v1') { const a = $('#p1').value.trim() || 'Rojo', b = $('#p2').value.trim() || 'Azul'; store.set('p1', a); store.set('p2', b); return { kind, sides: [{ name: a, members: [a] }, { name: b, members: [b] }], target: +tgt.value }; }
+      store.set('t1', $('#t1').value); store.set('t2', $('#t2').value);
+      return { kind, sides: [{ name: 'Gigantes Rojas', members: namesFrom($('#t1').value, ['Rojo 1']) }, { name: 'Enanas Azules', members: namesFrom($('#t2').value, ['Azul 1']) }], target: +tgt.value };
+    };
+  }
+  card.append(h('div', { class: 'actions' },
+    h('button', { class: 'btn alt', type: 'button', onclick: () => { show('home'); } }, 'Volver'),
+    h('button', { class: 'btn', type: 'button', id: 'startBtn', onclick: () => {
+      const cfg = { lives: lp ? lp.get() : 0 };
+      if (extra.bank) cfg.bank = extra.bank();
+      if (extra.players) { cfg.players = extra.players(); cfg.time = extra.time(); }
+      if (extra.duel) Object.assign(cfg, extra.duel());
+      start(m, cfg);
+    } }, 'Jugar')));
+  box.append(card); show('setup');
+  setTimeout(() => $('#startBtn').focus({ preventScroll: true }), 30);
+}
+
+function start(m, cfg) {
+  Game.reset(); Game.mode = m; Game.cfg = cfg;
+  $('#stage').innerHTML = ''; restoreHud(); show('game');
+  Game.lives = cfg.lives ? new LifeBar($('#hudLives'), cfg.lives) : null;
+  ({ reloj: Solo, oraculo: Solo, orden: Solo, terminal: Solo, grupo: Group, lab: Lab, duelo: Duel, simulacro: Exam })[m.id].start(m, cfg);
+}
+
+/* ---------- Modos individuales (Contrarreloj, ¿Qué imprime?, Ordena, Terminal) ---------- */
+const Solo = {
+  start(m, cfg) {
+    this.m = m; this.cfg = cfg; this.level = 1; this.n = 0;
+    this.pick = { reloj: deck(FILL), oraculo: deck(MCQ), orden: deck(ORDER), terminal: deck(TERM) }[m.id];
+    setHud(m.name, 'Nivel 1');
+    this.next();
+  },
+  time() {
+    const L = this.level;
+    return { reloj: Math.max(16, 46 - 4 * (L - 1)), oraculo: Math.max(9, 26 - 2 * (L - 1)), orden: Math.max(45, 110 - 8 * (L - 1)), terminal: Math.max(10, 28 - 2 * (L - 1)) }[this.m.id];
+  },
+  next() {
+    const stage = $('#stage'); stage.innerHTML = '';
+    const q = this.pick(); this.n++;
+    $('#hudSub').textContent = `Nivel ${this.level} · pregunta ${this.n}`;
+    const total = this.time(); let r;
+    const done = res => {
+      Timer.pause();
+      const frac = Timer.left / total;
+      if (res.ok) {
+        Game.right(this.m.id === 'orden' ? 150 : 100, frac, res.partial);
+        if (Game.ok % 3 === 0) { this.level++; toast('Nivel ' + this.level); }
+      } else Game.wrong();
+      const alive = !Game.lives || Game.lives.alive;
+      const showAns = this.m.id === 'reloj' || this.m.id === 'oraculo';
+      feedback(res.card, { ok: res.ok, title: res.ok ? (res.partial ? 'Correcto, con pista' : 'Correcto') : (Timer.left <= 0 ? 'Se acabó el tiempo' : 'Incorrecto'), ex: res.ex, answer: res.answer, showAnswer: showAns && this.m.id === 'oraculo', next: alive ? () => this.next() : () => endSolo(), nextLabel: alive ? 'Siguiente' : 'Ver resultado' });
+    };
+    if (this.m.id === 'reloj') r = renderFill(stage, q, { bank: this.cfg.bank, onDone: done });
+    else if (this.m.id === 'oraculo') { r = renderMCQ(stage, q, { onDone: done }); Game.onKeys(e => { if (/^[1-4]$/.test(e.key)) r.keys(+e.key - 1); }); }
+    else if (this.m.id === 'orden') r = renderOrder(stage, q, { onDone: done, onMiss: () => { Game.streak = 0; Game.bad++; Game.hud(); Snd.bad(); const alive = Game.lives.lose(); toast('Orden incorrecto', true); if (!alive) { Timer.pause(); r.finish(); feedback(r.card, { ok: false, title: 'Sin vidas', ex: q.ex + '<br>Orden correcto:', answer: q.l.join('\n'), showAnswer: true, next: () => endSolo(), nextLabel: 'Ver resultado' }); } } });
+    else r = renderTerm(stage, q, { onDone: done });
+    Timer.start(total, () => r.check(true));
+  }
+};
+
+function endSolo(extraKpis = []) {
+  Timer.stop(); Game.onKeys(() => {});
+  const m = Game.mode, cfg = Game.cfg;
+  const key = recKey(m.id, cfg.lives), prev = store.get(key, 0);
+  const isRec = Game.score > prev; if (isRec) store.set(key, Game.score);
+  Game.lives && Game.lives.alive ? Snd.win() : Snd.over();
+  const lifeName = LIFE_OPTS.find(o => o.n === cfg.lives)?.name || '';
+  const end = $('#end'); end.innerHTML = '';
+  end.append(h('div', { class: 'end' },
+    h('div', { class: 'label' }, `${m.name} · ${lifeName}`),
+    h('div', { class: 'big' }, Game.score + ' puntos'),
+    isRec ? h('div', {}, h('span', { class: 'newrec' }, 'Nuevo récord')) : h('div', { class: 'sub' }, `Récord en este formato: ${prev} puntos`),
+    h('div', { class: 'grid3' },
+      kpi('Aciertos', Game.ok), kpi('Errores', Game.bad), kpi('Mejor racha', Game.best), ...extraKpis),
+    endActions(m, cfg)));
+  Game.cleanups.forEach(f => f()); Game.cleanups = [];
+  show('end');
+}
+const kpi = (k, v) => h('div', { class: 'kpi' }, h('small', {}, k), h('b', {}, String(v)));
+const endActions = (m, cfg) => h('div', { class: 'actions', style: 'justify-content:flex-start' },
+  h('button', { class: 'btn', type: 'button', onclick: () => start(m, cfg) }, 'Jugar de nuevo'),
+  h('button', { class: 'btn alt', type: 'button', onclick: () => openSetup(m) }, 'Cambiar opciones'),
+  h('button', { class: 'btn alt', type: 'button', onclick: () => { renderHome(); show('home'); } }, 'Menú'));
+
+/* ---------- Equipo contra el reloj ---------- */
+const Group = {
+  start(m, cfg) {
+    this.m = m; this.cfg = cfg; this.turn = 0; this.over = false;
+    this.players = cfg.players.map(name => ({ name, ok: 0, bad: 0, pts: 0 }));
+    this.fill = deck(FILL); this.mcq = deck(MCQ);
+    setHud(m.name, `${this.players.length} integrantes`);
+    Timer.start(cfg.time, () => this.timeUp());
+    this.next();
+  },
+  timeUp() { this.over = true; Snd.over(); toast('¡Tiempo!', true); setTimeout(() => this.end(), 900); },
+  next() {
+    if (this.over) return;
+    const stage = $('#stage'); stage.innerHTML = '';
+    const p = this.players[this.turn % this.players.length], nx = this.players[(this.turn + 1) % this.players.length];
+    stage.append(h('div', { class: 'turn' }, h('span', { class: 'label' }, 'Turno de'), h('span', { class: 'who' }, p.name), h('span', { class: 'next' }, this.players.length > 1 ? `Después: ${nx.name}` : ''),
+      h('span', { class: 'grow', style: 'flex:1' }), h('button', { class: 'btn alt', type: 'button', onclick: () => { Timer.add(-5); toast('−5 s', true); this.turn++; this.next(); } }, 'Pasar turno (−5 s)')),
+      h('div', { class: 'roster' }, this.players.map((x, i) => h('span', { class: i === this.turn % this.players.length ? 'on' : '' }, `${x.name} · ${x.ok}✓`))));
+    const holder = h('div', {}); stage.append(holder);
+    const useMcq = Math.random() < .3;
+    const q = useMcq ? this.mcq() : this.fill();
+    const done = res => {
+      if (this.over) return;
+      if (res.ok) {
+        p.ok++; p.pts += Game.right(100, 0, res.partial); Timer.add(8); setTimeout(() => toast('+8 s'), 300);
+        this.turn++; setTimeout(() => this.next(), 650);
+      } else {
+        p.bad++; const alive = Game.wrong(); Timer.pause();
+        const go = () => { if (!alive) return this.end(); Timer.resume(); this.turn++; this.next(); };
+        feedback(res.card, { ok: false, ex: res.ex, answer: res.answer, showAnswer: useMcq, next: go, nextLabel: alive ? 'Seguir (el reloj está en pausa)' : 'Ver resultado' });
+      }
+    };
+    if (useMcq) { const r = renderMCQ(holder, q, { onDone: done }); Game.onKeys(e => { if (/^[1-4]$/.test(e.key)) r.keys(+e.key - 1); }); }
+    else { Game.onKeys(() => {}); renderFill(holder, q, { bank: this.cfg.bank, onDone: done }); }
+  },
+  end() {
+    Timer.stop(); this.over = true;
+    const m = this.m, cfg = this.cfg;
+    const key = recKey('grupo', cfg.lives), prev = store.get(key, 0), isRec = Game.score > prev; if (isRec) store.set(key, Game.score);
+    const mvp = [...this.players].sort((a, b) => b.pts - a.pts)[0];
+    const end = $('#end'); end.innerHTML = '';
+    end.append(h('div', { class: 'end' },
+      h('div', { class: 'label' }, m.name),
+      h('div', { class: 'big' }, Game.score + ' puntos de equipo'),
+      isRec ? h('div', {}, h('span', { class: 'newrec' }, 'Nuevo récord de equipo')) : h('div', { class: 'sub' }, `Récord: ${prev} puntos`),
+      h('div', { class: 'grid3' }, kpi('Aciertos', Game.ok), kpi('Errores', Game.bad), kpi('Mejor racha', Game.best), kpi('Figura', mvp.name)),
+      h('div', { class: 'tablewrap' }, h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', {}, 'Integrante'), h('th', {}, 'Aciertos'), h('th', {}, 'Errores'), h('th', {}, 'Puntos'))),
+        h('tbody', {}, this.players.map(p => h('tr', {}, h('td', {}, p.name), h('td', {}, p.ok), h('td', {}, p.bad), h('td', {}, p.pts)))))),
+      endActions(m, cfg)));
+    Game.cleanups.forEach(f => f()); Game.cleanups = [];
+    show('end');
+  }
+};
+
+/* ---------- Duelo ---------- */
+const Duel = {
+  start(m, cfg) {
+    this.m = m; this.cfg = cfg; this.round = 0;
+    $('#hud').hidden = true;
+    this.pick = deck(MCQ);
+    const stage = $('#stage'); stage.innerHTML = '';
+    this.sides = cfg.sides.map((s, i) => {
+      const el = h('div', { class: 'side p' + (i + 1) });
+      const lives = h('div', { class: 'lives' });
+      const pts = h('div', { class: 'pts' }, '0', h('small', {}, ` / ${cfg.target}`));
+      const rep = h('div', { class: 'rep' });
+      const keys = i === 0 ? ['Q', 'W', 'E', 'R'] : ['U', 'I', 'O', 'P'];
+      const pad = h('div', { class: 'pad' }, ['A', 'B', 'C', 'D'].map((L, k) => h('button', { type: 'button', onclick: () => this.answer(i, k) }, L, h('small', {}, keys[k]))));
+      el.append(h('h3', {}, s.name), rep, pts, lives, pad);
+      return { ...s, el, ptsEl: pts, repEl: rep, life: new LifeBar(lives, cfg.lives), pts: 0, ok: 0, bad: 0 };
+    });
+    this.center = h('div', { class: 'center' });
+    const top = h('div', { class: 'hud', style: 'grid-template-columns:auto minmax(0,1fr) auto;margin:0' },
+      h('div', { class: 'who' }, h('b', {}, 'Duelo'), h('span', { id: 'duelRound' }, 'Ronda 1')),
+      h('div', { class: 'tw' }, h('div', { class: 'tbar', id: 'tbar' }, h('i', { id: 'tfill' })), h('div', { class: 'ttext', id: 'ttext' }, '')),
+      h('div', { class: 'stats' }, h('button', { class: 'ghost quit', type: 'button', onclick: e => confirmQuit(e.currentTarget) }, 'Salir')));
+    // el HUD general queda oculto; reutilizamos los ids del temporizador en este HUD propio
+    $('#hud .tw').remove();
+    stage.append(h('div', { class: 'duel' }, this.sides[0].el, this.center, this.sides[1].el));
+    this.center.append(top);
+    this.qbox = h('div', {}); this.center.append(this.qbox);
+    Game.onKeys(e => {
+      const k = e.key.toLowerCase();
+      const a = 'qwer'.indexOf(k), b = 'uiop'.indexOf(k);
+      if (a >= 0) this.answer(0, a); else if (b >= 0) this.answer(1, b);
+      else if ((e.key === 'Enter' || e.key === ' ') && this.waiting) { e.preventDefault(); this.next(); }
+    });
+    this.next();
+  },
+  next() {
+    this.waiting = false; this.round++; this.done = false; this.locked = [false, false];
+    $('#duelRound').textContent = `Ronda ${this.round}`;
+    this.sides.forEach(s => { s.el.classList.remove('locked', 'won', 'lost'); s.rep = s.members[(this.round - 1) % s.members.length]; s.repEl.textContent = this.cfg.kind === 'eq' ? `Responde: ${s.rep}` : 'Listo'; });
+    const q = this.q = this.pick();
+    this.order = shuffle(q.o.map((_, i) => i));
+    this.qbox.innerHTML = '';
+    const card = h('div', { class: 'card' }, h('div', { class: 'prompt' }, h('h3', {}, q.q), h('span', { class: 'topicpill' }, TOPICS[q.t])));
+    if (q.c) card.append(h('div', { class: 'code', html: hl(q.c) }));
+    this.optEls = this.order.map((oi, k) => h('div', { class: 'dopt' }, h('span', { class: 'key' }, 'ABCD'[k]), h('span', {}, q.o[oi]), h('span', { class: 'mk' })));
+    card.append(h('div', { class: 'dopts' }, this.optEls));
+    this.card = card; this.qbox.append(card);
+    Timer.start(25, () => this.finish(null));
+  },
+  answer(side, k) {
+    if (this.done || this.locked[side] || this.waiting) return;
+    const s = this.sides[side];
+    $('.mk', this.optEls[k]).append(h('span', { class: 'm' + (side + 1) }, side === 0 ? 'R' : 'A'));
+    if (this.order[k] === 0) {
+      s.pts++; s.ok++; s.ptsEl.firstChild.textContent = s.pts; s.el.classList.add('won'); Snd.ok(); flash(true); toast(`Punto para ${this.cfg.kind === 'eq' ? s.rep : s.name}`);
+      this.finish(side);
+    } else {
+      this.locked[side] = true; s.bad++; s.el.classList.add('locked', 'lost');
+      Snd.bad(); const alive = s.life.lose();
+      if (!alive) return this.finish(null, side);
+      if (this.locked[0] && this.locked[1]) this.finish(null);
+    }
+  },
+  finish(winner, dead) {
+    if (this.done) return; this.done = true; Timer.stop();
+    this.optEls[this.order.indexOf(0)].classList.add('ok');
+    const champ = this.sides.find(s => s.pts >= this.cfg.target);
+    const over = champ || dead != null;
+    const fb = h('div', { class: 'fb ' + (winner != null ? 'ok' : 'bad') }, h('b', {}, winner != null ? `Punto para ${this.sides[winner].name}` : (dead != null ? `${this.sides[dead].name} se quedó sin vidas` : 'Nadie acertó')), h('p', { html: this.q.ex }));
+    const b = h('button', { class: 'btn', type: 'button', onclick: () => over ? this.end(champ || this.sides[1 - dead]) : this.next() }, over ? 'Ver ganador' : 'Siguiente ronda', ' ', h('kbd', {}, '⏎'));
+    fb.append(h('div', { class: 'row' }, b));
+    this.card.append(fb);
+    if (over) { this.waiting = false; Game.onKeys(e => { if (e.key === 'Enter') this.end(champ || this.sides[1 - dead]); }); }
+    else setTimeout(() => this.waiting = true, 400);
+  },
+  end(w) {
+    Timer.stop(); Snd.win();
+    const [a, b] = this.sides;
+    store.set('rec.duelo', `${w.name} ${Math.max(a.pts, b.pts)}–${Math.min(a.pts, b.pts)}`);
+    const end = $('#end'); end.innerHTML = '';
+    end.append(h('div', { class: 'end' },
+      h('div', { class: 'label' }, this.cfg.kind === 'eq' ? 'Duelo por equipos' : 'Duelo 1 contra 1'),
+      h('div', { class: 'big', style: `color:var(${w === a ? '--roja' : '--azul'})` }, `Gana ${w.name}`),
+      h('div', { class: 'sub' }, `${a.name} ${a.pts} – ${b.pts} ${b.name} · ${this.round} rondas`),
+      h('div', { class: 'tablewrap' }, h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', {}, 'Lado'), h('th', {}, 'Puntos'), h('th', {}, 'Errores'), h('th', {}, 'Vidas restantes'))),
+        h('tbody', {}, this.sides.map(s => h('tr', {}, h('td', {}, s.name), h('td', {}, s.pts), h('td', {}, s.bad), h('td', {}, s.life.inf ? '∞' : s.life.n)))))),
+      endActions(this.m, this.cfg)));
+    Game.cleanups.forEach(f => f()); Game.cleanups = []; Game.onKeys(() => {});
+    show('end'); restoreHud();
+  }
+};
+function restoreHud() {
+  if (!$('#hud .tw')) {
+    const tw = h('div', { class: 'tw' }, h('div', { class: 'tbar', id: 'tbar' }, h('i', { id: 'tfill' })), h('div', { class: 'ttext', id: 'ttext' }, '—'));
+    $('#hud .who').after(tw);
+  }
+}
+
+/* ---------- Simulacro ---------- */
+const Exam = {
+  start(m, cfg) {
+    restoreHud();
+    this.m = m; this.cfg = cfg; this.i = 0; this.pts = 0; this.byTopic = {};
+    const f = deck(FILL), q = deck(MCQ), t = deck(TERM);
+    const hasTerm = S.topics.some(x => x === 'unix' || x === 'git');
+    const items = [];
+    for (let k = 0; k < (hasTerm ? 6 : 7); k++) items.push(['fill', f()]);
+    for (let k = 0; k < (hasTerm ? 6 : 8); k++) items.push(['mcq', q()]);
+    if (hasTerm) for (let k = 0; k < 3; k++) items.push(['term', t()]);
+    this.items = shuffle(items);
+    setHud(m.name, 'Pregunta 1 de 15', { lives: false, stats: false });
+    Timer.start(12 * 60, () => this.end(true));
+    this.next();
+  },
+  next() {
+    if (this.i >= this.items.length) return this.end();
+    const [kind, q] = this.items[this.i]; this.i++;
+    $('#hudSub').textContent = `Pregunta ${this.i} de ${this.items.length}`;
+    const stage = $('#stage'); stage.innerHTML = '';
+    const done = res => {
+      const v = res.ok ? (res.partial ? .5 : 1) : 0;
+      this.pts += v;
+      const bt = this.byTopic[q.t] || (this.byTopic[q.t] = [0, 0]); bt[0] += v; bt[1]++;
+      res.ok ? Snd.ok() : Snd.bad();
+      feedback(res.card, { ok: res.ok, ex: res.ex, answer: res.answer, showAnswer: kind === 'mcq', next: () => this.next(), nextLabel: this.i < this.items.length ? 'Siguiente' : 'Entregar' });
+    };
+    if (kind === 'fill') { Game.onKeys(() => {}); renderFill(stage, q, { bank: false, onDone: done }); }
+    else if (kind === 'mcq') { const r = renderMCQ(stage, q, { onDone: done }); Game.onKeys(e => { if (/^[1-4]$/.test(e.key)) r.keys(+e.key - 1); }); }
+    else { Game.onKeys(() => {}); renderTerm(stage, { ...q }, { onDone: done }); }
+  },
+  end(timeout) {
+    Timer.stop();
+    const n = this.items.length, p = this.pts / n;
+    const nota = Math.round((p < .6 ? 1 + 3 * p / .6 : 4 + 3 * (p - .6) / .4) * 10) / 10;
+    const prev = store.get('rec.simulacro', 0); if (nota > prev) store.set('rec.simulacro', nota);
+    nota >= 4 ? Snd.win() : Snd.over();
+    const end = $('#end'); end.innerHTML = '';
+    const color = nota >= 5.5 ? 'var(--verde)' : nota >= 4 ? 'var(--sol)' : 'var(--roja)';
+    end.append(h('div', { class: 'end' },
+      h('div', { class: 'label' }, 'Simulacro de prueba' + (timeout ? ' · se acabó el tiempo' : '')),
+      h('div', { style: 'display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap' }, h('div', { class: 'nota', style: `color:${color}` }, nota.toFixed(1).replace('.', ',')), h('div', { class: 'sub' }, `${this.pts.toString().replace('.', ',')} de ${n} puntos · escala al 60 %`, h('br'), nota >= 4 ? 'Aprobado.' : 'Bajo 4,0: repasa los temas en rojo.')),
+      h('div', { class: 'tablewrap' }, h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', {}, 'Tema'), h('th', {}, 'Logro'), h('th', { style: 'width:40%' }, ''))),
+        h('tbody', {}, Object.entries(this.byTopic).map(([k, [a, b]]) => { const r = a / b; const bar = h('div', { class: 'bar' }, h('i', { style: `width:${r * 100}%;background:${r >= .6 ? 'var(--verde)' : 'var(--roja)'}` })); return h('tr', {}, h('td', {}, TOPICS[k]), h('td', {}, `${String(a).replace('.', ',')}/${b}`), h('td', {}, bar)); })))),
+      endActions(this.m, this.cfg)));
+    Game.cleanups.forEach(f => f()); Game.cleanups = []; Game.onKeys(() => {});
+    show('end');
+  }
+};
+
+/* =====================================================================
+   Motor de gráficos estilo matplotlib (canvas)
+   ===================================================================== */
+const TAB = { 'tab:blue': '#1f77b4', 'tab:orange': '#ff7f0e', 'tab:green': '#2ca02c', 'tab:red': '#d62728', 'tab:purple': '#9467bd', 'tab:gray': '#7f7f7f', 'k': '#111111', 'gray': '#808080', '0.6': '#999999' };
+const col = c => TAB[c] || c || '#1f77b4';
+const INFERNO = [[0, 0, 4], [40, 11, 84], [101, 21, 110], [159, 42, 99], [212, 72, 66], [245, 125, 21], [250, 193, 39], [252, 255, 164]];
+const cmapAt = u => { u = Math.max(0, Math.min(1, u)) * (INFERNO.length - 1); const i = Math.min(INFERNO.length - 2, Math.floor(u)), f = u - i; return INFERNO[i].map((c, j) => Math.round(c + (INFERNO[i + 1][j] - c) * f)); };
+const ease = p => 1 - Math.pow(1 - p, 3);
+const SUP = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+
+function niceTicks(a, b, n = 5) {
+  const span = b - a; if (!(span > 0)) return [a];
+  const raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), r = raw / mag;
+  const step = (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag;
+  const out = []; for (let v = Math.ceil(a / step) * step; v <= b + step * 1e-9; v += step) out.push(Math.abs(v) < step * 1e-9 ? 0 : v);
+  out.step = step; return out;
+}
+function fmtTick(v, step) {
+  const a = Math.abs(v);
+  if (v !== 0 && (a >= 1e5 || a < 1e-3)) return v.toExponential(1).replace('e+', 'e');
+  const dec = Math.max(0, -Math.floor(Math.log10(step) + 1e-9));
+  return v.toFixed(Math.min(dec, 4));
+}
+function fmtVal(v) {
+  const n = x => typeof x === 'boolean' ? (x ? 'True' : 'False') : (Math.abs(x) >= 1e4 || (Math.abs(x) < 1e-3 && x !== 0)) ? x.toExponential(2) : (+x.toFixed(4)).toString();
+  if (Array.isArray(v)) {
+    if (typeof v[0] === 'boolean') return `bool (${v.length},) · ${v.filter(Boolean).length} True`;
+    const s = v.length > 6 ? [...v.slice(0, 3).map(n), '…', ...v.slice(-2).map(n)] : v.map(n);
+    return `(${v.length},) [${s.join(' ')}]`;
+  }
+  if (typeof v === 'number') return n(v);
+  return String(v);
+}
+
+class Plot {
+  constructor(cv, small = false) {
+    this.cv = cv; this.ctx = cv.getContext('2d'); this.small = small; this.reset();
+    this.ro = new ResizeObserver(() => this.fit()); this.ro.observe(cv); this.fit();
+  }
+  fit() {
+    const r = this.cv.getBoundingClientRect(); if (!r.width) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    this.w = r.width; this.h = r.height; this.cv.width = Math.round(r.width * dpr); this.cv.height = Math.round(r.height * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.lim = null; this.draw();
+  }
+  reset() { this.els = []; this.st = { ylog: false, invx: false, invy: false }; this.lim = null; if (this.w) this.draw(); }
+  add(op, dur = 0) {
+    const e = { ...op, p: dur ? 0 : 1 };
+    if (op.k === 'ylog') { this.st.ylog = true; this.lim = null; }
+    if (op.k === 'invx') this.st.invx = !this.st.invx;
+    if (op.k === 'invy') this.st.invy = !this.st.invy;
+    if (op.k === 'img') e.cache = this.imgCache(op.z);
+    if (op.k === 'hist') e.bin = this.binData(op.d, op.bins || 10);
+    this.els.push(e);
+    if (!dur) { this.draw(); return Promise.resolve(); }
+    return new Promise(res => {
+      const t0 = performance.now();
+      const step = now => { e.p = Math.min(1, (now - t0) / dur); this.draw(); if (e.p < 1) requestAnimationFrame(step); else { this.settle(); res(); } };
+      requestAnimationFrame(step);
+    });
+  }
+  settle() { let k = 0; const f = () => { this.draw(); if (++k < 20) requestAnimationFrame(f); }; requestAnimationFrame(f); }
+  binData(d, nb) {
+    const lo = Math.min(...d), hi = Math.max(...d), w = (hi - lo) / nb || 1;
+    const counts = new Array(nb).fill(0);
+    for (const x of d) counts[Math.min(nb - 1, Math.floor((x - lo) / w))]++;
+    return { lo, hi, w, counts };
+  }
+  imgCache(z) {
+    const rows = z.length, cols = z[0].length, flat = z.flat();
+    const lo = Math.min(...flat), hi = Math.max(...flat);
+    const c = document.createElement('canvas'); c.width = cols; c.height = rows;
+    const g = c.getContext('2d'), im = g.createImageData(cols, rows);
+    for (let r = 0; r < rows; r++) for (let k = 0; k < cols; k++) {
+      const [R1, G1, B1] = cmapAt((z[r][k] - lo) / (hi - lo || 1)); const o = ((rows - 1 - r) * cols + k) * 4;
+      im.data[o] = R1; im.data[o + 1] = G1; im.data[o + 2] = B1; im.data[o + 3] = 255;
+    }
+    g.putImageData(im, 0, 0); c.lo = lo; c.hi = hi; return c;
+  }
+  target() {
+    const ylog = this.st.ylog, X = [], Y = []; let cats = null, img = false, hist = false;
+    const ty = v => ylog ? (v > 0 ? Math.log10(v) : null) : v;
+    for (const e of this.els) {
+      if (e.k === 'line' || e.k === 'scatter') { for (const v of e.x) X.push(v); for (const v of e.y) { const t = ty(v); if (t != null) Y.push(t); } }
+      else if (e.k === 'hist') { X.push(e.bin.lo, e.bin.hi); Y.push(0, Math.max(...e.bin.counts)); hist = true; }
+      else if (e.k === 'bar') { cats = e.cats; Y.push(0, Math.max(...e.vals)); hist = true; }
+      else if (e.k === 'hl') { const t = ty(e.y); if (t != null) Y.push(t); }
+      else if (e.k === 'vl') X.push(e.x);
+      else if (e.k === 'img') { X.push(e.ext[0], e.ext[1]); Y.push(e.ext[2], e.ext[3]); img = true; }
+    }
+    let x0 = X.length ? Math.min(...X) : 0, x1 = X.length ? Math.max(...X) : 1, y0 = Y.length ? Math.min(...Y) : 0, y1 = Y.length ? Math.max(...Y) : 1;
+    if (cats) { x0 = -0.6; x1 = cats.length - 0.4; }
+    if (x1 === x0) { x0 -= 1; x1 += 1; } if (y1 === y0) { y0 -= ylog ? .5 : Math.abs(y0 * .1) || 1; y1 += ylog ? .5 : Math.abs(y1 * .1) || 1; }
+    if (!img && !cats) { const px = (x1 - x0) * .04; x0 -= px; x1 += px; }
+    if (!img) { const py = (y1 - y0) * .06; if (hist) y1 += py; else { y0 -= py; y1 += py; } }
+    return { x0, x1, y0, y1, cats };
+  }
+  draw() {
+    if (!this.w) return;
+    const g = this.ctx, W = this.w, H = this.h, sm = this.small;
+    const T = this.target();
+    if (!this.lim || this.lim.cats !== T.cats) this.lim = { ...T };
+    else for (const k of ['x0', 'x1', 'y0', 'y1']) this.lim[k] += (T[k] - this.lim[k]) * .22;
+    const L = this.lim;
+    const has = k => this.els.find(e => e.k === k);
+    const fs = sm ? 8 : Math.max(10, Math.min(13, W / 46));
+    const ml = sm ? 26 : fs * 5.4, mr = sm ? 8 : (has('cbar') ? fs * 6.6 : fs * 1.4), mt = sm ? 8 : (has('title') ? fs * 2.6 : fs * 1.2), mb = sm ? 16 : fs * 3.8;
+    const px = ml, py = mt, pw = W - ml - mr, ph = H - mt - mb;
+    const ylog = this.st.ylog;
+    const fx = v => px + ((this.st.invx ? L.x1 - v : v - L.x0) / (L.x1 - L.x0)) * pw;
+    const fyT = v => py + ph - ((this.st.invy ? L.y1 - v : v - L.y0) / (L.y1 - L.y0)) * ph;
+    const fy = v => fyT(ylog ? Math.log10(Math.max(v, 1e-300)) : v);
+    g.clearRect(0, 0, W, H); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+    g.save(); g.beginPath(); g.rect(px, py, pw, ph); g.clip();
+    for (const e of this.els) {
+      const p = e.p, c = col(e.color);
+      if (e.k === 'img') {
+        const x = fx(e.ext[0]), x2 = fx(e.ext[1]), yb = fyT(e.ext[2]), yt = fyT(e.ext[3]);
+        const hh = (yb - yt) * ease(p); g.imageSmoothingEnabled = true;
+        const sh = e.cache.height * ease(p);
+        g.drawImage(e.cache, 0, e.cache.height - sh, e.cache.width, sh, Math.min(x, x2), yb - hh, Math.abs(x2 - x), hh);
+      } else if (e.k === 'line') {
+        const n = Math.max(1, Math.ceil(e.x.length * p));
+        if (e.ls !== 'none') { g.strokeStyle = c; g.lineWidth = (e.lw || 1.6) * (sm ? .7 : 1); g.lineJoin = 'round'; g.beginPath(); for (let i = 0; i < n; i++) { const X = fx(e.x[i]), Y = fy(e.y[i]); i ? g.lineTo(X, Y) : g.moveTo(X, Y); } g.stroke(); }
+        if (e.mk) { g.fillStyle = c; const r = e.mk === 'o' ? (sm ? 1.6 : 3.4) : (sm ? .8 : 1.5); for (let i = 0; i < n; i++) { g.beginPath(); g.arc(fx(e.x[i]), fy(e.y[i]), r, 0, 7); g.fill(); } }
+      } else if (e.k === 'scatter') {
+        const n = Math.ceil(e.x.length * p);
+        for (let i = 0; i < n; i++) { const age = Math.min(1, (p * e.x.length - i) / 6); g.globalAlpha = .85; g.fillStyle = e.colors ? e.colors[i] : c; g.beginPath(); g.arc(fx(e.x[i]), fy(e.y[i]), (sm ? 1.5 : 3.4) * (0.4 + .6 * age), 0, 7); g.fill(); if (e.colors) { g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = .5; g.stroke(); } }
+        g.globalAlpha = 1;
+      } else if (e.k === 'hist') {
+        const { lo, w, counts } = e.bin;
+        counts.forEach((cnt, i) => { const k = Math.max(0, Math.min(1, p * 1.6 - i / counts.length * .6)); const x = fx(lo + i * w), x2 = fx(lo + (i + 1) * w), y = fy(cnt * ease(k)); g.fillStyle = c; g.fillRect(Math.min(x, x2), y, Math.abs(x2 - x), fy(0) - y); g.strokeStyle = '#fff'; g.lineWidth = sm ? .4 : 1; g.strokeRect(Math.min(x, x2), y, Math.abs(x2 - x), fy(0) - y); });
+      } else if (e.k === 'bar') {
+        e.vals.forEach((v, i) => { const k = Math.max(0, Math.min(1, p * 1.5 - i * .1)); const x = fx(i - .4), x2 = fx(i + .4), y = fy(v * ease(k)); g.fillStyle = c; g.fillRect(Math.min(x, x2), y, Math.abs(x2 - x), fy(0) - y); });
+      } else if (e.k === 'hl' || e.k === 'vl') {
+        g.strokeStyle = c; g.lineWidth = (e.lw || 1.4) * (sm ? .7 : 1); g.setLineDash(e.dash ? (sm ? [3, 2] : [6, 4]) : []);
+        g.beginPath();
+        if (e.k === 'hl') { const y = fy(e.y); g.moveTo(px, y); g.lineTo(px + pw * ease(p), y); }
+        else { const x = fx(e.x); g.moveTo(x, py + ph); g.lineTo(x, py + ph - ph * ease(p)); }
+        g.stroke(); g.setLineDash([]);
+      }
+    }
+    g.restore();
+    // ejes
+    g.strokeStyle = '#222'; g.lineWidth = 1; g.strokeRect(px + .5, py + .5, pw, ph);
+    g.fillStyle = '#222'; g.font = `${fs}px "DejaVu Sans", Verdana, system-ui, sans-serif`;
+    {
+      // ticks x
+      g.textAlign = 'center'; g.textBaseline = 'top';
+      if (L.cats) L.cats.forEach((cat, i) => { const x = fx(i); g.beginPath(); g.moveTo(x, py + ph); g.lineTo(x, py + ph + 4); g.stroke(); g.fillText(cat, x, py + ph + 6); });
+      else { const tk = niceTicks(L.x0, L.x1, sm ? 3 : Math.max(3, Math.floor(pw / 80))); tk.forEach(v => { const x = fx(v); g.beginPath(); g.moveTo(x, py + ph); g.lineTo(x, py + ph + 4); g.stroke(); g.fillText(fmtTick(v, tk.step), x, py + ph + 6); }); }
+      // ticks y
+      g.textAlign = 'right'; g.textBaseline = 'middle';
+      if (ylog) {
+        const a = Math.ceil(L.y0 - 1e-9), b = Math.floor(L.y1 + 1e-9);
+        const stepD = Math.max(1, Math.ceil((b - a + 1) / (sm ? 3 : 6)));
+        for (let k = a; k <= b; k += stepD) { const y = fyT(k); g.beginPath(); g.moveTo(px - 4, y); g.lineTo(px, y); g.stroke(); g.fillText('10' + String(k).split('').map(ch => SUP[ch]).join(''), px - 6, y); }
+        if (b < a) { const tk = niceTicks(Math.pow(10, L.y0), Math.pow(10, L.y1), 3); tk.forEach(v => { if (v > 0) { const y = fy(v); g.fillText(fmtTick(v, tk.step), px - 6, y); } }); }
+      } else { const tk = niceTicks(L.y0, L.y1, sm ? 3 : Math.max(3, Math.floor(ph / 60))); tk.forEach(v => { const y = fyT(v); g.beginPath(); g.moveTo(px - 4, y); g.lineTo(px, y); g.stroke(); g.fillText(fmtTick(v, tk.step), px - 6, y); }); }
+    }
+    for (const e of this.els) {
+      g.globalAlpha = e.p;
+      if (e.k === 'title' && !sm) { g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `${fs * 1.15}px "DejaVu Sans", Verdana, system-ui, sans-serif`; g.fillText(e.s, px + pw / 2, mt / 2); g.font = `${fs}px "DejaVu Sans", Verdana, system-ui, sans-serif`; }
+      if (e.k === 'xl' && !sm) { g.textAlign = 'center'; g.textBaseline = 'bottom'; g.fillText(e.s, px + pw / 2, H - fs * .5); }
+      if (e.k === 'yl' && !sm) { g.save(); g.translate(fs * 1.1, py + ph / 2); g.rotate(-Math.PI / 2); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(e.s, 0, 0); g.restore(); }
+      if (e.k === 'cbar' && !sm) {
+        const im = this.els.find(x => x.k === 'img'); if (im) {
+          const bx = px + pw + fs * 1.2, bw = fs * 1.1;
+          for (let i = 0; i < ph; i++) { const [r1, g1, b1] = cmapAt(1 - i / ph); g.fillStyle = `rgb(${r1},${g1},${b1})`; g.fillRect(bx, py + i, bw, 1.5); }
+          g.strokeStyle = '#222'; g.strokeRect(bx + .5, py + .5, bw, ph); g.fillStyle = '#222'; g.textAlign = 'left'; g.textBaseline = 'middle';
+          const lo = im.cache.lo, hi = im.cache.hi; const fv = v => Math.abs(v) >= 1e4 ? v.toExponential(0).replace('e+', 'e') : v.toFixed(0);
+          g.fillText(fv(hi), bx + bw + 4, py + 6); g.fillText(fv((lo + hi) / 2), bx + bw + 4, py + ph / 2); g.fillText(fv(lo), bx + bw + 4, py + ph - 6);
+        }
+      }
+      g.globalAlpha = 1;
+    }
+    const lg = this.els.find(e => e.k === 'legend');
+    if (lg && !sm) {
+      const items = this.els.filter(e => e.label);
+      g.globalAlpha = lg.p; g.font = `${fs * .92}px "DejaVu Sans", Verdana, system-ui, sans-serif`;
+      const lw = Math.max(...items.map(e => g.measureText(e.label).width)) + fs * 3.4, lh = fs * 1.5, bh = items.length * lh + fs * .6;
+      // como loc="best": la esquina que tapa menos datos
+      const pts = []; for (const e of this.els) if (e.k === 'line' || e.k === 'scatter') for (let i = 0; i < e.x.length; i += 3) pts.push([fx(e.x[i]), fy(e.y[i])]);
+      const corners = [[px + pw - lw - 8, py + 8], [px + 8, py + 8], [px + pw - lw - 8, py + ph - bh - 8], [px + 8, py + ph - bh - 8]];
+      const hits = ([x, y]) => pts.filter(([a, b]) => a >= x && a <= x + lw && b >= y && b <= y + bh).length;
+      const [bx, by] = corners.reduce((best, c) => hits(c) < hits(best) ? c : best);
+      g.fillStyle = 'rgba(255,255,255,.88)'; g.strokeStyle = '#ccc'; g.fillRect(bx, by, lw, bh); g.strokeRect(bx + .5, by + .5, lw, bh);
+      items.forEach((e, i) => {
+        const y = by + fs * .3 + lh * (i + .5), c = col(e.color);
+        if (e.k === 'hl' || (e.k === 'line' && e.ls !== 'none')) { g.strokeStyle = c; g.lineWidth = 1.6; g.setLineDash(e.dash ? [5, 3] : []); g.beginPath(); g.moveTo(bx + 8, y); g.lineTo(bx + fs * 2.2, y); g.stroke(); g.setLineDash([]); }
+        else { g.fillStyle = c; g.beginPath(); g.arc(bx + fs * 1.3, y, 3.6, 0, 7); g.fill(); }
+        g.fillStyle = '#222'; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText(e.label, bx + fs * 2.7, y);
+      });
+      g.globalAlpha = 1;
+    }
+    // seguir animando el ajuste de límites
+    const T2 = this.target();
+    if (['x0', 'x1', 'y0', 'y1'].some(k => Math.abs(T2[k] - L[k]) > Math.abs(T2.y1 - T2.y0) * 1e-3 + 1e-12) && !this.pending) { this.pending = true; requestAnimationFrame(() => { this.pending = false; this.draw(); }); }
+  }
+}
+
+/* ---------- Laboratorio de gráficos ---------- */
+const Lab = {
+  start(m, cfg) {
+    restoreHud();
+    this.m = m; this.cfg = cfg; this.n = 0;
+    const pool = PLOTS.filter(inTopics);
+    this.order = shuffle(pool.length ? pool : PLOTS); this.k = 0;
+    setHud(m.name, 'Figura 1');
+    this.next();
+  },
+  next() {
+    if (this.k >= this.order.length) { this.order = shuffle(this.order); this.k = 0; }
+    const ch = this.ch = this.order[this.k++]; this.n++; this.tok = (this.tok || 0) + 1;
+    this.mist = 0; this.phase = 'run'; this.t0 = performance.now();
+    $('#hudSub').textContent = `Figura ${this.n} · ${ch.titulo}`;
+    Timer.none('a tu ritmo');
+    const bad = ch.build(false), good = ch.build(true);
+    this.bad = bad; this.good = good; this.bugI = bad.findIndex(l => l.bug);
+    const stage = $('#stage'); stage.innerHTML = '';
+    // izquierda: objetivo, código, variables
+    const mini = h('canvas', { 'aria-label': 'Figura objetivo' });
+    this.code = h('div', { class: 'codeview', role: 'list' });
+    this.vars = h('div', { class: 'vars', 'aria-label': 'Variables' }, h('div', {}, h('span', { class: 'vv' }, 'Variables: aparecen al ejecutar')));
+    this.stepEl = h('div', { class: 'step' });
+    this.actions = h('div', { class: 'fixes' });
+    const left = h('div', { class: 'left' },
+      h('div', { class: 'card' }, h('div', { class: 'prompt' }, h('h3', {}, ch.titulo), h('span', { class: 'topicpill' }, TOPICS[ch.t])),
+        h('div', { class: 'goal' }, h('div', { class: 'mini' }, mini), h('div', {}, h('div', { class: 'label' }, 'Objetivo'), h('p', {}, ch.obj)))),
+      this.code, this.vars);
+    // derecha: figura
+    this.cv = h('canvas', { 'aria-label': 'Figura generada por el código' });
+    this.figwrap = h('div', { class: 'figwrap' }, h('div', { class: 'figbar' }, h('span', {}, 'Figure 1'), h('span', { id: 'figStatus' }, 'sin ejecutar')), this.cv);
+    this.runBtn = h('button', { class: 'btn blue', type: 'button', onclick: () => this.runBuggy() }, '▶ Ejecutar código');
+    const right = h('div', { class: 'right', style: 'display:flex;flex-direction:column;gap:12px;min-width:0' }, this.figwrap,
+      h('div', { class: 'card', style: 'display:flex;flex-direction:column;gap:12px' }, this.stepEl, this.actions));
+    stage.append(h('div', { class: 'lab' }, left, right));
+    this.drawCode(bad);
+    this.plot = new Plot(this.cv);
+    const mp = new Plot(mini, true);
+    for (const l of good) for (const o of l.ops) if (o.k !== 'var' && o.k !== 'err') mp.add(o, 0);
+    this.setStep('Paso 1', 'Ejecuta el código y compara la figura con el objetivo.');
+    this.actions.append(this.runBtn);
+    Game.onKeys(e => { if (e.key === 'Enter' && this.phase === 'run' && document.activeElement?.tagName !== 'BUTTON') this.runBuggy(); });
+  },
+  setStep(a, b) { this.stepEl.innerHTML = ''; this.stepEl.append(h('span', { class: 'label' }, a), h('span', {}, b)); },
+  drawCode(lines) {
+    this.code.innerHTML = '';
+    this.lineEls = lines.map((l, i) => {
+      const el = h('div', { class: 'cl', role: 'listitem', tabindex: '-1' }, h('span', { class: 'no' }, String(i + 1)), h('span', { html: hl(l.c) || ' ' }));
+      el.onclick = () => this.pickLine(i);
+      el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.pickLine(i); } };
+      this.code.append(el); return el;
+    });
+  },
+  setVar(n, val) {
+    if (this.vars.firstChild && !this.vars.firstChild.dataset.n) this.vars.innerHTML = '';
+    let row = $$('div', this.vars).find(d => d.dataset.n === n);
+    if (!row) { row = h('div', { 'data-n': n }, h('span', { class: 'vn' }, n), h('span', { class: 'vv' })); this.vars.append(row); }
+    $('.vv', row).textContent = fmtVal(val); row.classList.remove('fresh'); void row.offsetWidth; row.classList.add('fresh');
+  },
+  async run(lines) {
+    this.plot.reset(); this.vars.innerHTML = ''; $('.traceback', this.figwrap)?.remove();
+    $('#figStatus').textContent = 'ejecutando…';
+    const fast = matchMedia('(prefers-reduced-motion: reduce)').matches, tok = this.tok;
+    for (let i = 0; i < lines.length; i++) {
+      if (tok !== this.tok) return 'abort';
+      this.lineEls.forEach((el, j) => { el.classList.toggle('run', j === i); el.classList.toggle('done', j < i); });
+      this.lineEls[i].scrollIntoView({ block: 'nearest' });
+      for (const o of lines[i].ops) {
+        if (o.k === 'var') { this.setVar(o.n, o.val); await sleep(fast ? 0 : 160); }
+        else if (o.k === 'err') {
+          this.lineEls[i].classList.replace('run', 'err');
+          this.figwrap.append(h('div', { class: 'traceback' }, o.msg));
+          $('#figStatus').textContent = 'error'; Snd.bad();
+          return 'error';
+        } else {
+          const dur = fast ? 0 : ({ line: 900, scatter: 800, hist: 800, bar: 700, img: 1000, hl: 400, vl: 400 })[o.k] || 260;
+          await this.plot.add(o, dur);
+        }
+        if (tok !== this.tok) return 'abort';
+      }
+      await sleep(fast ? 0 : 140);
+    }
+    if (tok !== this.tok) return 'abort';
+    this.lineEls.forEach(el => { el.classList.remove('run'); el.classList.add('done'); });
+    $('#figStatus').textContent = 'listo';
+    return 'ok';
+  },
+  async runBuggy() {
+    if (this.phase !== 'run') return; this.phase = 'running'; this.runBtn.disabled = true;
+    const res = await this.run(this.bad);
+    if (res === 'abort') return;
+    this.phase = 'find'; this.code.classList.add('picking');
+    this.actions.innerHTML = '';
+    this.setStep('Paso 2', res === 'error' ? 'El código se cayó. Haz clic en la línea que lo rompe.' : 'La figura no coincide con el objetivo. Haz clic en la línea culpable.');
+    this.lineEls[0].focus({ preventScroll: true });
+  },
+  pickLine(i) {
+    if (this.phase !== 'find') return;
+    const el = this.lineEls[i];
+    if (i === this.bugI) {
+      Snd.ok(); el.classList.remove('err'); el.classList.add('found'); this.code.classList.remove('picking'); this.phase = 'fix';
+      this.setStep('Paso 3', `Línea ${i + 1}: elige cómo corregirla.`);
+      const right = this.good[this.bugI].c;
+      const opts = shuffle(this.ch.fixes);
+      this.fixBtns = opts.map((txt, k) => h('button', { class: 'opt', type: 'button', onclick: e => this.pickFix(txt === right, e.currentTarget, txt) }, h('span', { class: 'key' }, String(k + 1)), h('span', { html: hl(txt.trim()) })));
+      this.actions.innerHTML = ''; this.actions.append(...this.fixBtns);
+      Game.onKeys(e => { if (/^[1-4]$/.test(e.key) && this.phase === 'fix') this.fixBtns[+e.key - 1]?.click(); });
+    } else {
+      this.mist++; el.classList.add('bad'); setTimeout(() => el.classList.remove('bad'), 700);
+      const alive = Game.wrong(); toast('Esa línea está bien', true);
+      if (!alive) this.lose();
+    }
+  },
+  async pickFix(ok, btn, txt) {
+    if (this.phase !== 'fix') return;
+    if (!ok) {
+      this.mist++; btn.classList.add('bad'); btn.disabled = true;
+      const alive = Game.wrong(); toast('Esa corrección no llega al objetivo', true);
+      if (!alive) this.lose();
+      return;
+    }
+    this.phase = 'fixed'; btn.classList.add('ok'); this.fixBtns.forEach(b => b.disabled = true);
+    Snd.ok();
+    this.drawCode(this.good); this.lineEls[this.bugI].classList.add('found');
+    this.setStep('Ejecutando', 'Mira cómo se construye la figura correcta, línea por línea.');
+    const res = await this.run(this.good);
+    if (res === 'abort') return;
+    const secs = (performance.now() - this.t0) / 1000;
+    const frac = Math.max(0, 1 - secs / 120);
+    if (this.mist === 0) Game.right(200, frac); else { Game.score += Math.max(40, 120 - 40 * this.mist); Game.ok++; Game.hud(); flash(true); }
+    this.actions.innerHTML = '';
+    const card = this.actions.closest('.card');
+    feedback(card, { ok: true, title: this.mist ? `Arreglado con ${this.mist} ${this.mist === 1 ? 'error' : 'errores'}` : 'Arreglado a la primera', ex: this.ch.ex, next: () => this.next(), nextLabel: 'Siguiente figura' });
+  },
+  lose() {
+    this.phase = 'over'; this.code.classList.remove('picking');
+    this.fixBtns && this.fixBtns.forEach(b => b.disabled = true);
+    this.lineEls[this.bugI].classList.add('bad');
+    const card = this.actions.closest('.card');
+    feedback(card, { ok: false, title: 'Sin vidas', ex: `${this.ch.ex}<br>Corrección: `, answer: this.good[this.bugI].c.trim(), showAnswer: true, next: () => endSolo([kpi('Figuras', this.n)]), nextLabel: 'Ver resultado' });
+  }
+};
+
+/* =====================================================================
+   Salir, sonido, fondo estrellado
+   ===================================================================== */
+function confirmQuit(btn) {
+  if (btn.dataset.armed) {
+    delete btn.dataset.armed;
+    const id = Game.mode?.id, played = Game.ok + Game.bad > 0;
+    Lab.tok = (Lab.tok || 0) + 1; Group.over = true;
+    if (played && ['reloj', 'oraculo', 'orden', 'terminal', 'lab'].includes(id)) return endSolo(id === 'lab' ? [kpi('Figuras', Lab.n)] : []);
+    if (played && id === 'grupo') return Group.end();
+    if (id === 'simulacro' && Exam.i > 1) return Exam.end();
+    Game.reset(); restoreHud(); $('#hud').hidden = false; renderHome(); show('home'); return;
+  }
+  btn.dataset.armed = '1'; const t = btn.textContent; btn.textContent = '¿Salir? Toca otra vez';
+  setTimeout(() => { delete btn.dataset.armed; btn.textContent = t; }, 2500);
+}
+$('#quitBtn').onclick = e => confirmQuit(e.currentTarget);
+$('#homeBtn').onclick = () => { if (!$('#game').hidden) { confirmQuit($('#stage .quit') || $('#quitBtn')); return; } renderHome(); show('home'); };
+const sb = $('#soundBtn');
+const syncSound = () => { sb.setAttribute('aria-pressed', String(S.sound)); sb.textContent = 'Sonido: ' + (S.sound ? 'sí' : 'no'); };
+sb.onclick = () => { S.sound = !S.sound; store.set('sound', S.sound); Snd.init(); syncSound(); };
+syncSound();
+document.addEventListener('pointerdown', () => Snd.init(), { once: true });
+
+(function sky() {
+  const c = $('#sky'), g = c.getContext('2d');
+  const draw = () => {
+    const dpr = Math.min(2, devicePixelRatio || 1); c.width = innerWidth * dpr; c.height = innerHeight * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    R.seed(2026);
+    const n = Math.round(innerWidth * innerHeight / 5200);
+    for (let i = 0; i < n; i++) {
+      const x = R.rand() * innerWidth, y = R.rand() * innerHeight, T = 3000 + R.rand() ** 2 * 9000, r = R.rand() ** 3 * 1.6 + .3;
+      g.globalAlpha = .25 + R.rand() * .55; g.fillStyle = tempColor(T); g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    }
+    g.globalAlpha = 1;
+  };
+  draw(); addEventListener('resize', draw);
+})();
+
+renderHome();
+</script>
