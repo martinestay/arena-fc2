@@ -5,14 +5,14 @@
 <meta name="description" content="Juego de práctica para Física Computacional II: Python, NumPy, Matplotlib, Pandas, archivos, Unix y Git.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: consola de observatorio nocturno. Paneles oscuros como terminal; los gráficos salen en "papel" blanco como en un notebook. */
 :root{
   --night:#0a0f1f; --panel:#111a31; --panel-2:#17223f; --rule:#273764; --fg:#e9edf8; --muted:#97a3c7;
-  --sol:#ffb547; --azul:#86b4ff; --roja:#ff5f57; --verde:#4fdc9b; --paper:#ffffff; --paper-ink:#1b1b1b;
+  --sol:#e8b25a; --azul:#8fb1e8; --roja:#e8675f; --verde:#5fc99a; --paper:#ffffff; --paper-ink:#1b1b1b;
   --c-kw:#9bbcff; --c-str:#ffd27f; --c-num:#ff9f7d; --c-com:#6b79a3; --c-fn:#7fe3c4; --c-op:#c8d0ea;
-  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --display:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   color-scheme:dark;
@@ -33,7 +33,7 @@ code,.mono{font-family:var(--mono)}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .brand{display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;text-align:left}
 .brand .mark{width:38px;height:38px;flex:none}
-.brand b{font-family:var(--display);font-size:1.15rem;font-weight:800;letter-spacing:.02em;display:block;line-height:1.1}
+.brand b{font-family:var(--display);font-size:1.1rem;font-weight:600;display:block;line-height:1.15}
 .brand small{color:var(--muted);font-size:.78rem}
 .tools{display:flex;gap:8px}
 .ghost{background:transparent;border:1px solid var(--rule);border-radius:10px;padding:7px 12px;color:var(--fg);font-size:.88rem}
@@ -42,7 +42,7 @@ code,.mono{font-family:var(--mono)}
 
 /* ---------- home ---------- */
 .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:end;margin-bottom:26px}
-.hero h1{font-size:clamp(2rem,5.4vw,3.6rem);font-weight:800;line-height:1.02}
+.hero h1{font-size:clamp(1.8rem,4.2vw,2.7rem);font-weight:600;line-height:1.1}
 .hero h1 em{font-style:normal;color:var(--sol)}
 .hero p{color:var(--muted);max-width:56ch;margin:14px 0 0}
 .hero-code{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:14px 16px;font-family:var(--mono);font-size:.82rem;line-height:1.65;min-width:0;overflow-x:auto;white-space:pre}
@@ -52,15 +52,13 @@ code,.mono{font-family:var(--mono)}
 .chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
 .chip[aria-pressed="true"] .dot{background:var(--sol);opacity:1}
 .modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.mode{position:relative;text-align:left;background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;transition:transform .15s,border-color .15s,background .15s;min-width:0}
-.mode:hover{transform:translateY(-2px);border-color:var(--azul);background:var(--panel-2)}
-.mode .ico{width:34px;height:34px;color:var(--sol)}
-.mode h3{font-size:1rem;font-weight:700}
+.mode{position:relative;text-align:left;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s,background .15s;min-width:0}
+.mode:hover{border-color:var(--muted);background:var(--panel-2)}
+.mode .ico{width:26px;height:26px;color:var(--muted)}
+.mode h3{font-size:1.02rem;font-weight:600}
 .mode p{margin:0;color:var(--muted);font-size:.92rem}
 .mode .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
-.tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-radius:6px;padding:3px 7px;background:var(--panel-2);color:var(--azul);font-weight:700}
-.tag.hot{color:var(--sol)}
-.tag.vs{color:var(--roja)}
+.tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-radius:4px;padding:2px 7px;border:1px solid var(--rule);color:var(--muted);font-weight:700}
 .rec{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .foot{margin-top:28px;color:var(--muted);font-size:.84rem}
 
@@ -96,10 +94,10 @@ kbd{font-family:var(--mono);font-size:.75em;border:1px solid currentColor;border
 #game{position:relative}
 .hud{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:12px 16px;margin-bottom:14px}
 .hud .who{display:flex;flex-direction:column;min-width:0}
-.hud .who b{font-family:var(--display);font-size:.95rem}
+.hud .who b{font-family:var(--display);font-size:.98rem;font-weight:600}
 .hud .who span{color:var(--muted);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tbar{height:10px;background:var(--night);border-radius:99px;overflow:hidden;position:relative}
-.tbar i{position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,var(--azul),var(--sol));border-radius:99px;transition:background .3s}
+.tbar i{position:absolute;inset:0 auto 0 0;width:100%;background:var(--azul);border-radius:99px;transition:background .3s}
 .tbar.low i{background:var(--roja)}
 .ttext{font-family:var(--mono);font-size:.8rem;color:var(--muted);text-align:center;margin-top:4px;font-variant-numeric:tabular-nums}
 .stats{display:flex;align-items:center;gap:16px}
@@ -112,11 +110,11 @@ kbd{font-family:var(--mono);font-size:.75em;border:1px solid currentColor;border
 .lives{display:flex;gap:3px;align-items:center;position:relative}
 .heart{width:26px;height:26px;position:relative;flex:none}
 .heart svg{width:100%;height:100%;display:block;overflow:visible}
-.heart .full{fill:var(--roja);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--roja) 60%,transparent))}
-.heart .shine{fill:#fff;opacity:.55}
+.heart .full{fill:var(--roja)}
+.heart .shine{fill:#fff;opacity:.35}
 .heart .empty{fill:none;stroke:var(--rule);stroke-width:1.8}
-.heart.beat svg{animation:beat 1.6s ease-in-out infinite}
-@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.14)}24%{transform:scale(.98)}36%{transform:scale(1.08)}}
+.heart.beat svg{animation:beat 2.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}10%{transform:scale(1.07)}20%{transform:scale(1)}30%{transform:scale(1.04)}}
 .heart .half{position:absolute;inset:0;pointer-events:none}
 .heart .half.l{clip-path:polygon(0 0,52% 0,44% 28%,58% 46%,42% 66%,54% 100%,0 100%);animation:fallL .9s cubic-bezier(.4,.1,.8,.6) forwards}
 .heart .half.r{clip-path:polygon(52% 0,100% 0,100% 100%,54% 100%,42% 66%,58% 46%,44% 28%);animation:fallR .9s cubic-bezier(.4,.1,.8,.6) forwards}
@@ -131,9 +129,9 @@ kbd{font-family:var(--mono);font-size:.75em;border:1px solid currentColor;border
 .inf{font-family:var(--mono);font-size:.9rem;color:var(--muted);margin-left:4px;font-variant-numeric:tabular-nums}
 .shake{animation:shake .42s}
 @keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
-#flash{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;background:radial-gradient(ellipse at center,transparent 45%,color-mix(in srgb,var(--roja) 55%,transparent))}
+#flash{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;background:radial-gradient(ellipse at center,transparent 55%,color-mix(in srgb,var(--roja) 30%,transparent))}
 #flash.on{animation:flash .55s}
-#flash.good{background:radial-gradient(ellipse at center,transparent 55%,color-mix(in srgb,var(--verde) 35%,transparent))}
+#flash.good{background:radial-gradient(ellipse at center,transparent 65%,color-mix(in srgb,var(--verde) 18%,transparent))}
 @keyframes flash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
 
 /* ---------- stage ---------- */
@@ -164,7 +162,7 @@ input.blank.reveal{border-color:var(--azul);color:var(--azul)}
 .fb{margin-top:14px;border-radius:12px;padding:14px 16px;border:1px solid var(--rule);background:var(--panel-2);display:flex;flex-direction:column;gap:8px;animation:rise .25s ease-out}
 .fb.ok{border-color:color-mix(in srgb,var(--verde) 60%,var(--rule))}
 .fb.bad{border-color:color-mix(in srgb,var(--roja) 60%,var(--rule))}
-.fb b{font-family:var(--display);font-size:.95rem}
+.fb b{font-family:var(--display);font-size:.98rem;font-weight:600}
 .fb.ok b{color:var(--verde)}.fb.bad b{color:var(--roja)}
 .fb p{margin:0;color:var(--fg);max-width:75ch}
 .fb .code{font-size:.84rem;padding:10px 12px}
@@ -173,7 +171,7 @@ input.blank.reveal{border-color:var(--azul);color:var(--azul)}
 .toast.bad{background:var(--roja);color:#2b0705}
 @keyframes toast{0%{opacity:0;transform:translate(-50%,8px)}15%{opacity:1;transform:translate(-50%,0)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
 .turn{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
-.turn .who{font-family:var(--display);font-size:1.25rem;color:var(--sol)}
+.turn .who{font-family:var(--display);font-size:1.25rem;font-weight:600;color:var(--fg)}
 .turn .next{color:var(--muted);font-size:.88rem}
 .roster{display:flex;gap:6px;flex-wrap:wrap}
 .roster span{font-size:.8rem;border:1px solid var(--rule);border-radius:999px;padding:2px 10px;color:var(--muted)}
@@ -237,10 +235,10 @@ input.blank.reveal{border-color:var(--azul);color:var(--azul)}
 .side.p1{--team:var(--roja)}.side.p2{--team:var(--azul)}
 .side h3{font-size:.95rem;color:var(--team);overflow-wrap:anywhere}
 .side .rep{font-size:.84rem;color:var(--muted)}
-.side .pts{font-family:var(--display);font-size:2.6rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.side .pts{font-family:var(--display);font-size:2.4rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
 .side .pts small{font-size:.9rem;color:var(--muted);font-weight:500}
 .pad{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
-.pad button{background:var(--panel-2);border:1.5px solid var(--rule);border-radius:12px;padding:14px 4px;font-family:var(--display);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pad button{background:var(--panel-2);border:1.5px solid var(--rule);border-radius:10px;padding:14px 4px;font-family:var(--display);font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px}
 .pad button:hover{border-color:var(--team)}
 .pad button small{font-family:var(--mono);font-size:.68rem;color:var(--muted);font-weight:400}
 .side.locked{opacity:.55}
@@ -250,7 +248,7 @@ input.blank.reveal{border-color:var(--azul);color:var(--azul)}
 .duel .center{display:flex;flex-direction:column;gap:12px;min-width:0}
 .dopts{display:flex;flex-direction:column;gap:8px}
 .dopt{display:flex;gap:10px;align-items:flex-start;background:var(--panel-2);border:1.5px solid var(--rule);border-radius:12px;padding:10px 12px;font-family:var(--mono);font-size:.86rem;white-space:pre-wrap;word-break:break-word}
-.dopt .key{font-family:var(--display);font-weight:700;color:var(--sol);flex:none;width:18px}
+.dopt .key{font-family:var(--display);font-weight:600;color:var(--muted);flex:none;width:18px}
 .dopt.ok{border-color:var(--verde)}
 .dopt .mk{margin-left:auto;font-family:var(--body);font-size:.75rem;font-weight:700;display:flex;gap:4px;flex:none}
 .dopt .mk span{border-radius:4px;padding:0 5px}
@@ -258,7 +256,7 @@ input.blank.reveal{border-color:var(--azul);color:var(--azul)}
 
 /* ---------- end ---------- */
 .end{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-.end .big{font-family:var(--display);font-size:clamp(2rem,6vw,3.4rem);font-weight:800;line-height:1}
+.end .big{font-family:var(--display);font-size:clamp(1.9rem,5vw,3rem);font-weight:600;line-height:1.05}
 .end .sub{color:var(--muted)}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .kpi{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:14px}
@@ -269,7 +267,7 @@ table.t{width:100%;border-collapse:collapse;font-size:.92rem}
 table.t th,table.t td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:left;font-variant-numeric:tabular-nums}
 table.t th{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .tablewrap{overflow-x:auto}
-.nota{font-family:var(--display);font-size:4rem;font-weight:800;line-height:1}
+.nota{font-family:var(--display);font-size:4rem;font-weight:600;line-height:1}
 .bar{height:8px;border-radius:99px;background:var(--night);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--azul)}
 
@@ -300,8 +298,8 @@ table.t th{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:va
 <div id="app">
   <header class="top">
     <button class="brand" id="homeBtn" aria-label="Volver al inicio">
-      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="10" fill="#111a31" stroke="#273764"/><circle cx="20" cy="20" r="7" fill="#ffb547"/><ellipse cx="20" cy="20" rx="15" ry="5" fill="none" stroke="#86b4ff" stroke-width="1.6" transform="rotate(-24 20 20)"/><circle cx="32" cy="14.5" r="2" fill="#86b4ff"/></svg>
-      <span><b>ARENA FC-2</b><small>Física Computacional II · repaso jugable</small></span>
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="8" fill="#111a31" stroke="#273764"/><path d="M8 29h24M8 29V9" stroke="#97a3c7" stroke-width="1.6" fill="none"/><path d="M10 15h4l2 9h3l2-6h9" stroke="#e8b25a" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>
+      <span><b>Arena FC-2</b><small>USACH · segundo semestre 2026</small></span>
     </button>
     <div class="tools">
       <button class="ghost" id="soundBtn" aria-pressed="true">Sonido: sí</button>
@@ -371,10 +369,10 @@ const FILL = [
   { t: 'np', q: 'Crea el generador con tu semilla.', c: 'rng = np.random.⟦default_rng⟧(seed=2026)', ex: 'Con la misma semilla, <code>default_rng</code> reproduce los mismos números.' },
   { t: 'np', q: 'Agrega ruido gaussiano de desviación 0.002 al flujo.', c: 'flujo = 1 + rng.⟦normal⟧(loc=0, scale=⟦0.002⟧, size=500)', ex: '<code>rng.normal(loc, scale, size)</code>: loc es la media y scale la desviación estándar.' },
   { t: 'np', q: 'Índice de la estrella con mayor flujo.', c: 'i_max = np.⟦argmax⟧(flujo)', ex: '<code>argmax</code> devuelve el índice; <code>max</code> devolvería el valor.' },
-  { t: 'np', q: 'Ordena los índices de mayor a menor flujo.', c: 'orden = np.⟦argsort⟧(flujo)⟦[::-1]⟧', ex: '<code>argsort</code> ordena de menor a mayor; <code>[::-1]</code> invierte el arreglo.' },
-  { t: 'np', q: 'Máscara booleana de estrellas detectables (límite 1e-11 W/m²).', c: 'mascara = flujo ⟦>=⟧ 1e-11\ndetectadas = np.⟦where|nonzero⟧(mascara)[0]', ex: 'Una comparación produce un arreglo booleano; <code>np.where(mascara)[0]</code> da los índices True.' },
+  { t: 'np', q: 'Ordena los índices de mayor a menor flujo.', c: 'orden = np.⟦argsort⟧(flujo)⟦[::-1]⟧', ex: '<code>argsort</code> no ordena los valores: devuelve los índices que los ordenarían de menor a mayor. <code>[::-1]</code> invierte ese orden.' },
+  { t: 'np', q: 'Máscara booleana de estrellas detectables (límite 1e-11 W/m²).', c: 'mascara = flujo ⟦>=⟧ 1e-11\ndetectadas = np.⟦where|nonzero⟧(mascara)[0]', ex: 'La comparación produce un arreglo booleano. Con un solo argumento, <code>np.where</code> devuelve una tupla con un arreglo de índices por eje; <code>[0]</code> toma el del único eje.' },
   { t: 'np', q: 'Umbral de detección de tránsitos: F̄ − 3σ.', c: 'umbral = flujo.⟦mean⟧() - 3 * flujo.⟦std⟧()', ex: 'Los métodos <code>.mean()</code> y <code>.std()</code> existen en todo ndarray.' },
-  { t: 'np', q: 'Selecciona los tiempos dentro del tránsito.', c: 'en_transito = (t >= 4.5) ⟦&⟧ (t <= 5.0)', ex: 'Con arreglos se usa <code>&amp;</code> (no <code>and</code>) y cada condición va entre paréntesis.' },
+  { t: 'np', q: 'Selecciona los tiempos dentro del tránsito.', c: 'en_transito = (t >= 4.5) ⟦&⟧ (t <= 5.0)', ex: '<code>and</code> intenta convertir todo el arreglo en un solo True/False y lanza ValueError; <code>&amp;</code> compara elemento a elemento. Los paréntesis son obligatorios porque <code>&amp;</code> se evalúa antes que <code>&gt;=</code>.' },
   { t: 'np', q: 'Razón de radios a partir de la profundidad del tránsito.', c: 'Rp_Rs = np.⟦sqrt⟧(delta_F)', ex: 'R<sub>p</sub>/R<sub>⋆</sub> = √ΔF.' },
   { t: 'np', q: 'NumPy trabaja en radianes. Calcula cos(180°).', c: 'np.cos(np.⟦deg2rad|radians⟧(180))   # -1.0', ex: '<code>np.deg2rad</code> convierte grados a radianes.' },
   { t: 'np', q: 'Obtén la primera columna de la matriz.', c: 'a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\nprimera_col = a[⟦:⟧, 0]   # array([1, 4, 7])', ex: '<code>:</code> toma todas las filas; el 0 elige la columna.' },
@@ -383,19 +381,19 @@ const FILL = [
   { t: 'np', q: 'Convierte la matriz en una columna.', c: 'columna = np.reshape(a, (⟦-1⟧, 1))   # forma (9, 1)', ex: 'El -1 le pide a NumPy que calcule esa dimensión.' },
   { t: 'np', q: 'Apila dos arreglos de 4 elementos como filas: forma (2, 4).', c: 'unos, ceros = np.ones(4), np.zeros(4)\nnp.⟦stack|vstack⟧([unos, ceros], axis=0)', ex: '<code>np.stack(..., axis=0)</code> crea un eje nuevo al inicio.' },
   { t: 'np', q: 'Detecta valores indefinidos tras un logaritmo.', c: 'log_vals = np.log10(datos)\nhay_nan = np.⟦isnan⟧(log_vals)', ex: 'nan significa <em>not a number</em>; aparece con log10 de negativos.' },
-  { t: 'np', q: 'Reemplaza los nan por 0.', c: 'limpio = np.⟦nan_to_num⟧(log_vals, nan=0)', ex: '<code>np.nan_to_num</code> sustituye nan (e infinitos) por números.' },
+  { t: 'np', q: 'Reemplaza los nan por 0.', c: 'limpio = np.⟦nan_to_num⟧(log_vals, nan=0)', ex: '<code>np.nan_to_num</code> cambia nan por el valor indicado y ±inf por el mayor número finito representable, así que log10(0) = −inf no queda en 0.' },
   { t: 'np', q: 'Arreglo de unos con la misma forma que otro.', c: 'unos = np.⟦ones_like⟧(arreglo)', ex: 'También existe <code>np.zeros_like</code>.' },
-  { t: 'np', q: 'Ley de Stefan-Boltzmann (Tarea 4).', c: 'L = 4 * np.pi * R**2 * sigma_SB * T**⟦4⟧', ex: 'L = 4πR²σT⁴: la temperatura entra a la cuarta potencia.' },
-  { t: 'np', q: 'Flujo observado a distancia d.', c: 'F = L / (4 * np.pi * d**⟦2⟧)', ex: 'El flujo cae con el cuadrado de la distancia.' },
+  { t: 'np', q: 'Ley de Stefan-Boltzmann (Tarea 4).', c: 'L = 4 * np.pi * R**2 * sigma_SB * T**⟦4⟧', ex: 'L = 4πR²σ<sub>SB</sub>T⁴. Duplicar T multiplica L por 16; duplicar R, solo por 4.' },
+  { t: 'np', q: 'Flujo observado a distancia d.', c: 'F = L / (4 * np.pi * d**⟦2⟧)', ex: 'La luminosidad se reparte sobre una esfera de área 4πd², por eso el flujo cae como 1/d².' },
   { t: 'np', q: 'Posiciones aleatorias de 5 estrellas en [-5, 5] (Tarea 3).', c: 'x0 = rng.⟦uniform⟧(-5, 5, 5)\ny0 = rng.⟦uniform⟧(-5, 5, 5)', ex: '<code>rng.uniform(low, high, size)</code>.' },
   { t: 'np', q: 'Malla 2D para evaluar la imagen.', c: 'x = np.linspace(-5, 5, 200)\nX, Y = np.⟦meshgrid⟧(x, x)', ex: '<code>meshgrid</code> genera las coordenadas de cada píxel.' },
-  { t: 'np', q: 'Perfil gaussiano de una estrella.', c: 'I = I0 * np.⟦exp⟧(⟦-⟧((X - x0)**2 + (Y - y0)**2) / (2 * sigma**2))', ex: 'Sin el signo menos la "estrella" crece hacia los bordes.' },
+  { t: 'np', q: 'Perfil gaussiano de una estrella.', c: 'I = I0 * np.⟦exp⟧(⟦-⟧((X - x0)**2 + (Y - y0)**2) / (2 * sigma**2))', ex: 'El exponente debe ser negativo para que la intensidad decaiga lejos del centro. Sin el signo menos crece sin límite hacia los bordes.' },
   { t: 'np', q: 'Suma sobre el primer eje de un arreglo de forma (4, 3, 5).', c: 'cubo = rng.uniform(0, 10, size=(4, 3, 5))\nnp.sum(cubo, axis=⟦0⟧).shape   # (3, 5)', ex: 'Sumar sobre un eje lo elimina de la forma.' },
   { t: 'np', q: 'Mediana del flujo (Tarea 2).', c: 'mediana = np.⟦median⟧(flujo)', ex: 'La mediana es robusta frente a valores extremos.' },
   // Python básico
   { t: 'py', q: 'Imprime los impares entre 1 y 30 (Tarea 1).', c: 'for i in range(1, 31):\n    if i % 2 == ⟦1⟧:\n        print(i)', ex: 'El resto de dividir un impar por 2 es 1.' },
   { t: 'py', q: 'f-string para mostrar una variable.', c: 'x = 1\nprint(⟦f⟧"el valor de x = {x}")', ex: 'La f antes de las comillas activa las llaves {}.' },
-  { t: 'py', q: 'Energía cinética Ek = ½mv² (Tarea 1).', c: 'def energia_cinetica(m, v):\n    return 0.5 * m * v⟦**⟧2', ex: 'En Python la potencia es <code>**</code>; <code>^</code> es XOR.' },
+  { t: 'py', q: 'Energía cinética Ek = ½mv² (Tarea 1).', c: 'def energia_cinetica(m, v):\n    return 0.5 * m * v⟦**⟧2', ex: 'La potencia se escribe <code>**</code>: <code>v**2</code> es v². Ojo con <code>^</code>, que en Python no es potencia sino el operador lógico bit a bit (o exclusivo) entre enteros: <code>3 ^ 2</code> da 1, y con floats lanza TypeError.' },
   { t: 'py', q: 'Convierte 2 km/h a m/s.', c: 'v = 2 / ⟦3.6⟧   # m/s', ex: '1 m/s = 3.6 km/h.' },
   { t: 'py', q: 'Recorre clave y valor de un diccionario.', c: 'datos = {"entero": 1, "real": 2.5, "lista": [1, 2], "tupla": (1, 2)}\nfor clave, valor in datos.⟦items⟧():\n    print(clave, valor)', ex: '<code>.items()</code> entrega pares (clave, valor).' },
   { t: 'py', q: 'Lista por comprensión de cuadrados.', c: 'cuadrados = [x**2 ⟦for⟧ x ⟦in⟧ range(10)]', ex: 'Estructura: [expresión for variable in iterable].' },
@@ -412,7 +410,7 @@ const FILL = [
   { t: 'pd', q: 'Tabla a partir de un diccionario.', c: 'df = pd.⟦DataFrame⟧({"id": ids, "radio": R, "distancia": d})', ex: 'Cada clave del diccionario se vuelve una columna.' },
   { t: 'pd', q: 'Muestra las primeras diez filas del catálogo (Tarea 4).', c: 'df.⟦head⟧(10)', ex: '<code>head(n)</code> muestra las primeras n filas.' },
   { t: 'pd', q: 'Estadísticas descriptivas.', c: 'df.⟦describe⟧()', ex: 'Entrega count, mean, std, min, cuartiles y max.' },
-  { t: 'pd', q: 'Fila por posición y fila por etiqueta.', c: 'df.⟦iloc⟧[0]      # primera fila\ndf.⟦loc⟧["a"]    # fila con índice "a"', ex: 'iloc usa posiciones enteras; loc usa etiquetas.' },
+  { t: 'pd', q: 'Fila por posición y fila por etiqueta.', c: 'df.⟦iloc⟧[0]      # primera fila\ndf.⟦loc⟧["a"]    # fila con índice "a"', ex: 'iloc usa posiciones enteras y excluye el extremo final de un rango; loc usa etiquetas y lo incluye.' },
   { t: 'pd', q: 'Filtra con dos condiciones.', c: 'df[(df["bajos"] > 2) ⟦&⟧ (df["altos"] > 15)]', ex: 'Igual que en NumPy: <code>&amp;</code>, <code>|</code> y paréntesis.' },
   { t: 'pd', q: 'Filas cuya letra sea "i" o "j".', c: 'df[df["letras"].⟦isin⟧(["i", "j"])]', ex: '<code>isin</code> compara contra una lista de valores.' },
   { t: 'pd', q: 'Aplica una función a cada elemento.', c: 'df["cuadrado"] = df["altos"].⟦apply⟧(cuadrado)', ex: '<code>apply</code> llama la función para cada valor.' },
@@ -445,7 +443,7 @@ const FILL = [
   { t: 'plt', q: 'Imagen con coordenadas físicas y barra de color.', c: 'im = ax.⟦imshow⟧(I, extent=[-5, 5, -5, 5], origin="lower")\nplt.⟦colorbar⟧(im, label="Intensidad")', ex: '<code>extent</code> pone los ejes en x, y en lugar de índices.' },
   { t: 'plt', q: 'Etiqueta con tamaño de fuente 14.', c: 'plt.xlabel("Tiempo [años]", ⟦fontsize⟧=14)', ex: 'fontsize también sirve en legend y title.' },
   { t: 'plt', q: 'Dispersión y leyenda.', c: 'plt.⟦scatter⟧(d, F, c="tab:blue", label="Estrellas")\nplt.⟦legend⟧(fontsize=14)', ex: 'La leyenda usa los <code>label</code> de cada llamada.' },
-  { t: 'plt', q: 'Numera cada estrella en la imagen.', c: 'for i in range(5):\n    ax.⟦text|annotate⟧(x0[i], y0[i], str(i + 1), color="w")', ex: '<code>ax.text(x, y, texto)</code> escribe en coordenadas de datos.' },
+  { t: 'plt', q: 'Numera cada estrella en la imagen.', c: 'for i in range(5):\n    ax.⟦text⟧(x0[i], y0[i], str(i + 1), color="w")', ex: '<code>ax.text(x, y, texto)</code> escribe en coordenadas de datos. <code>annotate</code> sirve también, pero recibe primero el texto: <code>ax.annotate(str(i + 1), (x0[i], y0[i]))</code>.' },
 ];
 
 // o[0] siempre es la correcta; se baraja al mostrar
@@ -457,17 +455,17 @@ const MCQ = [
   { t: 'np', q: '¿Qué imprime?', c: 'a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\nprint(np.shape(a), np.ndim(a), np.size(a))', o: ['(3, 3) 2 9', '(3, 3) 3 9', '(9,) 1 9', '(3, 3) 2 3'], ex: 'shape = forma, ndim = número de ejes, size = total de elementos.' },
   { t: 'np', q: '¿Cómo queda x?', c: 'x = np.array([[1, 2, 3], [3, 2, 1]])\nx[x <= 1] = 100', o: ['[[100 2 3] [3 2 100]]', '[[100 100 3] [3 100 100]]', '[[1 2 3] [3 2 1]]', '[[100 2 3] [3 2 1]]'], ex: 'La máscara selecciona solo los elementos ≤ 1.' },
   { t: 'np', q: '¿Qué devuelve?', c: 'x = np.array([[1, 2, 3], [3, 2, 1]])\nnp.where(x <= 2, 0, 1)', o: ['[[0 0 1] [1 0 0]]', '[[1 1 0] [0 1 1]]', '(array([0, 0, 1, 1]), array([0, 1, 1, 2]))', '[[0 0 3] [3 0 0]]'], ex: 'np.where(cond, si_true, si_false) reemplaza elemento a elemento.' },
-  { t: 'np', q: '¿Qué forma tiene el resultado?', c: 'np.stack([np.ones(4), np.zeros(4)], axis=1).shape', o: ['(4, 2)', '(2, 4)', '(8,)', '(4, 4)'], ex: 'axis=1 pone los arreglos como columnas.' },
-  { t: 'np', q: '¿Qué forma tiene el resultado?', c: 'np.concat([np.ones(4), np.zeros(4)], axis=0).shape', o: ['(8,)', '(2, 4)', '(4, 2)', '(4,)'], ex: 'concat une a lo largo de un eje existente; no crea uno nuevo.' },
+  { t: 'np', q: '¿Qué forma tiene el resultado?', c: 'np.stack([np.ones(4), np.zeros(4)], axis=1).shape', o: ['(4, 2)', '(2, 4)', '(8,)', '(4, 4)'], ex: 'stack crea un eje nuevo; con axis=1 ese eje va en segundo lugar, así que cada arreglo queda como columna.' },
+  { t: 'np', q: '¿Qué forma tiene el resultado?', c: 'np.concat([np.ones(4), np.zeros(4)], axis=0).shape', o: ['(8,)', '(2, 4)', '(4, 2)', '(4,)'], ex: 'np.concat (alias de np.concatenate en NumPy 2) une a lo largo de un eje que ya existe; no crea uno nuevo.' },
   { t: 'np', q: '¿Cuánto vale aproximadamente?', c: 'np.cos(180)', o: ['-0.598', '-1.0', '0.0', '1.0'], ex: 'NumPy interpreta 180 como radianes. Para grados usa np.deg2rad(180).' },
   { t: 'np', q: '¿Qué devuelve?', c: 'np.log10(-5)', o: ['nan (con RuntimeWarning)', '-0.699', 'ValueError', '0'], ex: 'El log de un negativo no está definido en los reales: nan.' },
-  { t: 'np', q: '¿Qué devuelve?', c: 'np.argsort(np.array([30, 10, 20]))', o: ['array([1, 2, 0])', 'array([10, 20, 30])', 'array([2, 0, 1])', 'array([0, 2, 1])'], ex: 'Son los índices que ordenarían el arreglo de menor a mayor.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'np.argsort(np.array([30, 10, 20]))', o: ['array([1, 2, 0])', 'array([10, 20, 30])', 'array([2, 0, 1])', 'array([0, 2, 1])'], ex: 'El menor (10) está en el índice 1, luego 20 en el 2 y 30 en el 0.' },
   { t: 'np', q: '¿Qué devuelve?', c: 'np.argmax(np.array([3, 9, 2, 9]))', o: ['1', '3', '9', '[1, 3]'], ex: 'Si hay empate devuelve la primera aparición.' },
   { t: 'np', q: '¿Qué forma tiene?', c: 'cubo = rng.uniform(0, 10, size=(4, 3, 5))\nnp.sum(cubo, axis=1).shape', o: ['(4, 5)', '(3, 5)', '(4, 3)', '(5,)'], ex: 'Se elimina el eje 1 (tamaño 3).' },
   { t: 'np', q: '¿Cuántos elementos tiene?', c: 'np.linspace(0, 10, 11)', o: ['11, con paso 1.0', '10, con paso 1.0', '11, con paso 0.9', '10, con paso 1.1'], ex: 'linspace incluye los extremos 0 y 10.' },
   { t: 'np', q: '¿Qué imprime?', c: 'print(np.median([1, 100, 2]))', o: ['2.0', '34.33', '100', '1.0'], ex: 'Ordena: 1, 2, 100. El del medio es 2.' },
   { t: 'np', q: '¿Qué imprime?', c: 'r1 = np.random.default_rng(0).uniform()\nr2 = np.random.default_rng(0).uniform()\nprint(r1 == r2)', o: ['True', 'False', 'Depende del computador', 'Error'], ex: 'Misma semilla, misma secuencia. Por eso cada tarea pide fijar la semilla.' },
-  { t: 'np', q: '¿Qué imprime?', c: 'print(np.allclose([1.0, np.nan], [1.0, np.nan]))', o: ['False', 'True', 'nan', 'Error'], ex: 'nan ≠ nan. Hay que pasar equal_nan=True.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.allclose([1.0, np.nan], [1.0, np.nan]))', o: ['False', 'True', 'nan', 'Error'], ex: 'Por definición nan no es igual a nada, ni a sí mismo. Para tratarlos como iguales: equal_nan=True.' },
   { t: 'np', q: 'Si la distancia a una estrella se duplica, su flujo…', c: 'F = L / (4 * np.pi * d**2)', o: ['se divide por 4', 'se divide por 2', 'no cambia', 'se multiplica por 4'], ex: 'F ∝ 1/d², así que (2d)² = 4d².' },
   { t: 'np', q: 'Con R fija, si T se duplica, L se multiplica por…', c: 'L = 4 * np.pi * R**2 * sigma_SB * T**4', o: ['16', '4', '2', '8'], ex: '2⁴ = 16.' },
   { t: 'np', q: 'Si la profundidad del tránsito es ΔF = 0.01, ¿cuánto vale Rp/R⋆?', c: 'Rp_Rs = np.sqrt(delta_F)', o: ['0.1', '0.01', '0.0001', '1.0'], ex: '√0.01 = 0.1.' },
@@ -477,8 +475,8 @@ const MCQ = [
   { t: 'py', q: '¿Qué devuelve con x = 5?', c: 'f = lambda x: "alto" if x > 5 else "bajo"\nf(5)', o: ["'bajo'", "'alto'", 'None', 'True'], ex: '5 > 5 es False.' },
   { t: 'py', q: '¿Qué valor tiene Ek en joules?', c: 'm, v = 4, 2 / 3.6\nEk = 0.5 * m * v**2', o: ['≈ 0.617', '8.0', '≈ 1.11', '≈ 2.22'], ex: 'v ≈ 0.556 m/s, v² ≈ 0.309, Ek = 2·0.309 ≈ 0.617 J.' },
   { t: 'cls', q: '¿Qué imprime?', c: 'class Estrella:\n    def __init__(self, nombre, masa):\n        self.nombre = nombre\n        self.masa = masa\n\nsirio = Estrella("Sirio A", 2.06)\nprint(sirio.masa)', o: ['2.06', 'Sirio A', 'masa', 'AttributeError'], ex: 'El atributo quedó guardado en self.masa.' },
-  { t: 'cls', q: '¿Qué pasa al llamar e.info()?', c: 'class Estrella:\n    def info():\n        print("hola")\n\ne = Estrella()\ne.info()', o: ['TypeError: info() takes 0 positional arguments but 1 was given', 'Imprime hola', 'NameError', 'AttributeError'], ex: 'Python pasa la instancia automáticamente; falta self.' },
-  { t: 'cls', q: '¿Qué es self?', c: null, o: ['La instancia particular del objeto', 'El nombre de la clase', 'Una palabra reservada que importa la clase', 'El método constructor'], ex: 'self apunta al objeto concreto sobre el que se llama el método.' },
+  { t: 'cls', q: '¿Qué pasa al llamar e.info()?', c: 'class Estrella:\n    def info():\n        print("hola")\n\ne = Estrella()\ne.info()', o: ['TypeError: Estrella.info() takes 0 positional arguments but 1 was given', 'Imprime hola', 'NameError', 'AttributeError'], ex: 'e.info() equivale a Estrella.info(e): Python pasa la instancia como primer argumento, y el método no tiene dónde recibirla.' },
+  { t: 'cls', q: '¿Qué es self?', c: null, o: ['La instancia particular del objeto', 'El nombre de la clase', 'Una palabra reservada que importa la clase', 'El método constructor'], ex: 'self apunta al objeto concreto sobre el que se llama el método. No es una palabra reservada, es una convención: lo que importa es que sea el primer parámetro.' },
   { t: 'pd', q: '¿Qué forma tiene?', c: 'lista_1 = list(range(10))\nlista_2 = list(range(10, 20))\nlista_3 = list("abcdefghij")\npd.DataFrame([lista_1, lista_2, lista_3]).shape', o: ['(3, 10)', '(10, 3)', '(30,)', '(3, 3)'], ex: 'Cada lista es una fila. Con .T queda (10, 3).' },
   { t: 'pd', q: '¿Cuántas filas quedan?', c: 'df = pd.DataFrame({"n": range(10)})\ndf[df["n"] > 2]', o: ['7', '8', '3', '2'], ex: 'Quedan 3, 4, …, 9: siete filas.' },
   { t: 'pd', q: 'Una columna tiene un NaN en una fila. ¿Qué hace df.dropna()?', c: null, o: ['Elimina solo esa fila', 'Elimina esa columna', 'Reemplaza el NaN por 0', 'Elimina todo el DataFrame'], ex: 'Por defecto dropna elimina las filas que tengan algún NaN.' },
@@ -506,23 +504,24 @@ const MCQ = [
   { t: 'unix', q: '¿Qué es Overleaf?', c: null, o: ['Una plataforma en línea para escribir y compilar LaTeX', 'Un gestor de paquetes de Python', 'Un cliente de Git', 'Un kernel de Jupyter'], ex: 'Permite trabajar en LaTeX sin instalarlo y colaborar.' },
 ];
 
-// Ordena el código: líneas en el orden correcto
+// Ordenar el programa. l: una solución válida. dep[i]: líneas que deben ir antes de la i
+// (sin dep, cada línea depende de la anterior). Las líneas con sangría forman el bloque de su cabecera.
 const ORDER = [
   { t: 'io', q: 'Escribe un archivo y luego léelo.', l: ['ruta = CARPETA / "observaciones.txt"', 'with open(ruta, "w", encoding="utf-8") as archivo:', '    archivo.write("Objeto: EST-001\\n")', 'with open(ruta, "r", encoding="utf-8") as archivo:', '    contenido = archivo.read()', 'print(contenido)'], ex: 'Primero se define la ruta, luego se escribe y finalmente se lee.' },
-  { t: 'np', q: 'Simula un tránsito y detecta los puntos bajo 3σ (Tarea 2).', l: ['rng = np.random.default_rng(seed=123)', 't = np.linspace(0, 10, 500)', 'flujo = 1 + rng.normal(0, 0.002, t.size)', 'mask = (t >= 4.5) & (t <= 5.0)', 'flujo[mask] -= 0.02', 'umbral = flujo.mean() - 3 * flujo.std()', 'candidatos = t[flujo < umbral]'], ex: 'El umbral se calcula después de insertar el tránsito.' },
-  { t: 'cls', q: 'Define la clase Estrella y úsala.', l: ['class Estrella:', '    def __init__(self, nombre, luminosidad, distancia):', '        self.nombre = nombre', '        self.luminosidad = luminosidad', '        self.distancia = distancia', 'sol = Estrella("Sol", 3.828e26, 1.496e11)'], ex: 'Clase, constructor, atributos y recién entonces la instancia.' },
-  { t: 'git', q: 'Entrega la tarea por GitHub.', l: ['git clone https://github.com/usuario/fiscompii', 'cd fiscompii', 'mkdir -p tareas/tarea5', 'git add .', 'git commit -m "Tarea 5"', 'git push'], ex: 'Clonar, entrar, crear la carpeta, preparar, guardar y subir.' },
-  { t: 'plt', q: 'Construye y guarda la figura.', l: ['fig, ax = plt.subplots(figsize=(8, 5))', 'ax.plot(t, flujo, ".", label="Curva de luz")', 'ax.axhline(umbral, color="tab:red", ls="--", label="F̄ − 3σ")', 'ax.set_xlabel("Tiempo [años]", fontsize=14)', 'ax.legend(fontsize=14)', 'fig.savefig(CARPETA / "curva_luz.png")'], ex: 'La leyenda va después de las curvas con label; se guarda al final.' },
+  { t: 'np', q: 'Simula un tránsito y detecta los puntos bajo 3σ (Tarea 2).', l: ['rng = np.random.default_rng(seed=123)', 't = np.linspace(0, 10, 500)', 'flujo = 1 + rng.normal(0, 0.002, t.size)', 'mask = (t >= 4.5) & (t <= 5.0)', 'flujo[mask] -= 0.02', 'umbral = flujo.mean() - 3 * flujo.std()', 'candidatos = t[flujo < umbral]'], dep: { 2: [0, 1], 3: [1], 4: [2, 3], 5: [4], 6: [5] }, ex: 'El umbral se calcula después de insertar el tránsito; si no, la media y σ no lo incluyen. rng, t y mask pueden ir en distinto orden mientras existan antes de usarse.' },
+  { t: 'cls', q: 'Define la clase Estrella y úsala.', l: ['class Estrella:', '    def __init__(self, nombre, luminosidad, distancia):', '        self.nombre = nombre', '        self.luminosidad = luminosidad', '        self.distancia = distancia', 'sol = Estrella("Sol", 3.828e26, 1.496e11)'], dep: { 1: [0], 2: [1], 3: [1], 4: [1], 5: [0] }, ex: 'Los atributos van dentro de __init__ en cualquier orden; la instancia se crea después de definir la clase.' },
+  { t: 'git', q: 'Entrega la tarea por GitHub.', l: ['git clone https://github.com/<tu-usuario>/fiscompii', 'cd fiscompii', 'mkdir -p tareas/tarea5', 'cp ~/Downloads/tarea5.ipynb tareas/tarea5/', 'git add .', 'git commit -m "Tarea 5"', 'git push'], ex: 'Git no registra carpetas vacías: hay que copiar el notebook antes de git add.' },
+  { t: 'plt', q: 'Construye y guarda la figura.', l: ['fig, ax = plt.subplots(figsize=(8, 5))', 'ax.plot(t, flujo, ".", label="Curva de luz")', 'ax.axhline(umbral, color="tab:red", ls="--", label="F̄ − 3σ")', 'ax.set_xlabel("Tiempo [años]", fontsize=14)', 'ax.legend(fontsize=14)', 'fig.savefig(CARPETA / "curva_luz.png")'], dep: { 1: [0], 2: [0], 3: [0], 4: [1, 2], 5: [1, 2, 3, 4] }, ex: 'legend solo muestra lo que ya se dibujó con label, y savefig guarda la figura tal como está en ese momento. La curva, la línea y la etiqueta pueden ir en cualquier orden.' },
   { t: 'pd', q: 'Lee, limpia, filtra y exporta (Clase 5).', l: ['datos = pd.read_csv("catalogo.csv")', 'datos = datos.dropna()', 'calientes = datos.loc[datos["temperatura_K"] > 7000].copy()', 'calientes = calientes.sort_values("temperatura_K", ascending=False)', 'calientes.to_csv("estrellas_calientes.csv", index=False)'], ex: 'Primero limpiar, luego filtrar, ordenar y exportar.' },
-  { t: 'unix', q: 'Prepara tu ambiente de trabajo.', l: ['conda create -n compii python=3.12 numpy pandas matplotlib notebook', 'conda activate compii', 'python --version', 'jupyter notebook'], ex: 'El ambiente se crea una vez y se activa antes de usarlo.' },
-  { t: 'py', q: 'Función documentada para el flujo (formato de clase).', l: ['def flujo(L, d):', '    """Calcula el flujo observado en W/m^2."""', '    L_W = L * 3.828e26', '    d_m = d * 3.0857e16', '    return L_W / (4 * np.pi * d_m**2)', 'F = flujo(np.array([1.0, 2.5]), np.array([10, 25]))'], ex: 'Docstring justo bajo el def; conversión de unidades antes del cálculo.' },
+  { t: 'unix', q: 'Prepara tu ambiente de trabajo.', l: ['conda create -n compii python=3.12 numpy pandas matplotlib notebook', 'conda activate compii', 'python --version', 'jupyter notebook'], dep: { 1: [0], 2: [1], 3: [1] }, ex: 'El ambiente se crea una vez y se activa antes de usarlo; si no, python y jupyter son los del sistema.' },
+  { t: 'py', q: 'Función documentada para el flujo (formato de clase).', l: ['def flujo(L, d):', '    """Calcula el flujo observado en W/m^2."""', '    L_W = L * 3.828e26', '    d_m = d * 3.0857e16', '    return L_W / (4 * np.pi * d_m**2)', 'F = flujo(np.array([1.0, 2.5]), np.array([10, 25]))'], dep: { 1: [0], 2: [1], 3: [1], 4: [2, 3], 5: [0] }, ex: 'El docstring solo cuenta como tal si es la primera línea del cuerpo. Las conversiones pueden ir en cualquier orden, pero antes del return.' },
   { t: 'io', q: 'Guarda varios arreglos en .npz y recupera uno.', l: ['ruta_npz = CARPETA / "catalogo.npz"', 'np.savez_compressed(ruta_npz, luminosidad=L, distancia=d)', 'with np.load(ruta_npz, allow_pickle=False) as archivo:', '    L2 = archivo["luminosidad"].copy()', 'assert np.array_equal(L, L2)'], ex: '.copy() dentro del with, porque el archivo se cierra al salir.' },
-  { t: 'pd', q: 'Catálogo de la Tarea 4: genera, calcula y clasifica.', l: ['rng = np.random.default_rng(seed=42)', 'R = rng.uniform(0.5, 5, 100)', 'df = pd.DataFrame({"R": R, "T": rng.uniform(3000, 10000, 100)})', 'df["L"] = df["R"]**2 * (df["T"] / 5772)**4', 'df["F"] = df["L"] * L_SOL / (4 * np.pi * (d * PC)**2)', 'df["Clasificacion"] = np.where(df["F"] >= F_lim, "Detectada", "No detectada")'], ex: 'Cada columna depende de la anterior.' },
+  { t: 'pd', q: 'Catálogo de la Tarea 4 (L_SOL, PC y F_lim ya definidas): genera, calcula y clasifica.', l: ['rng = np.random.default_rng(seed=42)', 'df = pd.DataFrame({"R": rng.uniform(0.5, 5, 100), "T": rng.uniform(3000, 10000, 100)})', 'df["d"] = rng.uniform(50, 500, 100)', 'df["L"] = df["R"]**2 * (df["T"] / 5772)**4', 'df["F"] = df["L"] * L_SOL / (4 * np.pi * (df["d"] * PC)**2)', 'df["Clasificacion"] = np.where(df["F"] >= F_lim, "Detectada", "No detectada")'], dep: { 1: [0], 2: [1], 3: [1], 4: [2, 3], 5: [4] }, ex: 'Con R en R☉ y T en K, L/L☉ = (R/R☉)²(T/T☉)⁴. La distancia y la luminosidad son independientes; el flujo necesita ambas.' },
 ];
 
-// Terminal Rush
+// Comandos de terminal
 const TERM = [
-  { t: 'unix', q: 'Muestra el directorio de trabajo actual.', a: ['pwd'], out: '/home/estudiante/fiscompii' },
+  { t: 'unix', q: 'Muestra el directorio de trabajo actual.', a: ['pwd'], out: '/Users/<tu-usuario>/fiscompii' },
   { t: 'unix', q: 'Lista el contenido del directorio.', a: ['ls', 'ls -l', 'ls -la', 'ls -a', 'ls -lh'], out: 'LEEME.md  clases  tareas' },
   { t: 'unix', q: 'Crea el directorio resultados.', a: ['mkdir resultados', 'mkdir -p resultados'], out: '' },
   { t: 'unix', q: 'Crea tareas/tarea5, incluyendo las carpetas padre si faltan.', a: ['mkdir -p tareas/tarea5'], out: '' },
@@ -538,7 +537,7 @@ const TERM = [
   { t: 'unix', q: 'Activa el ambiente conda compii.', a: ['conda activate compii'], out: '(compii)' },
   { t: 'git', q: 'Prepara todos los cambios para el commit.', a: ['git add .', 'git add -A', 'git add --all'], out: '' },
   { t: 'git', q: 'Guarda los cambios con el mensaje "tarea 5".', a: ['git commit -m "tarea 5"'], out: '[main 3f2c1ab] tarea 5\n 1 file changed, 120 insertions(+)' },
-  { t: 'git', q: 'Sube tus commits al repositorio remoto.', a: ['git push', 'git push origin main'], out: 'To github.com:estudiante/fiscompii.git\n   a1b2c3d..3f2c1ab  main -> main' },
+  { t: 'git', q: 'Sube tus commits al repositorio remoto.', a: ['git push', 'git push origin main'], out: 'To https://github.com/<tu-usuario>/fiscompii.git\n   a1b2c3d..3f2c1ab  main -> main' },
   { t: 'git', q: 'Descarga y combina los cambios más recientes del remoto.', a: ['git pull', 'git pull origin main'], out: 'Already up to date.' },
   { t: 'git', q: 'Revisa qué archivos cambiaron y cuáles están preparados.', a: ['git status'], out: 'On branch main\nChanges not staged for commit:\n  modified:   tareas/tarea5/tarea5.ipynb' },
   { t: 'git', q: 'Muestra el historial de commits.', a: ['git log', 'git log --oneline'], out: '3f2c1ab tarea 5\na1b2c3d tarea 4' },
@@ -656,7 +655,7 @@ const PLOTS = [
       ];
     },
     fixes: ['datos = rng.normal(loc=10, scale=2, size=1000)', 'datos = rng.normal(loc=2, scale=10, size=1000)', 'datos = rng.uniform(8, 12, size=1000)', 'datos = np.linspace(2, 10, 1000)'],
-    ex: 'uniform reparte los valores por igual en un intervalo. La campana viene de rng.normal(loc=media, scale=σ).'
+    ex: 'uniform reparte los valores con la misma probabilidad en todo el intervalo (NumPy acepta low > high, por eso igual funciona). La campana viene de rng.normal(loc=media, scale=σ).'
   },
   {
     id: 'energia', t: 'py', titulo: 'Energía cinética en línea recta',
@@ -675,7 +674,7 @@ const PLOTS = [
       ];
     },
     fixes: ['Ek = 0.5 * m * v**2', 'Ek = 0.5 * m**2 * v', 'Ek = (0.5 * m * v)**2', 'Ek = 0.5 * m * 2**v'],
-    ex: '<code>v*2</code> multiplica por 2; la potencia es <code>v**2</code>. (0.5·m·v)² también es parábola, pero llega a 400 J.'
+    ex: '<code>v*2</code> duplica la velocidad y deja una recta; la potencia es <code>v**2</code>. (0.5·m·v)² también es parábola, pero vale 4v² y llega a 400 J.'
   },
   {
     id: 'hr', t: 'plt', titulo: 'Diagrama HR al revés',
@@ -1062,6 +1061,27 @@ function renderMCQ(box, q, { onDone }) {
   return { pick, check: () => pick(null, true), keys: k => pick(k), card };
 }
 
+// Revisa un orden propuesto (seq: índices de q.l) y marca cada línea como válida o no.
+// Reglas: las dependencias de q.dep y los bloques por sangría, como los lee Python.
+function orderMarks(q, seq) {
+  const ind = x => x.match(/^ */)[0].length;
+  const dep = i => q.dep ? (q.dep[i] || []) : (i ? [i - 1] : []);
+  const blockSize = h => { let k = h + 1; while (k < q.l.length && ind(q.l[k]) > ind(q.l[h])) k++; return k - h - 1; };
+  const header = j => { for (let k = j - 1; k >= 0; k--) if (ind(q.l[k]) < ind(q.l[j])) return k; return -1; };
+  const pos = {}; seq.forEach((i, k) => pos[i] = k);
+  const lineOk = i => {
+    if (!dep(i).every(d => pos[d] != null && pos[d] < pos[i])) return false;
+    for (let h = 0; h < q.l.length; h++) {
+      const n = blockSize(h); if (!n || pos[h] == null) continue;
+      const inside = pos[i] > pos[h] && pos[i] <= pos[h] + n;
+      let mine = false; for (let x = header(i); x >= 0; x = header(x)) if (x === h) mine = true;
+      if (mine !== inside) return false;
+    }
+    return true;
+  };
+  return seq.map(lineOk);
+}
+
 // Ordenar líneas
 function renderOrder(box, q, { onDone, onMiss }) {
   const card = h('div', { class: 'card' }, h('div', { class: 'prompt' }, h('h3', {}, q.q), h('span', { class: 'topicpill' }, TOPICS[q.t])));
@@ -1087,7 +1107,7 @@ function renderOrder(box, q, { onDone, onMiss }) {
   function check(timeout) {
     if (done) return;
     if (timeout) { done = true; placed.length = 0; placed.push(...q.l.map(txt => items.find(it => it.txt === txt))); draw(q.l.map(() => true)); onDone({ ok: false, ex: q.ex, card }); return; }
-    const marks = placed.map((it, k) => it.txt === q.l[k]);
+    const marks = orderMarks(q, placed.map(it => it.i));
     if (marks.every(Boolean)) { done = true; draw(marks); onDone({ ok: true, ex: q.ex, card }); }
     else { draw(marks); onMiss && onMiss(marks.filter(Boolean).length); }
   }
@@ -1101,7 +1121,7 @@ function renderTerm(box, q, { onDone }) {
   card.append(h('div', { class: 'prompt' }, h('div', { class: 'task' }, h('b', {}, '$'), h('h3', {}, q.q)), h('span', { class: 'topicpill' }, TOPICS[q.t])));
   const term = h('div', { class: 'term' });
   const input = h('input', { id: 'termInput', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Comando' });
-  const ps = () => h('span', {}, h('span', { class: 'ps' }, 'estudiante@fc2'), ':', h('span', { class: 'path' }, '~/fiscompii'), '$');
+  const ps = () => h('span', {}, h('span', { class: 'path' }, '~/fiscompii'), ' $');
   const line = h('div', { class: 'line' }, ps(), input);
   term.append(h('div', { class: 'out' }, 'Escribe el comando y presiona Enter.'), line);
   card.append(term); box.append(card);
@@ -1182,13 +1202,13 @@ const ICONS = {
 };
 
 const MODES = [
-  { id: 'reloj', name: 'Contrarreloj', ico: 'clock', desc: 'Completa el código antes de que se acabe el tiempo. Cada 3 aciertos sube el nivel y baja el reloj.', tags: [['Contra reloj', 'hot'], ['Solo']] },
-  { id: 'grupo', name: 'Equipo contra el reloj', ico: 'team', desc: 'Un reloj y unas vidas compartidas. Se turnan para completar código; cada acierto suma segundos.', tags: [['Contra reloj', 'hot'], ['Grupo']] },
-  { id: 'lab', name: 'Laboratorio de gráficos', ico: 'chart', desc: 'El código corre línea a línea y la figura se construye ante tus ojos. Encuentra el error y arréglalo.', tags: [['Depurar'], ['Visual']] },
-  { id: 'duelo', name: 'Duelo', ico: 'vs', desc: '1 contra 1 o equipo contra equipo en el mismo teclado. El primero en acertar se lleva el punto.', tags: [['VS', 'vs'], ['1v1 · equipos']] },
-  { id: 'oraculo', name: '¿Qué imprime?', ico: 'eye', desc: 'Lee el código y predice el resultado sin ejecutarlo. Rápido, con trampas típicas de NumPy y pandas.', tags: [['Contra reloj', 'hot'], ['Solo']] },
-  { id: 'orden', name: 'Ordena el programa', ico: 'list', desc: 'Las líneas llegan desordenadas. Arma el programa en el orden en que debe ejecutarse.', tags: [['Lógica'], ['Solo']] },
-  { id: 'terminal', name: 'Terminal Rush', ico: 'term', desc: 'Comandos de Unix y Git escritos en una terminal simulada, con el reloj encima.', tags: [['Contra reloj', 'hot'], ['Unix · Git']] },
+  { id: 'reloj', name: 'Completar código', ico: 'clock', desc: 'Llena los espacios del código antes de que termine el tiempo. Cada 3 aciertos el reloj se acorta.', tags: [['Contra reloj'], ['Individual']] },
+  { id: 'grupo', name: 'Completar código en grupo', ico: 'team', desc: 'Turnos con reloj y vidas compartidas. Cada acierto suma 8 segundos al reloj del grupo.', tags: [['Contra reloj'], ['Grupo']] },
+  { id: 'lab', name: 'Depurar gráficos', ico: 'chart', desc: 'El código se ejecuta línea a línea y la figura se construye en vivo. Encuentra la línea con el error y corrígela.', tags: [['Matplotlib'], ['Individual']] },
+  { id: 'duelo', name: 'Duelo', ico: 'vs', desc: 'Dos jugadores o dos equipos en el mismo teclado. Suma el punto quien acierta primero.', tags: [['1 contra 1'], ['Equipos']] },
+  { id: 'oraculo', name: 'Predecir la salida', ico: 'eye', desc: 'Lee el código y anticipa el resultado sin ejecutarlo.', tags: [['Contra reloj'], ['Individual']] },
+  { id: 'orden', name: 'Ordenar el programa', ico: 'list', desc: 'Las líneas llegan desordenadas. Ordénalas para que el programa funcione; se acepta cualquier orden válido.', tags: [['Individual']] },
+  { id: 'terminal', name: 'Comandos de terminal', ico: 'term', desc: 'Escribe el comando de Unix, conda o Git que corresponde a cada tarea.', tags: [['Contra reloj'], ['Unix · Git']] },
   { id: 'simulacro', name: 'Simulacro de prueba', ico: 'grade', desc: '15 preguntas mezcladas en 12 minutos. Sin vidas: al final recibes una nota de 1,0 a 7,0.', tags: [['Prueba 1 · 10 nov'], ['Nota']] },
 ];
 const LIFE_OPTS = [
@@ -1206,7 +1226,7 @@ function renderHome() {
   const sample = hl('t = np.linspace(0, 10, 500)\nflujo = 1 + rng.normal(0, 0.002, 500)\nflujo[(t >= 4.5) & (t <= 5.0)] -= 0.02\numbral = flujo.mean() - 3 * flujo.std()\n# ¿cuántos puntos caen bajo el umbral?');
   home.append(
     h('div', { class: 'hero' },
-      h('div', {}, h('h1', { html: 'Repasa FC-2 <em>jugando</em>.' }), h('p', {}, 'Ocho modos con la materia del curso: terminal y Git, Python, clases, NumPy, Matplotlib, pandas y lectura de archivos. Elige los temas, el modo y cuántas vidas te das.')),
+      h('div', {}, h('h1', { html: 'Física Computacional II' }), h('p', {}, 'Práctica con la materia de las clases 1 a 5: terminal y Git, Python, clases, NumPy, Matplotlib, pandas y lectura de archivos. Elige los temas, el modo y las vidas.')),
       h('div', { class: 'hero-code', html: sample })),
     h('div', { class: 'label' }, 'Temas en juego'));
   const tp = h('div', { class: 'topics' });
@@ -1231,7 +1251,7 @@ function renderHome() {
     grid.append(h('button', { class: 'mode', type: 'button', onclick: () => { Snd.init(); openSetup(m); } },
       h('span', { class: 'ico', html: ICONS[m.ico] }),
       h('h3', {}, m.name), h('p', {}, m.desc),
-      h('div', { class: 'tags' }, m.tags.map(([t, c]) => h('span', { class: 'tag ' + (c || '') }, t))),
+      h('div', { class: 'tags' }, m.tags.map(([t]) => h('span', { class: 'tag' }, t))),
       h('span', { class: 'rec' }, recTxt)));
   }
   home.append(grid, h('p', { class: 'foot' }, 'Contenidos de Física Computacional II (USACH, 2026), clases 1 a 5 y tareas 1 a 5. Teclado: Enter para comprobar y avanzar, 1–4 para elegir opciones.'));
@@ -1264,12 +1284,12 @@ function openSetup(m) {
     extra.bank = () => cb.checked;
   }
   if (m.id === 'grupo') {
-    const ta = h('textarea', { id: 'grpNames' }); ta.value = store.get('grpNames', 'Antonia\nBenjamín\nCatalina');
+    const ta = h('textarea', { id: 'grpNames', placeholder: 'Un nombre por línea' }); ta.value = store.get('grupo.nombres', '');
     const sel = h('select', { id: 'grpTime' }, ...[90, 150, 240].map(s => h('option', { value: s }, `${s} segundos`))); sel.value = store.get('grpTime', 150);
     card.append(h('div', { class: 'fieldrow' },
       h('label', { class: 'field', for: 'grpNames' }, h('span', { class: 'label' }, 'Integrantes (uno por línea)'), ta),
       h('label', { class: 'field', for: 'grpTime' }, h('span', { class: 'label' }, 'Reloj inicial'), sel, h('small', { style: 'color:var(--muted)' }, 'Acierto: +8 s. Pasar turno: −5 s.'))));
-    extra.players = () => { store.set('grpNames', ta.value); return namesFrom(ta.value, ['Jugador 1', 'Jugador 2']); };
+    extra.players = () => { store.set('grupo.nombres', ta.value); return namesFrom(ta.value, []); };
     extra.time = () => { store.set('grpTime', +sel.value); return +sel.value; };
   }
   if (m.id === 'duelo') {
@@ -1283,13 +1303,15 @@ function openSetup(m) {
       b1.setAttribute('aria-pressed', String(kind === '1v1')); b2.setAttribute('aria-pressed', String(kind === 'eq')); store.set('duelKind', kind);
       f1.innerHTML = '';
       if (kind === '1v1') {
-        f1.append(h('label', { class: 'field', for: 'p1' }, h('span', { class: 'label' }, 'Jugador rojo · teclas Q W E R'), h('input', { id: 'p1', value: store.get('p1', 'Rocío') })),
-          h('label', { class: 'field', for: 'p2' }, h('span', { class: 'label' }, 'Jugador azul · teclas U I O P'), h('input', { id: 'p2', value: store.get('p2', 'Tomás') })));
+        f1.append(h('label', { class: 'field', for: 'p1' }, h('span', { class: 'label' }, 'Lado rojo · teclas Q W E R'), h('input', { id: 'p1', placeholder: 'Nombre', value: store.get('duelo.p1', '') })),
+          h('label', { class: 'field', for: 'p2' }, h('span', { class: 'label' }, 'Lado azul · teclas U I O P'), h('input', { id: 'p2', placeholder: 'Nombre', value: store.get('duelo.p2', '') })));
       } else {
-        const t1 = h('textarea', { id: 't1' }); t1.value = store.get('t1', 'Rocío\nIgnacia\nMatías');
-        const t2 = h('textarea', { id: 't2' }); t2.value = store.get('t2', 'Tomás\nFernanda\nDiego');
-        f1.append(h('label', { class: 'field', for: 't1' }, h('span', { class: 'label' }, 'Gigantes Rojas · Q W E R'), t1),
-          h('label', { class: 'field', for: 't2' }, h('span', { class: 'label' }, 'Enanas Azules · U I O P'), t2));
+        const team = (k, lado, keys) => {
+          const n = h('input', { id: 'n' + k, placeholder: 'Nombre del equipo (opcional)', value: store.get('duelo.n' + k, '') });
+          const t = h('textarea', { id: 't' + k, placeholder: 'Integrantes, uno por línea' }); t.value = store.get('duelo.t' + k, '');
+          return h('div', { class: 'field' }, h('span', { class: 'label' }, `Lado ${lado} · ${keys}`), n, t);
+        };
+        f1.append(team(1, 'rojo', 'Q W E R'), team(2, 'azul', 'U I O P'));
       }
     };
     b1.onclick = () => { kind = '1v1'; draw(); }; b2.onclick = () => { kind = 'eq'; draw(); };
@@ -1299,9 +1321,15 @@ function openSetup(m) {
       h('p', { class: 'desc', style: 'margin:0' }, 'Respuesta equivocada: pierdes una vida y quedas bloqueado esa ronda. Si un lado se queda sin vidas, pierde el duelo. En pantalla táctil, cada lado tiene sus botones.'));
     extra.duel = () => {
       store.set('duelTarget', +tgt.value);
-      if (kind === '1v1') { const a = $('#p1').value.trim() || 'Rojo', b = $('#p2').value.trim() || 'Azul'; store.set('p1', a); store.set('p2', b); return { kind, sides: [{ name: a, members: [a] }, { name: b, members: [b] }], target: +tgt.value }; }
-      store.set('t1', $('#t1').value); store.set('t2', $('#t2').value);
-      return { kind, sides: [{ name: 'Gigantes Rojas', members: namesFrom($('#t1').value, ['Rojo 1']) }, { name: 'Enanas Azules', members: namesFrom($('#t2').value, ['Azul 1']) }], target: +tgt.value };
+      if (kind === '1v1') {
+        const a = $('#p1').value.trim(), b = $('#p2').value.trim(); store.set('duelo.p1', a); store.set('duelo.p2', b);
+        return { kind, sides: [{ name: a || 'Lado rojo', members: [a || 'Lado rojo'] }, { name: b || 'Lado azul', members: [b || 'Lado azul'] }], target: +tgt.value };
+      }
+      const side = (k, lado) => {
+        const n = $('#n' + k).value.trim(), t = $('#t' + k).value; store.set('duelo.n' + k, n); store.set('duelo.t' + k, t);
+        return { name: n || `Lado ${lado}`, members: namesFrom(t, []) };
+      };
+      return { kind, sides: [side(1, 'rojo'), side(2, 'azul')], target: +tgt.value };
     };
   }
   card.append(h('div', { class: 'actions' },
@@ -1309,7 +1337,7 @@ function openSetup(m) {
     h('button', { class: 'btn', type: 'button', id: 'startBtn', onclick: () => {
       const cfg = { lives: lp ? lp.get() : 0 };
       if (extra.bank) cfg.bank = extra.bank();
-      if (extra.players) { cfg.players = extra.players(); cfg.time = extra.time(); }
+      if (extra.players) { cfg.players = extra.players(); cfg.time = extra.time(); if (!cfg.players.length) { toast('Escribe al menos un nombre', true); $('#grpNames').focus(); return; } }
       if (extra.duel) Object.assign(cfg, extra.duel());
       start(m, cfg);
     } }, 'Jugar')));
@@ -1476,7 +1504,7 @@ const Duel = {
   next() {
     this.waiting = false; this.round++; this.done = false; this.locked = [false, false];
     $('#duelRound').textContent = `Ronda ${this.round}`;
-    this.sides.forEach(s => { s.el.classList.remove('locked', 'won', 'lost'); s.rep = s.members[(this.round - 1) % s.members.length]; s.repEl.textContent = this.cfg.kind === 'eq' ? `Responde: ${s.rep}` : 'Listo'; });
+    this.sides.forEach(s => { s.el.classList.remove('locked', 'won', 'lost'); s.rep = s.members.length ? s.members[(this.round - 1) % s.members.length] : s.name; s.repEl.textContent = this.cfg.kind === 'eq' && s.members.length ? `Responde: ${s.rep}` : 'Listo'; });
     const q = this.q = this.pick();
     this.order = shuffle(q.o.map((_, i) => i));
     this.qbox.innerHTML = '';
@@ -1961,10 +1989,10 @@ document.addEventListener('pointerdown', () => Snd.init(), { once: true });
   const draw = () => {
     const dpr = Math.min(2, devicePixelRatio || 1); c.width = innerWidth * dpr; c.height = innerHeight * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
     R.seed(2026);
-    const n = Math.round(innerWidth * innerHeight / 5200);
+    const n = Math.round(innerWidth * innerHeight / 11000);
     for (let i = 0; i < n; i++) {
       const x = R.rand() * innerWidth, y = R.rand() * innerHeight, T = 3000 + R.rand() ** 2 * 9000, r = R.rand() ** 3 * 1.6 + .3;
-      g.globalAlpha = .25 + R.rand() * .55; g.fillStyle = tempColor(T); g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+      g.globalAlpha = .1 + R.rand() * .3; g.fillStyle = tempColor(T); g.beginPath(); g.arc(x, y, r * .8, 0, 7); g.fill();
     }
     g.globalAlpha = 1;
   };
