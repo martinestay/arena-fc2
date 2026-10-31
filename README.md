@@ -1,6 +1,8 @@
 # Arena FC-2
 
-Juego de repaso para **Física Computacional II** (USACH, 2026): terminal y Git, Python, clases, NumPy, Matplotlib, pandas y lectura/escritura de archivos.
+Juego de repaso para **Física Computacional II** (USACH, 2026): terminal y Git, Python, ciclos y condicionales, funciones, clases, NumPy, Matplotlib, pandas y lectura/escritura de archivos.
+
+Incluye 120 ejercicios de completar código, 95 de opción múltiple, 16 programas para ordenar, 31 comandos de terminal y 13 figuras para depurar.
 
 Todo el juego está en `index.html`, un solo archivo. Se abre en cualquier navegador; solo necesita internet para cargar las fuentes.
 
