@@ -352,7 +352,7 @@ const store = {
   set(k, v) { try { localStorage.setItem('arenafc2.' + k, JSON.stringify(v)); } catch {} }
 };
 
-const TOPICS = { unix: 'Terminal', git: 'Git', py: 'Python básico', loop: 'Ciclos y condicionales', fn: 'Funciones', cls: 'Clases', np: 'NumPy', plt: 'Matplotlib', pd: 'Pandas', io: 'Archivos' };
+const TOPICS = { unix: 'Terminal', git: 'Git', py: 'Python básico', loop: 'Ciclos y condicionales', fn: 'Funciones', cls: 'Clases', np: 'NumPy', plt: 'Matplotlib', pd: 'Pandas', fot: 'Imágenes y fotometría', io: 'Archivos' };
 // los temas nuevos quedan activos también para quien ya tenía una selección guardada
 const nuevosTemas = Object.keys(TOPICS).filter(k => !store.get('topicsKnown', ['unix', 'git', 'py', 'cls', 'np', 'plt', 'pd', 'io']).includes(k));
 store.set('topicsKnown', Object.keys(TOPICS));
@@ -497,6 +497,60 @@ const FILL = [
   { t: 'plt', q: 'Guarda en alta resolución sin bordes sobrantes.', c: 'plt.savefig("figura.png", ⟦dpi⟧=300, bbox_inches="tight")', ex: 'dpi controla los píxeles por pulgada.' },
   { t: 'plt', q: 'Escala logarítmica en ambos ejes.', c: 'plt.⟦xscale⟧("log")\nplt.⟦yscale⟧("log")', ex: 'En log-log una ley de potencia F ∝ d⁻² se ve como una recta de pendiente −2.' },
   { t: 'plt', q: 'Evita que se monten las etiquetas de varios subgráficos.', c: 'fig, axs = plt.subplots(2, 2)\n...\nfig.⟦tight_layout⟧()', ex: 'Ajusta los márgenes para que títulos y etiquetas no se superpongan.' },
+  // Clase 6: clases y decoradores
+  { t: 'cls', q: 'Accede a un cálculo como si fuera un atributo (Clase 6).', c: 'class Estrella:\n    ...\n    @⟦property⟧\n    def flujo_relativo(self):\n        return self.luminosidad / (4 * np.pi * self.distancia**2)\n\nprint(estrella.flujo_relativo)   # sin paréntesis', ex: '<code>@property</code> ejecuta el método al leer el atributo, sin paréntesis.' },
+  { t: 'cls', q: 'Crea una estrella desde un diccionario (Clase 6).', c: 'class Estrella:\n    ...\n    @⟦classmethod⟧\n    def desde_diccionario(⟦cls⟧, datos):\n        return ⟦cls⟧(datos["nombre"], datos["luminosidad"], datos["distancia"])', ex: 'Un método de clase recibe la clase como <code>cls</code>, no una instancia, y sirve como constructor alternativo.' },
+  { t: 'cls', q: 'Llama al constructor alternativo.', c: 'datos = {"nombre": "Vega", "luminosidad": 40.1, "distancia": 7.68}\nestrella2 = Estrella.⟦desde_diccionario⟧(datos)', ex: 'Se llama sobre la clase, no sobre una instancia: todavía no existe ninguna estrella.' },
+  { t: 'cls', q: 'Completa el decorador de la clase.', c: 'def decorador(funcion):\n    def nueva_funcion():\n        print("Antes de ejecutar")\n        ⟦funcion⟧()\n        print("Después de ejecutar")\n    return ⟦nueva_funcion⟧\n\n⟦@⟧decorador\ndef saludar():\n    print("¡Hola, mundo!")', ex: '<code>@decorador</code> equivale a <code>saludar = decorador(saludar)</code>. El decorador devuelve la función nueva, sin llamarla.' },
+  { t: 'cls', q: 'Constructor alternativo desde un DataFrame (Tarea 6).', c: 'class CatalogoEstelar:\n    ...\n    @classmethod\n    def desde_dataframe(cls, datos):\n        return ⟦cls⟧(datos.⟦copy⟧())', ex: 'Con <code>.copy()</code> el catálogo no modifica el DataFrame original al limpiarlo.' },
+  { t: 'cls', q: 'Secciones de un NumPy Docstring.', c: 'def flujo(L, d):\n    """Calcula el flujo observado.\n\n    ⟦Parameters⟧\n    ----------\n    L : float\n        Luminosidad en W.\n    d : float\n        Distancia en m.\n\n    ⟦Returns⟧\n    -------\n    float\n        Flujo en W/m^2.\n    """', ex: 'Parameters documenta las entradas y Returns lo que devuelve. También existen Attributes, Raises, Notes y Examples.' },
+  { t: 'fn', q: 'Rechaza parámetros inválidos.', c: 'if alpha <= 0 or beta <= 0:\n    ⟦raise⟧ ⟦ValueError⟧("alpha y beta deben ser positivos")', ex: '<code>raise</code> detiene la función con un error claro. En un NumPy Docstring se documenta en la sección Raises.' },
+  // Clase 6: NumPy
+  { t: 'np', q: 'Convierte un vector en columna y en fila (Clase 6).', c: 'valores = np.arange(1, 6)\ncolumna = valores[:, ⟦None|np.newaxis⟧]   # (5, 1)\nfila = valores[⟦None|np.newaxis⟧, :]      # (1, 5)', ex: '<code>None</code> y <code>np.newaxis</code> son lo mismo: agregan un eje de tamaño 1.' },
+  { t: 'np', q: 'Tabla de multiplicar por broadcasting.', c: 'tabla = columna * fila\ntabla.shape   # (⟦5⟧, ⟦5⟧)', ex: '(5, 1) con (1, 5): cada eje de tamaño 1 se expande para calzar con el otro.' },
+  { t: 'np', q: 'Lleva escalares y arreglos a una misma forma.', c: 'x = np.array([20, 40, 60])\nr = np.array([5, 10, 15])\nx, y, r = np.⟦broadcast_arrays⟧(x, 35, r)\n# y queda [35 35 35]', ex: 'Devuelve los arreglos expandidos a la forma común, sin hacer ninguna operación.' },
+  { t: 'np', q: 'Rebanada independiente del original.', c: 'original = np.arange(8)\ncopia = original[::2].⟦copy⟧()\ncopia[0] = 99   # original no cambia', ex: 'Una rebanada es una vista que comparte memoria; <code>.copy()</code> crea datos propios.' },
+  { t: 'np', q: 'Comprueba si dos arreglos comparten memoria.', c: 'vista = original[::2]\nnp.⟦shares_memory⟧(original, vista)   # True', ex: 'Por eso modificar la vista cambia también el original.' },
+  { t: 'np', q: 'El mismo valor con percentil y con cuantil.', c: 'p75 = np.⟦percentile⟧(flujos, 75)\nq75 = np.⟦quantile⟧(flujos, 0.75)\nnp.⟦isclose⟧(p75, q75)   # True', ex: 'percentile usa la escala de 0 a 100 y quantile la de 0 a 1.' },
+  { t: 'np', q: 'Umbral para que el 35 % con mayor flujo quede detectado.', c: 'umbral = np.quantile(flujo_rel, ⟦0.65|.65⟧)', ex: 'Si el 35 % queda sobre el umbral, el 65 % queda bajo él: es el cuantil 0.65.' },
+  { t: 'np', q: 'Desviación estándar de una muestra.', c: 'np.std(flujos, ⟦ddof⟧=1)', ex: 'ddof=1 divide por N − 1. Por defecto NumPy usa ddof=0, mientras que pandas usa ddof=1.' },
+  // Tarea 6: física
+  { t: 'np', q: 'Radio estelar desde Stefan-Boltzmann (Tarea 6).', c: 'R_Rsol = np.⟦sqrt⟧(L_Lsol) * (T_SOL / T_K)**⟦2⟧', ex: 'De L = 4πR²σT⁴ resulta R/R☉ = √(L/L☉) · (T☉/T)².' },
+  { t: 'np', q: 'Magnitud bolométrica absoluta (Tarea 6).', c: 'M_bol = 4.74 - ⟦2.5⟧ * np.⟦log10⟧(L_Lsol)', ex: 'El signo menos hace que las estrellas más luminosas tengan magnitud menor.' },
+  { t: 'np', q: 'Ley de Wien en nanómetros (Tarea 6).', c: 'b = 2.8978e-3   # m K\nlambda_max_nm = b / T_K * ⟦1e9|1e+9|10**9|1000000000⟧', ex: 'b/T da metros; 1 m = 10⁹ nm.' },
+  { t: 'np', q: 'Flujo bolométrico en unidades físicas (Tarea 6).', c: 'F_bol = (L_Lsol * ⟦L_SOL⟧) / (4 * np.pi * (d_pc * ⟦PC⟧)**2)', ex: 'La ecuación exige L en vatios y d en metros: primero se convierte desde L☉ y pc.' },
+  // Clase 6: pandas
+  { t: 'pd', q: 'Grupos de temperatura de la Tarea 6.', c: 'df["grupo"] = pd.⟦cut⟧(df["T_K"], bins=[0, 5000, 7500, np.inf],\n                     labels=["Fría", "Intermedia", "Caliente"], ⟦right⟧=False)', ex: 'Con <code>right=False</code> los intervalos son [a, b): 5000 K es Intermedia y 7500 K es Caliente, como pide la tarea.' },
+  { t: 'pd', q: 'Tabla resumen por grupo.', c: 'df.⟦groupby⟧("grupo", ⟦observed⟧=True).⟦agg⟧(\n    n_estrellas=("id", "size"),\n    T_media=("T_K", "mean"))', ex: '<code>observed=True</code> omite las categorías de <code>pd.cut</code> que quedaron vacías.' },
+  { t: 'pd', q: 'Fracción de estrellas detectadas en cada grupo.', c: 'df.groupby("grupo", observed=True).agg(f_det=("detectada", "⟦mean⟧"))', ex: 'True vale 1 y False vale 0, así que el promedio de un booleano es una fracción.' },
+  { t: 'pd', q: 'Las cinco estrellas de mayor flujo.', c: 'fuentes = catalogo.⟦nlargest⟧(5, "flujo_rel").copy().⟦reset_index⟧(drop=True)', ex: '<code>drop=True</code> descarta el índice antiguo en lugar de guardarlo como columna.' },
+  { t: 'pd', q: 'Pasa una columna a NumPy.', c: 'flujos = catalogo["flujo_rel"].⟦to_numpy⟧()', ex: 'Es la forma recomendada de obtener un ndarray desde pandas.' },
+  { t: 'pd', q: 'Recorre las filas como objetos con atributos.', c: 'for fuente in fuentes.⟦itertuples⟧(index=False):\n    print(fuente.id, fuente.x_pix)', ex: 'Cada fila llega como una tupla con nombres; se lee con <code>fuente.columna</code>.' },
+  { t: 'pd', q: 'Cuenta los valores faltantes por columna (Tarea 6).', c: 'n_faltantes = df.⟦isna⟧().sum()\npct_faltantes = 100 * df.isna().⟦mean⟧()', ex: 'Igual que con cualquier booleano: la suma cuenta y el promedio da la fracción.' },
+  { t: 'pd', q: 'Las estrellas sin flujo quedan como desconocidas (Tarea 6).', c: 'df["estado"] = np.where(df["F_bol"].⟦isna⟧(), "Desconocida",\n                        np.where(df["F_bol"] >= umbral, "Detectada", "No detectada"))', ex: 'NaN >= umbral da False: sin el primer filtro, esas estrellas quedarían como no detectadas.' },
+  { t: 'io', q: 'Carga un .npz sin importar qué columnas trae (Tarea 6).', c: 'with np.load(ruta, allow_pickle=False) as datos:\n    df = pd.DataFrame({k: datos[k] for k in datos.⟦files⟧})', ex: '<code>.files</code> lista los nombres de los arreglos guardados.' },
+  // Clase 6: imágenes y fotometría
+  { t: 'fot', q: 'Grilla densa de coordenadas.', c: 'alto, ancho = 96, 96\nY, X = np.⟦mgrid⟧[:alto, :ancho]', ex: 'mgrid entrega primero las filas (Y) y luego las columnas (X), al revés que <code>meshgrid(x, y)</code>.' },
+  { t: 'fot', q: 'Grilla abierta para ahorrar memoria.', c: 'yc, xc = np.⟦ogrid⟧[:alto, :ancho]   # (alto, 1) y (1, ancho)', ex: 'ogrid guarda solo un vector por eje; el broadcasting forma la grilla al operar.' },
+  { t: 'fot', q: 'Perfil de Moffat circular.', c: 'def moffat_2d(x, y, x0, y0, amplitud, alpha=2.6, beta=3.2):\n    radio2 = (x - x0)**2 + (y - y0)**2\n    return amplitud * (1 + radio2 / alpha⟦**⟧2)**(⟦-beta⟧)', ex: 'I = A [1 + r²/α²]^(−β). En r = 0 vale A y decae con la distancia.' },
+  { t: 'fot', q: 'Agrega ejes para evaluar varias estrellas a la vez.', c: 'x0 = fuentes["x_pix"].to_numpy()[:, ⟦None⟧, ⟦None⟧]   # (5, 1, 1)\ncubo = moffat_2d(X[⟦None⟧, :, :], Y[None, :, :], x0, y0, A, alpha, beta)\n# cubo.shape == (5, 96, 96)', ex: '(1, 96, 96) con (5, 1, 1) da una imagen por estrella, sin un ciclo por píxel.' },
+  { t: 'fot', q: 'Suma todas las estrellas en una sola imagen.', c: 'modelo = cubo.⟦sum⟧(axis=⟦0⟧)   # (96, 96)', ex: 'El eje 0 es el de las estrellas; al sumarlo desaparece.' },
+  { t: 'fot', q: 'Imagen simulada con fondo y ruido.', c: 'imagen = modelo + fondo + rng.⟦normal⟧(0, sigma_ruido, size=modelo.⟦shape⟧)', ex: 'Un valor de ruido por píxel: el tamaño debe coincidir con la imagen.' },
+  { t: 'fot', q: 'Máscara circular de una apertura.', c: 'yc, xc = np.ogrid[:alto, :ancho]\nmascara = (xc - x0)**2 + (yc - y0)**2 <= radio⟦**⟧2', ex: 'Es la ecuación del círculo: la distancia al cuadrado se compara con el radio al cuadrado.' },
+  { t: 'fot', q: 'Mide el flujo dentro de la apertura.', c: 'flujo_apertura = np.⟦sum⟧(imagen[⟦mascara⟧] - fondo)', ex: 'Si no se resta el fondo, cada píxel aporta también el valor del cielo.' },
+  { t: 'fot', q: 'Flujo total ideal de un Moffat.', c: 'flujo_total = np.pi * A * alpha**⟦2⟧ / (⟦beta⟧ - 1)', ex: 'F∞ = πAα²/(β − 1). Solo es finito si β > 1.' },
+  { t: 'fot', q: 'Fracción de flujo encerrada en el radio R.', c: 'fraccion = 1 - (1 + (R / alpha)**2)**(⟦1⟧ - beta)', ex: 'F(<R)/F∞ = 1 − (1 + R²/α²)^(1−β). Tiende a 1 cuando R crece.' },
+  { t: 'fot', q: 'Error relativo de la fotometría, en porcentaje.', c: 'tabla["residuo"] = tabla["flujo_apertura"] - tabla["flujo_modelo"]\ntabla["error_pct"] = ⟦100⟧ * tabla["residuo"] / tabla["⟦flujo_modelo⟧"]', ex: 'El residuo se compara con el valor de referencia, que es el modelo.' },
+  // Clase 6: Matplotlib
+  { t: 'plt', q: 'Líneas de nivel con su valor.', c: 'cs = ax.⟦contour⟧(X, Y, senal, levels=[15, 35, 70, 130], colors="cyan")\nax.⟦clabel⟧(cs, inline=True, fontsize=8, fmt="%.0f")', ex: 'contour dibuja las líneas y clabel les escribe el valor.' },
+  { t: 'plt', q: 'Regiones rellenas entre niveles.', c: 'cf = ax.⟦contourf⟧(X, Y, senal, levels=15, cmap="viridis")\nfig.colorbar(cf, ax=ax)', ex: 'La f viene de filled: rellena el espacio entre niveles.' },
+  { t: 'plt', q: 'Varias propiedades de los ejes en una línea.', c: 'ax.⟦set⟧(xlabel="Distancia [pc]", ylabel="Flujo [u. a.]", yscale="log", title="Catálogo")', ex: '<code>ax.set</code> reemplaza a set_xlabel, set_ylabel, set_yscale y set_title juntos.' },
+  { t: 'plt', q: 'Dos paneles lado a lado (Tarea 6).', c: 'fig, (ax1, ax2) = plt.subplots(⟦1⟧, ⟦2⟧, figsize=(12, 4.5))', ex: 'Una fila y dos columnas. Los ejes se pueden desempaquetar directamente.' },
+  { t: 'plt', q: 'Configuración común para todas las figuras.', c: 'plt.⟦rcParams⟧.update({"font.size": 11, "figure.figsize": (8, 5)})', ex: 'rcParams guarda los valores por defecto de Matplotlib.' },
+  { t: 'plt', q: 'Marca las fuentes con círculos huecos.', c: 'ax.scatter(x_pix, y_pix, s=100, ⟦facecolors⟧="none", edgecolors="cyan")', ex: 'Sin relleno, la marca no tapa la estrella.' },
+  { t: 'plt', q: 'La misma escala de color en dos imágenes.', c: 'vmin, vmax = 0, np.percentile(senal, 99)\nax1.imshow(modelo, origin="lower", ⟦vmin⟧=vmin, ⟦vmax⟧=vmax)\nax2.imshow(senal, origin="lower", vmin=vmin, vmax=vmax)', ex: 'Sin límites iguales, un mismo color significaría intensidades distintas en cada panel.' },
+  { t: 'plt', q: 'Barra de color en el panel derecho (Tarea 6).', c: 'sc = ax2.scatter(d_pc, F_bol, c=T_K, cmap="plasma")\nfig.colorbar(sc, ⟦ax⟧=ax2, label="Temperatura [K]")', ex: 'El argumento ax indica a qué panel le quita espacio la barra.' },
+  { t: 'plt', q: 'Mantén la misma escala en ambos ejes.', c: 'ax.⟦set_aspect⟧("equal", adjustable="box")', ex: 'En una comparación 1:1, la diagonal queda realmente a 45°.' },
 ];
 
 // o[0] siempre es la correcta; se baraja al mostrar
@@ -601,10 +655,67 @@ const MCQ = [
   { t: 'plt', q: '¿Qué hace origin="lower" en imshow?', c: null, o: ['Pone la fila 0 del arreglo abajo, como un eje y normal', 'Centra la imagen', 'Invierte los colores', 'Recorta la parte inferior'], ex: 'Por defecto imshow pone la fila 0 arriba, como en una imagen.' },
   { t: 'plt', q: '¿Qué pasa con los valores ≤ 0 en un eje logarítmico?', c: 'plt.yscale("log")', o: ['No se dibujan', 'Se dibujan en cero', 'Se convierten a positivos', 'El gráfico falla'], ex: 'El logaritmo no está definido para ellos.' },
   { t: 'plt', q: '¿Qué hace sharex=True?', c: 'fig, axs = plt.subplots(2, 2, sharex=True)', o: ['Todos los subgráficos usan el mismo eje x', 'Copia los datos entre gráficos', 'Une los cuatro gráficos en uno', 'Oculta el eje x'], ex: 'Al hacer zoom en uno, los demás lo siguen; facilita comparar.' },
+  // Clase 6: clases y decoradores
+  { t: 'cls', q: '¿Qué imprime saludar()?', c: 'def decorador(funcion):\n    def nueva_funcion():\n        print("Antes")\n        funcion()\n        print("Después")\n    return nueva_funcion\n\n@decorador\ndef saludar():\n    print("Hola")', o: ['Antes, Hola, Después', 'Hola', 'Antes, Después, Hola', 'Hola, Antes, Después'], ex: 'saludar pasó a ser nueva_funcion, que envuelve a la original.' },
+  { t: 'cls', q: '¿A qué equivale @decorador sobre def saludar?', c: null, o: ['saludar = decorador(saludar)', 'decorador = saludar(decorador)', 'saludar = decorador', 'saludar.decorador()'], ex: 'El símbolo @ es una forma corta de escribir esa asignación.' },
+  { t: 'cls', q: '¿Qué pasa?', c: 'class Estrella:\n    @property\n    def flujo(self):\n        return 1.0\n\nEstrella().flujo()', o: ["TypeError: 'float' object is not callable", 'Devuelve 1.0', 'AttributeError', 'Devuelve el método'], ex: 'estrella.flujo ya devuelve 1.0; los paréntesis intentan llamar a ese número.' },
+  { t: 'cls', q: '¿Qué recibe como primer argumento un @classmethod?', c: null, o: ['La clase (cls)', 'La instancia (self)', 'Nada', 'El módulo'], ex: 'Por eso puede crear instancias nuevas con cls(...).' },
+  { t: 'cls', q: '¿Para qué sirve desde_dataframe en la Tarea 6?', c: null, o: ['Crear un catálogo desde un DataFrame, sin leer un .npz', 'Guardar el catálogo en un DataFrame', 'Convertir un DataFrame en un arreglo', 'Limpiar un DataFrame existente'], ex: 'Es un constructor alternativo: otra forma de llegar al mismo objeto.' },
+  { t: 'cls', q: '¿Qué sección de un NumPy Docstring documenta los errores posibles?', c: null, o: ['Raises', 'Returns', 'Notes', 'Attributes'], ex: 'Returns documenta lo que devuelve; Raises, lo que puede lanzar.' },
+  { t: 'cls', q: '¿Cuánto vale aproximadamente?', c: 'estrella = Estrella("Sol", 1.0, 10.0)\nestrella.flujo_relativo   # L / (4π d²)', o: ['7.96e-4', '7.96e-3', '0.1', '1.0'], ex: '1 / (4π · 100) ≈ 7.96 × 10⁻⁴. Es un flujo relativo, no calibrado.' },
+  { t: 'cls', q: '¿Qué ventaja tiene una clase sobre funciones sueltas? (Tarea 6)', c: null, o: ['Reúne datos y operaciones, sin pasar el catálogo a cada función', 'Siempre es más rápida', 'Evita usar pandas', 'Elimina los valores NaN'], ex: 'Cada método accede a los datos mediante self y el estado queda en un solo objeto.' },
+  // Clase 6: NumPy
+  { t: 'np', q: '¿Qué forma tiene?', c: 'valores = np.arange(1, 6)\nvalores[:, None].shape', o: ['(5, 1)', '(1, 5)', '(5,)', '(5, 5)'], ex: 'None agrega un eje en la posición donde se escribe.' },
+  { t: 'np', q: '¿Qué forma tiene?', c: 'valores = np.arange(1, 6)\n(valores[:, None] * valores[None, :]).shape', o: ['(5, 5)', '(5, 1)', '(1, 5)', 'ValueError'], ex: 'Cada eje de tamaño 1 se expande para calzar con el otro.' },
+  { t: 'np', q: '¿Qué forma tiene?', c: '(np.ones((3, 1)) * np.ones((1, 4))).shape', o: ['(3, 4)', '(4, 3)', '(1, 1)', 'ValueError'], ex: '3 con 1 da 3; 1 con 4 da 4.' },
+  { t: 'np', q: '¿Qué pasa?', c: 'np.ones((3, 2)) * np.ones(3)', o: ['ValueError: las formas no son compatibles', 'Da forma (3, 2)', 'Da forma (3, 3)', 'Da forma (3,)'], ex: 'Las formas se comparan desde la derecha: 2 y 3 no son iguales y ninguno vale 1.' },
+  { t: 'np', q: '¿Cuándo son compatibles dos dimensiones por broadcasting?', c: null, o: ['Cuando son iguales o una de ellas vale 1', 'Solo cuando son iguales', 'Cuando una es múltiplo de la otra', 'Siempre'], ex: 'Es la regla de la clase, aplicada eje por eje desde la derecha.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'original = np.arange(8)\nvista = original[::2]\nvista[0] = 99\nprint(original[0])', o: ['99', '0', '2', 'Error'], ex: 'La rebanada es una vista: comparte memoria con el original.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'original = np.arange(8)\ncopia = original[::2].copy()\ncopia[0] = 99\nprint(original[0])', o: ['0', '99', '2', 'Error'], ex: 'La copia tiene sus propios datos.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'np.quantile(np.array([1, 2, 3, 4, 5]), 0.25)', o: ['2.0', '1.25', '1.0', '25.0'], ex: 'El cuantil 0.25 de cinco datos ordenados cae justo en el segundo.' },
+  { t: 'np', q: '¿Qué devuelve?', c: 'np.percentile(np.arange(11), 90)', o: ['9.0', '90.0', '10.0', '0.9'], ex: 'Los datos van de 0 a 10; el 90 % del recorrido llega a 9.' },
+  { t: 'np', q: '¿A qué equivale np.quantile(x, 0.5)?', c: null, o: ['np.median(x)', 'np.mean(x)', 'np.percentile(x, 0.5)', 'x.max() / 2'], ex: 'El cuantil 0.5 es el percentil 50, es decir, la mediana. np.percentile(x, 0.5) sería el percentil 0.5.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.std([1, 2, 3], ddof=1))', o: ['1.0', '0.816', '2.0', '0.667'], ex: 'Con ddof=1: √(2 / 2) = 1. Con ddof=0 sería √(2 / 3) ≈ 0.816.' },
+  // Tarea 6: física
+  { t: 'np', q: '¿Cuánto vale M_bol para L = 100 L☉?', c: 'M_bol = 4.74 - 2.5 * np.log10(L_Lsol)', o: ['-0.26', '9.74', '4.74', '-5.0'], ex: '4.74 − 2.5 · 2 = −0.26.' },
+  { t: 'np', q: 'Si la luminosidad de una estrella aumenta, su magnitud bolométrica…', c: null, o: ['disminuye', 'aumenta', 'no cambia', 'se vuelve NaN'], ex: 'Es una escala invertida: menor magnitud significa más brillo.' },
+  { t: 'np', q: '¿Cuánto vale λ_max para T = 5800 K?', c: 'lambda_max_nm = 2.8978e-3 / T_K * 1e9', o: ['≈ 500 nm', '≈ 5000 nm', '≈ 50 nm', '≈ 1.7e13 nm'], ex: '2.8978 × 10⁻³ / 5800 ≈ 5 × 10⁻⁷ m = 500 nm.' },
+  { t: 'np', q: 'Según la ley de Wien, una estrella más caliente emite su máximo en…', c: null, o: ['una longitud de onda menor', 'una longitud de onda mayor', 'la misma longitud de onda', 'el infrarrojo, siempre'], ex: 'λ_max = b/T: son inversamente proporcionales.' },
+  { t: 'np', q: 'Una estrella con L = 1 L☉ y T = T☉/2, ¿qué radio tiene?', c: 'R_Rsol = np.sqrt(L_Lsol) * (T_SOL / T_K)**2', o: ['4 R☉', '2 R☉', '0.25 R☉', '1 R☉'], ex: '√1 · 2² = 4: para emitir lo mismo a menor temperatura necesita más superficie.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.nan >= 1e-4)', o: ['False', 'True', 'nan', 'Error'], ex: 'Toda comparación con nan da False. Por eso la Tarea 6 pide una clasificación desconocida.' },
+  { t: 'np', q: '¿Cómo cambian las detecciones si el umbral baja de 1e-4 a 1e-12 W/m²?', c: 'detectada = F_bol >= umbral', o: ['Aumentan o se mantienen', 'Disminuyen', 'Siguen siempre iguales', 'Quedan todas como NaN'], ex: 'Un umbral menor deja pasar flujos más débiles; ninguna estrella detectada deja de serlo.' },
+  { t: 'np', q: 'L y T se generaron de forma independiente. ¿Qué se ve en el diagrama HR? (Tarea 6)', c: null, o: ['Una nube sin secuencia principal definida', 'Una secuencia principal clara', 'Una línea recta perfecta', 'Solo gigantes rojas'], ex: 'La secuencia principal refleja una relación física entre L y T que estos datos no tienen.' },
+  // Clase 6: pandas
+  { t: 'pd', q: '¿En qué grupo queda T = 5000 K?', c: 'pd.cut(T, bins=[0, 5000, 7500, np.inf],\n       labels=["Fría", "Intermedia", "Caliente"], right=False)', o: ['Intermedia', 'Fría', 'Caliente', 'NaN'], ex: 'right=False incluye el extremo izquierdo: [5000, 7500).' },
+  { t: 'pd', q: 'Sin right=False, ¿en qué grupo queda T = 5000 K?', c: 'pd.cut(T, bins=[0, 5000, 7500, np.inf],\n       labels=["Fría", "Intermedia", "Caliente"])', o: ['Fría', 'Intermedia', 'Caliente', 'NaN'], ex: 'Por defecto los intervalos son (a, b]: 5000 pertenece a (0, 5000].' },
+  { t: 'pd', q: '¿Qué imprime?', c: 'print(pd.Series([True, False, True, True]).mean())', o: ['0.75', '3', 'True', '1.0'], ex: 'El promedio de un booleano es la fracción de True.' },
+  { t: 'pd', q: '¿Qué hace observed=True en groupby?', c: null, o: ['Omite las categorías vacías', 'Elimina los NaN de todas las columnas', 'Ordena los grupos', 'Muestra el resultado en pantalla'], ex: 'Una categoría de pd.cut sin estrellas no aparece en la tabla.' },
+  { t: 'pd', q: '¿Qué devuelve?', c: 'd = pd.DataFrame({"x": [1, 5, 3, 9, 7, 2]})\nd.nlargest(2, "x")["x"].tolist()', o: ['[9, 7]', '[7, 9]', '[1, 5]', '[1, 2]'], ex: 'nlargest devuelve las filas con los mayores valores, de mayor a menor.' },
+  { t: 'pd', q: 'Una estrella tiene flujo NaN. ¿Cómo debe quedar clasificada? (Tarea 6)', c: null, o: ['Desconocida', 'No detectada', 'Detectada', 'Se borra del catálogo sin avisar'], ex: 'No se puede afirmar que no fue detectada si el flujo no se pudo calcular.' },
+  { t: 'pd', q: '¿Sobre qué estrellas se calcula f_det en la Tarea 6?', c: null, o: ['Las que tienen flujo válido y temperatura conocida', 'Todas las del catálogo', 'Solo las detectadas', 'Las que no tienen NaN en ninguna columna, incluido el nombre'], ex: 'f_det = N detectadas / N con flujo válido, dentro de cada grupo de temperatura.' },
+  // Clase 6: imágenes y fotometría
+  { t: 'fot', q: '¿Qué forma tiene?', c: 'np.mgrid[:2, :3].shape', o: ['(2, 2, 3)', '(2, 3)', '(6,)', '(3, 2, 3)'], ex: 'Una matriz de 2 × 3 por cada eje: dos matrices.' },
+  { t: 'fot', q: '¿Qué formas tienen yc y xc?', c: 'yc, xc = np.ogrid[:4, :5]', o: ['(4, 1) y (1, 5)', '(4, 5) y (4, 5)', '(4,) y (5,)', '(1, 4) y (5, 1)'], ex: 'ogrid deja los ejes abiertos, listos para combinarse por broadcasting.' },
+  { t: 'fot', q: '¿Cuál es el orden correcto con mgrid?', c: 'np.mgrid[:alto, :ancho]', o: ['Y, X = ...', 'X, Y = ...', 'Da igual', 'x, y, z = ...'], ex: 'El primer eje recorre las filas, que corresponden a y.' },
+  { t: 'fot', q: '¿Qué forma tiene?', c: 'Y, X = np.mgrid[:96, :96]\nX[None, :, :].shape', o: ['(1, 96, 96)', '(96, 96, 1)', '(96, 96)', '(96, 1, 96)'], ex: 'None agrega el eje al comienzo, donde irán las estrellas.' },
+  { t: 'fot', q: 'Con 5 estrellas, ¿qué forma tiene cubo.sum(axis=0)?', c: '# cubo.shape == (5, 96, 96)', o: ['(96, 96)', '(5, 96)', '(5,)', '(5, 96, 96)'], ex: 'Al sumar el eje de las estrellas queda una sola imagen.' },
+  { t: 'fot', q: '¿Cuánto vale un perfil de Moffat en su centro?', c: 'I = A * (1 + r**2 / alpha**2)**(-beta)', o: ['A', 'A / beta', 'A * alpha', '0'], ex: 'Con r = 0, el paréntesis vale 1.' },
+  { t: 'fot', q: '¿Qué pasa con F∞ si β = 1?', c: 'F_inf = np.pi * A * alpha**2 / (beta - 1)', o: ['Diverge: la fórmula exige β > 1', 'Vale π A α²', 'Vale 0', 'Vale A'], ex: 'El denominador se anula. Con β = 1, NumPy da inf.' },
+  { t: 'fot', q: '¿Cuánto vale aproximadamente la fracción encerrada?', c: 'alpha, beta, R = 2.6, 3.2, 8.0\nf = 1 - (1 + (R / alpha)**2)**(1 - beta)', o: ['99.4 %', '50 %', '8.0 %', '100 % exacto'], ex: 'Es el valor de la clase: una apertura de 8 píxeles captura casi todo el perfil.' },
+  { t: 'fot', q: 'En una imagen, ¿a qué posición corresponde imagen[20, 18]?', c: null, o: ['x = 18, y = 20', 'x = 20, y = 18', 'x = 2, y = 18', 'Depende de cmap'], ex: 'El arreglo se indexa [fila, columna], es decir, [y, x].' },
+  { t: 'fot', q: '¿Qué forma tiene imagen[mascara] si la máscara tiene 197 True?', c: 'imagen.shape == (96, 96)', o: ['(197,)', '(96, 96)', '(197, 197)', '(14, 14)'], ex: 'Una máscara booleana entrega los píxeles seleccionados en un arreglo 1D.' },
+  { t: 'fot', q: 'La apertura de R = 8 selecciona 197 píxeles y πR² ≈ 201. ¿Por qué difieren?', c: null, o: ['Porque la grilla es discreta y cuenta píxeles enteros', 'Porque hay ruido en la imagen', 'Por un error de redondeo de NumPy', 'Porque falta restar el fondo'], ex: 'La máscara no depende de la imagen; el borde del círculo pasa entre píxeles.' },
+  { t: 'fot', q: 'Con fondo = 10 y 197 píxeles, ¿cuánto se sobreestima el flujo si no se resta el fondo?', c: 'flujo = np.sum(imagen[mascara])', o: ['1970', '10', '197', '2010'], ex: '197 · 10 = 1970 unidades que vienen del cielo y no de la estrella.' },
+  // Clase 6: Matplotlib y terminal
+  { t: 'plt', q: '¿Cuál es la diferencia entre contour y contourf?', c: null, o: ['contour dibuja líneas de nivel; contourf rellena entre niveles', 'contourf es más rápido e igual', 'contour solo funciona con imshow', 'contourf dibuja solo una línea'], ex: 'La f viene de filled.' },
+  { t: 'plt', q: '¿Qué hace ax.clabel(cs)?', c: 'cs = ax.contour(X, Y, senal, levels=[15, 35, 70])', o: ['Escribe el valor sobre cada línea de nivel', 'Agrega una barra de color', 'Pone el título de los ejes', 'Agrega una leyenda'], ex: 'Necesita el objeto que devolvió contour.' },
+  { t: 'plt', q: '¿Por qué usar los mismos vmin y vmax en dos imágenes?', c: null, o: ['Para que un mismo color signifique la misma intensidad', 'Para que carguen más rápido', 'Para quitar el ruido', 'Porque imshow lo exige'], ex: 'Si cambian, las imágenes no se pueden comparar a simple vista.' },
+  { t: 'plt', q: '¿Qué significa "u. a." en un eje de la clase?', c: 'ax.set(ylabel="Flujo relativo [u. a.]")', o: ['Unidades arbitrarias: el valor no está calibrado', 'Unidades astronómicas', 'Unidades absolutas', 'Unidades atómicas'], ex: 'El flujo relativo sirve para comparar, no como medida física.' },
+  { t: 'unix', q: '¿Cómo conviene nombrar un archivo? (Clase 6)', c: null, o: ['Tarea_5.ipynb', 'Tarea 5.ipynb', 'Tarea 5 .ipynb', 'tarea 5 final.ipynb'], ex: 'La terminal separa los argumentos por espacios, así que "Tarea 5.ipynb" se leería como dos nombres.' },
 ];
 
 // Ordenar el programa. l: una solución válida. dep[i]: líneas que deben ir antes de la i
-// (sin dep, cada línea depende de la anterior). Las líneas con sangría forman el bloque de su cabecera.
+// (sin dep, cada línea depende de la anterior). adj: pares que deben ir seguidos. Las líneas con sangría forman el bloque de su cabecera.
 const ORDER = [
   { t: 'io', q: 'Escribe un archivo y luego léelo.', l: ['ruta = CARPETA / "observaciones.txt"', 'with open(ruta, "w", encoding="utf-8") as archivo:', '    archivo.write("Objeto: EST-001\\n")', 'with open(ruta, "r", encoding="utf-8") as archivo:', '    contenido = archivo.read()', 'print(contenido)'], ex: 'Primero se define la ruta, luego se escribe y finalmente se lee.' },
   { t: 'np', q: 'Simula un tránsito y detecta los puntos bajo 3σ (Tarea 2).', l: ['rng = np.random.default_rng(seed=123)', 't = np.linspace(0, 10, 500)', 'flujo = 1 + rng.normal(0, 0.002, t.size)', 'mask = (t >= 4.5) & (t <= 5.0)', 'flujo[mask] -= 0.02', 'umbral = flujo.mean() - 3 * flujo.std()', 'candidatos = t[flujo < umbral]'], dep: { 2: [0, 1], 3: [1], 4: [2, 3], 5: [4], 6: [5] }, ex: 'El umbral se calcula después de insertar el tránsito; si no, la media y σ no lo incluyen. rng, t y mask pueden ir en distinto orden mientras existan antes de usarse.' },
@@ -622,6 +733,13 @@ const ORDER = [
   { t: 'fn', q: 'Clasifica estrellas con una función y apply.', l: ['def clasificar(T):', '    if T > 7500:', '        return "caliente"', '    elif T > 5000:', '        return "templada"', '    return "fría"', 'df["tipo"] = df["T"].apply(clasificar)'], ex: 'apply llama a la función una vez por fila. El último return cubre todo lo que no entró en los if.' },
   { t: 'plt', q: 'Cuatro imágenes con distinto σ y una sola barra de color (Tarea 3).', l: ['fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)', 'for ax, s in zip(axs.flat, [0.25, 0.5, 0.75, 1.0]):', '    I = imagen(s)', '    im = ax.imshow(I, vmin=0, vmax=100, origin="lower")', '    ax.set_title(f"σ = {s}")', 'fig.colorbar(im, ax=axs)'], dep: { 1: [0], 2: [1], 3: [2], 4: [1], 5: [3] }, ex: 'axs.flat recorre la grilla 2×2 como una lista. vmin y vmax iguales hacen que una sola barra de color sirva para las cuatro.' },
   { t: 'plt', q: 'Histograma con la media marcada (rng ya definido).', l: ['datos = rng.normal(10, 2, 1000)', 'plt.hist(datos, bins=30, alpha=0.6, label="Muestra")', 'plt.axvline(datos.mean(), color="k", ls="--", label="Media")', 'plt.xlabel("Valor")', 'plt.legend()', 'plt.savefig("histograma.png")'], dep: { 1: [0], 2: [0], 4: [1, 2], 5: [1, 2, 3, 4] }, ex: 'La leyenda va después de los elementos con label y la figura se guarda al final.' },
+  { t: 'cls', q: 'Escribe un decorador y úsalo (Clase 6).', l: ['def decorador(funcion):', '    def nueva_funcion():', '        print("Antes de ejecutar")', '        funcion()', '    return nueva_funcion', '@decorador', 'def saludar():', '    print("¡Hola, mundo!")', 'saludar()'], ex: 'El return va fuera de la función interna, y @decorador justo sobre la función que decora.' },
+  { t: 'cls', q: 'Clase con una propiedad, y úsala.', l: ['class Estrella:', '    def __init__(self, L, d):', '        self.L = L', '        self.d = d', '    @property', '    def flujo(self):', '        return self.L / (4 * np.pi * self.d**2)', 'e = Estrella(1.0, 10.0)', 'print(e.flujo)'], dep: { 1: [0], 2: [1], 3: [1], 4: [0], 5: [4], 6: [5], 7: [0], 8: [7] }, adj: [[4, 5]], ex: '@property debe ir justo sobre el método. Dentro de la clase, los métodos pueden ir en cualquier orden.' },
+  { t: 'np', q: 'Tabla de multiplicar por broadcasting, como imagen.', l: ['valores = np.arange(1, 6)', 'columna = valores[:, None]', 'fila = valores[None, :]', 'tabla = columna * fila', 'fig, ax = plt.subplots()', 'im = ax.imshow(tabla, origin="lower")', 'fig.colorbar(im, ax=ax)'], dep: { 1: [0], 2: [0], 3: [1, 2], 5: [3, 4], 6: [5] }, ex: 'Columna y fila son independientes, pero ambas deben existir antes del producto.' },
+  { t: 'pd', q: 'Catálogo con detección por percentiles (Clase 6, rng ya definido).', l: ['n = 150', 'cat = pd.DataFrame({"L": rng.uniform(0.5, 120, n), "d": rng.uniform(20, 600, n)})', 'cat["flujo_rel"] = cat["L"] / (4 * np.pi * cat["d"]**2)', 'umbral = np.quantile(cat["flujo_rel"], 0.65)', 'cat["detectada"] = cat["flujo_rel"] >= umbral'], ex: 'El umbral se calcula desde los flujos, y la columna detectada desde el umbral.' },
+  { t: 'pd', q: 'Resumen por grupo de temperatura (Tarea 6; df, L_SOL, PC y umbral ya definidos).', l: ['df["F"] = df["L"] * L_SOL / (4 * np.pi * (df["d"] * PC)**2)', 'df["detectada"] = df["F"] >= umbral', 'df["grupo"] = pd.cut(df["T"], bins=[0, 5000, 7500, np.inf], labels=["Fría", "Intermedia", "Caliente"], right=False)', 'resumen = df.groupby("grupo", observed=True).agg(n=("T", "size"), f_det=("detectada", "mean"))', 'resumen.plot.bar(y="f_det")'], dep: { 1: [0], 3: [1, 2], 4: [3] }, ex: 'El grupo solo depende de T, así que puede calcularse antes o después del flujo. El resumen necesita ambas columnas.' },
+  { t: 'fot', q: 'Construye la imagen simulada (x0, y0 y A ya tienen forma (5, 1, 1)).', l: ['alto, ancho = 96, 96', 'Y, X = np.mgrid[:alto, :ancho]', 'cubo = moffat_2d(X[None, :, :], Y[None, :, :], x0, y0, A, alpha, beta)', 'modelo = cubo.sum(axis=0)', 'imagen = modelo + fondo + rng.normal(0, sigma_ruido, size=modelo.shape)', 'senal = imagen - fondo'], ex: 'Grilla, una imagen por estrella, suma, y al final fondo y ruido.' },
+  { t: 'fot', q: 'Fotometría de apertura y comparación con el valor ideal.', l: ['yc, xc = np.ogrid[:alto, :ancho]', 'mascara = (xc - x0)**2 + (yc - y0)**2 <= radio**2', 'flujo = np.sum(imagen[mascara] - fondo)', 'flujo_total = np.pi * A * alpha**2 / (beta - 1)', 'fraccion = 1 - (1 + (radio / alpha)**2)**(1 - beta)', 'flujo_ideal = flujo_total * fraccion'], dep: { 1: [0], 2: [1], 5: [3, 4] }, ex: 'La medición y el cálculo teórico son independientes: solo el último paso necesita sus dos partes.' },
 ];
 
 // Comandos de terminal
@@ -657,6 +775,9 @@ const TERM = [
   { t: 'unix', q: 'Vuelve a tu carpeta personal.', a: ['cd', 'cd ~'], out: '' },
   { t: 'unix', q: 'Crea el ambiente conda compii con Python 3.12.', a: ['conda create -n compii python=3.12', 'conda create --name compii python=3.12'], out: 'Proceed ([y]/n)?' },
   { t: 'unix', q: 'Lista los ambientes conda que existen.', a: ['conda env list', 'conda info --envs', 'conda info -e'], out: 'base      /opt/miniconda3\ncompii *  /opt/miniconda3/envs/compii' },
+  { t: 'unix', q: 'Crea tareas/tarea6, incluyendo las carpetas padre si faltan.', a: ['mkdir -p tareas/tarea6'], out: '' },
+  { t: 'unix', q: 'Renombra "Tarea 5.ipynb" como Tarea_5.ipynb (el nombre tiene un espacio).', a: ['mv "Tarea 5.ipynb" Tarea_5.ipynb', 'mv Tarea\\ 5.ipynb Tarea_5.ipynb'], out: '' },
+  { t: 'git', q: 'Guarda los cambios con el mensaje "tarea 6".', a: ['git commit -m "tarea 6"'], out: '[main 8c1d2e4] tarea 6\n 2 files changed, 310 insertions(+)' },
 ];
 
 /* =====================================================================
@@ -975,6 +1096,154 @@ const PLOTS = [
     fixes: ['    return np.exp(-(x - mu)**2 / (2 * sigma**2))', '    print(np.exp(-(x - mu)**2 / (2 * sigma**2)))', '    return np.exp((x - mu)**2 / (2 * sigma**2))', '    g = np.exp(-(x - mu)**2 / (2 * sigma**2)); g'],
     ex: 'El error aparece en la línea 5, pero la causa está en la 3: sin <code>return</code> la función devuelve None. Imprimir el valor tampoco lo devuelve.'
   },
+  {
+    id: 'broadcast', t: 'np', titulo: 'La tabla que quedó en una columna',
+    obj: 'Tabla de multiplicar de 5 × 5 hecha por broadcasting (Clase 6).',
+    build(ok) {
+      const v = [1, 2, 3, 4, 5];
+      const z = ok ? v.map(a => v.map(b => a * b)) : v.map(a => [a * a]);
+      const ext = ok ? [-0.5, 4.5, -0.5, 4.5] : [-0.5, 0.5, -0.5, 4.5];
+      return [
+        { c: 'valores = np.arange(1, 6)', ops: [O.v('valores', v)] },
+        { c: 'columna = valores[:, None]', ops: [O.v('columna', '(5, 1)')] },
+        { c: ok ? 'fila = valores[None, :]' : 'fila = valores[:, None]', ops: [O.v('fila', ok ? '(1, 5)' : '(5, 1)')], bug: true },
+        { c: 'tabla = columna * fila', ops: [O.v('tabla', ok ? '(5, 5)' : '(5, 1)')] },
+        { c: 'plt.imshow(tabla, origin="lower", cmap="inferno")', ops: [O.img(z, ext, { nearest: true })] },
+        { c: 'plt.colorbar(label="Producto")', ops: [O.cbar('Producto')] },
+        { c: 'plt.xlabel("Índice de columna")', ops: [O.xl('Índice de columna')] },
+        { c: 'plt.ylabel("Índice de fila")', ops: [O.yl('Índice de fila')] },
+      ];
+    },
+    fixes: ['fila = valores[None, :]', 'fila = valores.ravel()[:, None]', 'fila = valores[None, None]', 'fila = valores[:, :]'],
+    ex: '(5, 1) con (5, 1) no se expande: multiplica elemento a elemento. Para obtener 5 × 5, una debe ser columna y la otra fila.'
+  },
+  {
+    id: 'mgrid', t: 'fot', titulo: 'Las estrellas fuera de sus círculos',
+    obj: 'Cada estrella debe quedar dentro del círculo que marca su posición (x, y) en el catálogo.',
+    build(ok) {
+      const n = 96, pos = [[18, 20], [43, 31], [74, 18], [28, 73], [78, 75]], amp = [280, 208, 151, 139, 131];
+      const z = [];
+      for (let f = 0; f < n; f++) { const row = []; for (let c = 0; c < n; c++) { const X = ok ? c : f, Y = ok ? f : c; let t = 0; pos.forEach(([x0, y0], i) => { t += amp[i] * Math.pow(1 + ((X - x0) ** 2 + (Y - y0) ** 2) / 2.6 ** 2, -3.2); }); row.push(t); } z.push(row); }
+      return [
+        { c: 'alto, ancho = 96, 96', ops: [O.v('alto', 96), O.v('ancho', 96)] },
+        { c: ok ? 'Y, X = np.mgrid[:alto, :ancho]' : 'X, Y = np.mgrid[:alto, :ancho]', ops: [O.v('X', '(96, 96)'), O.v('Y', '(96, 96)')], bug: true },
+        { c: 'cubo = moffat_2d(X[None, :, :], Y[None, :, :], x0, y0, A)', ops: [O.v('cubo', '(5, 96, 96)')] },
+        { c: 'modelo = cubo.sum(axis=0)', ops: [O.v('modelo', '(96, 96)')] },
+        { c: 'plt.imshow(modelo, origin="lower", cmap="inferno", vmax=80)', ops: [O.img(z.map(r => r.map(v => Math.min(v, 80))), [-0.5, 95.5, -0.5, 95.5])] },
+        { c: 'plt.scatter(x_pix, y_pix, s=100, facecolors="none", edgecolors="cyan")', ops: [O.sc(pos.map(q => q[0]), pos.map(q => q[1]), { color: 'cyan', hollow: true })] },
+        { c: 'plt.xlabel("x [píxeles]")', ops: [O.xl('x [píxeles]')] },
+        { c: 'plt.ylabel("y [píxeles]")', ops: [O.yl('y [píxeles]')] },
+      ];
+    },
+    fixes: ['Y, X = np.mgrid[:alto, :ancho]', 'X, Y = np.mgrid[:ancho, :alto]', 'X, Y = np.ogrid[:alto, :ancho]', 'Y, X = np.mgrid[:alto]'],
+    ex: 'mgrid entrega primero las filas, que son y. Con los nombres cambiados, cada estrella aparece reflejada respecto a la diagonal: en (y, x).'
+  },
+  {
+    id: 'moffat', t: 'fot', titulo: 'El Moffat invertido',
+    obj: 'Cinco estrellas brillantes en su centro y oscuras alrededor (Clase 6).',
+    build(ok) {
+      const n = 96, pos = [[18, 20], [43, 31], [74, 18], [28, 73], [78, 75]], amp = [280, 208, 151, 139, 131];
+      const z = [];
+      for (let f = 0; f < n; f++) { const row = []; for (let c = 0; c < n; c++) { let t = 0; pos.forEach(([x0, y0], i) => { t += amp[i] * Math.pow(1 + ((c - x0) ** 2 + (f - y0) ** 2) / 2.6 ** 2, ok ? -3.2 : 3.2); }); row.push(t); } z.push(row); }
+      return [
+        { c: 'alpha, beta = 2.6, 3.2', ops: [O.v('alpha', 2.6), O.v('beta', 3.2)] },
+        { c: 'Y, X = np.mgrid[:96, :96]', ops: [O.v('X', '(96, 96)'), O.v('Y', '(96, 96)')] },
+        { c: 'radio2 = (X[None, :, :] - x0)**2 + (Y[None, :, :] - y0)**2', ops: [O.v('radio2', '(5, 96, 96)')] },
+        { c: ok ? 'cubo = A * (1 + radio2 / alpha**2)**(-beta)' : 'cubo = A * (1 + radio2 / alpha**2)**(beta)', ops: [O.v('cubo', '(5, 96, 96)')], bug: true },
+        { c: 'modelo = cubo.sum(axis=0)', ops: [O.v('modelo', '(96, 96)')] },
+        { c: 'plt.imshow(modelo, origin="lower", cmap="inferno")', ops: [O.img(z, [-0.5, 95.5, -0.5, 95.5])] },
+        { c: 'plt.colorbar(label="Intensidad [u. a.]")', ops: [O.cbar('Intensidad [u. a.]')] },
+        { c: 'plt.xlabel("x [píxeles]")', ops: [O.xl('x [píxeles]')] },
+        { c: 'plt.ylabel("y [píxeles]")', ops: [O.yl('y [píxeles]')] },
+      ];
+    },
+    fixes: ['cubo = A * (1 + radio2 / alpha**2)**(-beta)', 'cubo = A * (1 - radio2 / alpha**2)**(-beta)', 'cubo = A * (1 + radio2 / alpha)**(beta)', 'cubo = A / (1 + radio2 / alpha**2)**(-beta)'],
+    ex: 'Con exponente positivo la intensidad crece con la distancia: lo más brillante queda en los bordes. Dividir por una potencia negativa es lo mismo que el error original.'
+  },
+  {
+    id: 'apertura', t: 'fot', titulo: 'La apertura demasiado chica',
+    obj: 'La apertura debe tener radio R = 8 píxeles y seleccionar 197 píxeles (Clase 6).',
+    build(ok) {
+      R.seed(42);
+      const n = 96, x0 = 18, y0 = 20, radio = 8, pos = [[18, 20], [43, 31], [74, 18], [28, 73], [78, 75]], amp = [280, 208, 151, 139, 131];
+      const z = []; let cuenta = 0;
+      for (let f = 0; f < n; f++) { const row = []; for (let c = 0; c < n; c++) { let t = R.normal(0, 1.8); pos.forEach(([a, b], i) => { t += amp[i] * Math.pow(1 + ((c - a) ** 2 + (f - b) ** 2) / 2.6 ** 2, -3.2); }); row.push(t); if ((c - x0) ** 2 + (f - y0) ** 2 <= (ok ? radio ** 2 : radio)) cuenta++; } z.push(row); }
+      const rr = ok ? radio : Math.sqrt(radio), th = linspace(0, 2 * Math.PI, 80);
+      return [
+        { c: 'yc, xc = np.ogrid[:96, :96]', ops: [O.v('yc', '(96, 1)'), O.v('xc', '(1, 96)')] },
+        { c: 'x0, y0, radio = 18, 20, 8', ops: [O.v('x0', 18), O.v('y0', 20), O.v('radio', 8)] },
+        { c: ok ? 'mascara = (xc - x0)**2 + (yc - y0)**2 <= radio**2' : 'mascara = (xc - x0)**2 + (yc - y0)**2 <= radio', ops: [O.v('mascara', `bool (96, 96) · ${cuenta} True`)], bug: true },
+        { c: 'plt.imshow(senal, origin="lower", cmap="inferno", vmin=0)', ops: [O.img(z.map(r => r.map(v => Math.max(v, 0))), [-0.5, 95.5, -0.5, 95.5])] },
+        { c: 'plt.contour(mascara.astype(int), levels=[0.5], colors="cyan")', ops: [O.line(th.map(a => x0 + rr * Math.cos(a)), th.map(a => y0 + rr * Math.sin(a)), { color: 'cyan', lw: 2 })] },
+        { c: 'plt.xlabel("x [píxeles]")', ops: [O.xl('x [píxeles]')] },
+        { c: 'plt.ylabel("y [píxeles]")', ops: [O.yl('y [píxeles]')] },
+        { c: 'plt.title(f"Píxeles en la apertura: {mascara.sum()}")', ops: [O.title(`Píxeles en la apertura: ${cuenta}`)] },
+      ];
+    },
+    fixes: ['mascara = (xc - x0)**2 + (yc - y0)**2 <= radio**2', 'mascara = (xc - x0)**2 + (yc - y0)**2 <= 2 * radio', 'mascara = (xc - y0)**2 + (yc - x0)**2 <= radio**2', 'mascara = (xc - x0) + (yc - y0) <= radio'],
+    ex: 'La distancia al cuadrado se compara con el radio al cuadrado. Sin el cuadrado, el radio real es √8 ≈ 2.8 píxeles y la apertura pierde gran parte del flujo.'
+  },
+  {
+    id: 'grupos', t: 'pd', titulo: 'Fracciones mayores que 1',
+    obj: 'Fracción de estrellas detectadas por grupo de temperatura: cada barra debe estar entre 0 y 1 (Tarea 6).',
+    build(ok) {
+      R.seed(42);
+      const N = 150, L = R.arr(N, () => R.uniform(0.5, 120)), d = R.arr(N, () => R.uniform(20, 600)), T = R.arr(N, () => R.uniform(3000, 10000));
+      const F = L.map((l, i) => l / (4 * Math.PI * d[i] ** 2));
+      const orden = [...F].sort((a, b) => a - b), pos = 0.65 * (N - 1), k = Math.floor(pos), umbral = orden[k] + (orden[k + 1] - orden[k]) * (pos - k);
+      const nombres = ['Fría', 'Intermedia', 'Caliente'], grupo = t => t < 5000 ? 0 : t < 7500 ? 1 : 2;
+      const det = [0, 0, 0], tot = [0, 0, 0];
+      T.forEach((t, i) => { tot[grupo(t)]++; if (F[i] >= umbral) det[grupo(t)]++; });
+      const vals = det.map((a, i) => ok ? a / tot[i] : a);
+      return [
+        { c: 'cat["grupo"] = pd.cut(cat["T_K"], bins=[0, 5000, 7500, np.inf], labels=nombres, right=False)', ops: [O.v('n por grupo', tot.join(' '))] },
+        { c: 'umbral = np.quantile(cat["flujo_rel"], 0.65)', ops: [O.v('umbral', umbral)] },
+        { c: 'cat["detectada"] = cat["flujo_rel"] >= umbral', ops: [O.v('detectadas', det.reduce((a, b) => a + b, 0))] },
+        { c: ok ? 'res = cat.groupby("grupo", observed=True).agg(f_det=("detectada", "mean"))' : 'res = cat.groupby("grupo", observed=True).agg(f_det=("detectada", "sum"))', ops: [O.v('f_det', vals)], bug: true },
+        { c: 'plt.bar(res.index, res["f_det"], color="tab:green")', ops: [O.bar(nombres, vals, { color: 'tab:green' })] },
+        { c: 'plt.ylabel("Fracción detectada")', ops: [O.yl('Fracción detectada')] },
+        { c: 'plt.title("Detección por grupo de temperatura")', ops: [O.title('Detección por grupo de temperatura')] },
+      ];
+    },
+    fixes: ['res = cat.groupby("grupo", observed=True).agg(f_det=("detectada", "mean"))', 'res = cat.groupby("grupo", observed=True).agg(f_det=("detectada", "size"))', 'res = cat.groupby("grupo", observed=True).agg(f_det=("detectada", "max"))', 'res = cat.groupby("grupo", observed=True).agg(f_det=("flujo_rel", "mean"))'],
+    ex: 'La suma de un booleano cuenta los True; el promedio da la fracción. size contaría todas las estrellas del grupo.'
+  },
+  {
+    id: 'wien', t: 'np', titulo: 'Wien al revés',
+    obj: 'λ_max debe bajar con la temperatura y dar cerca de 500 nm para el Sol (Tarea 6).',
+    build(ok) {
+      const T = linspace(3000, 10000, 100), l = T.map(t => ok ? 2.8978e-3 / t * 1e9 : 2.8978e-3 * t * 1e9);
+      return [
+        { c: 'b = 2.8978e-3                    # m K', ops: [O.v('b', 2.8978e-3)] },
+        { c: 'T = np.linspace(3000, 10000, 100)   # K', ops: [O.v('T', T)] },
+        { c: ok ? 'lambda_max = b / T * 1e9' : 'lambda_max = b * T * 1e9', ops: [O.v('lambda_max', l)], bug: true },
+        { c: 'plt.plot(T, lambda_max, color="tab:red", lw=2)', ops: [O.line(T, l, { color: 'tab:red', lw: 2.2, label: 'λ_max' })] },
+        { c: 'plt.axvline(5772, color="k", ls="--", label="Sol")', ops: [O.vl(5772, { color: 'k', dash: true, label: 'Sol' })] },
+        { c: 'plt.xlabel("T [K]")', ops: [O.xl('T [K]')] },
+        { c: 'plt.ylabel("λ_max [nm]")', ops: [O.yl('λ_max [nm]')] },
+        { c: 'plt.legend()', ops: [O.legend()] },
+      ];
+    },
+    fixes: ['lambda_max = b / T * 1e9', 'lambda_max = T / b * 1e9', 'lambda_max = b / T', 'lambda_max = b / T**2 * 1e9'],
+    ex: 'λ_max = b/T: temperatura y longitud de onda son inversamente proporcionales. Sin el 1e9 el resultado queda en metros.'
+  },
+  {
+    id: 'magnitud', t: 'np', titulo: 'Más brillo, más magnitud',
+    obj: 'La magnitud debe bajar al aumentar la luminosidad; para L = L☉ debe dar 4.74 (Tarea 6).',
+    build(ok) {
+      const logL = linspace(-1, 3, 100), M = logL.map(x => ok ? 4.74 - 2.5 * x : 4.74 + 2.5 * x);
+      return [
+        { c: 'log_L = np.linspace(-1, 3, 100)', ops: [O.v('log_L', logL)] },
+        { c: ok ? 'M_bol = 4.74 - 2.5 * log_L' : 'M_bol = 4.74 + 2.5 * log_L', ops: [O.v('M_bol', M)], bug: true },
+        { c: 'plt.plot(log_L, M_bol, color="tab:blue", lw=2)', ops: [O.line(logL, M, { color: 'tab:blue', lw: 2.2 })] },
+        { c: 'plt.axhline(4.74, color="gray", ls=":")', ops: [O.hl(4.74, { color: 'gray', dash: true })] },
+        { c: 'plt.xlabel("log10(L / L☉)")', ops: [O.xl('log10(L / L☉)')] },
+        { c: 'plt.ylabel("M_bol")', ops: [O.yl('M_bol')] },
+      ];
+    },
+    fixes: ['M_bol = 4.74 - 2.5 * log_L', 'M_bol = 4.74 - 2.5 * 10**log_L', 'M_bol = -4.74 + 2.5 * log_L', 'M_bol = 2.5 - 4.74 * log_L'],
+    ex: 'La magnitud es una escala invertida: M_bol = 4.74 − 2.5 log₁₀(L/L☉). A mayor luminosidad, menor magnitud.'
+  },
 ];
 
 /* =====================================================================
@@ -1237,6 +1506,7 @@ function orderMarks(q, seq) {
   const pos = {}; seq.forEach((i, k) => pos[i] = k);
   const lineOk = i => {
     if (!dep(i).every(d => pos[d] != null && pos[d] < pos[i])) return false;
+    if ((q.adj || []).some(([a, b]) => (i === a || i === b) && pos[b] !== pos[a] + 1)) return false;
     for (let h = 0; h < q.l.length; h++) {
       const n = blockSize(h); if (!n || pos[h] == null) continue;
       const inside = pos[i] > pos[h] && pos[i] <= pos[h] + n;
@@ -1392,7 +1662,7 @@ function renderHome() {
   const sample = hl('t = np.linspace(0, 10, 500)\nflujo = 1 + rng.normal(0, 0.002, 500)\nflujo[(t >= 4.5) & (t <= 5.0)] -= 0.02\numbral = flujo.mean() - 3 * flujo.std()\n# ¿cuántos puntos caen bajo el umbral?');
   home.append(
     h('div', { class: 'hero' },
-      h('div', {}, h('h1', { html: 'Física Computacional II' }), h('p', {}, 'Práctica con la materia de las clases 1 a 5: terminal y Git, Python, ciclos, funciones, clases, NumPy, Matplotlib, pandas y lectura de archivos. Elige los temas, el modo y las vidas.')),
+      h('div', {}, h('h1', { html: 'Física Computacional II' }), h('p', {}, 'Práctica con la materia de las clases 1 a 6: terminal y Git, Python, ciclos, funciones, clases, NumPy, Matplotlib, pandas, archivos, imágenes y fotometría. Elige los temas, el modo y las vidas.')),
       h('div', { class: 'hero-code', html: sample })),
     h('div', { class: 'label' }, 'Temas en juego'));
   const tp = h('div', { class: 'topics' });
@@ -1420,7 +1690,7 @@ function renderHome() {
       h('div', { class: 'tags' }, m.tags.map(([t]) => h('span', { class: 'tag' }, t))),
       h('span', { class: 'rec' }, recTxt)));
   }
-  home.append(grid, h('p', { class: 'foot' }, 'Contenidos de Física Computacional II (USACH, 2026), clases 1 a 5 y tareas 1 a 5. Teclado: Enter para comprobar y avanzar, 1–4 para elegir opciones.'));
+  home.append(grid, h('p', { class: 'foot' }, 'Contenidos de Física Computacional II (USACH, 2026), clases 1 a 6 y tareas 1 a 6. Teclado: Enter para comprobar y avanzar, 1–4 para elegir opciones.'));
 }
 
 /* ---------- Configuración ---------- */
@@ -1899,7 +2169,7 @@ class Plot {
       const p = e.p, c = col(e.color);
       if (e.k === 'img') {
         const x = fx(e.ext[0]), x2 = fx(e.ext[1]), yb = fyT(e.ext[2]), yt = fyT(e.ext[3]);
-        const hh = (yb - yt) * ease(p); g.imageSmoothingEnabled = true;
+        const hh = (yb - yt) * ease(p); g.imageSmoothingEnabled = !e.nearest;
         const sh = e.cache.height * ease(p);
         g.drawImage(e.cache, 0, e.cache.height - sh, e.cache.width, sh, Math.min(x, x2), yb - hh, Math.abs(x2 - x), hh);
       } else if (e.k === 'line') {
@@ -1908,7 +2178,7 @@ class Plot {
         if (e.mk) { g.fillStyle = c; const r = e.mk === 'o' ? (sm ? 1.6 : 3.4) : (sm ? .8 : 1.5); for (let i = 0; i < n; i++) { g.beginPath(); g.arc(fx(e.x[i]), fy(e.y[i]), r, 0, 7); g.fill(); } }
       } else if (e.k === 'scatter') {
         const n = Math.ceil(e.x.length * p);
-        for (let i = 0; i < n; i++) { const age = Math.min(1, (p * e.x.length - i) / 6); g.globalAlpha = .85; g.fillStyle = e.colors ? e.colors[i] : c; g.beginPath(); g.arc(fx(e.x[i]), fy(e.y[i]), (sm ? 1.5 : 3.4) * (0.4 + .6 * age), 0, 7); g.fill(); if (e.colors) { g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = .5; g.stroke(); } }
+        for (let i = 0; i < n; i++) { const age = Math.min(1, (p * e.x.length - i) / 6); g.globalAlpha = .85; g.fillStyle = e.colors ? e.colors[i] : c; g.beginPath(); g.arc(fx(e.x[i]), fy(e.y[i]), (e.hollow ? (sm ? 3.5 : 9) : (sm ? 1.5 : 3.4)) * (0.4 + .6 * age), 0, 7); if (e.hollow) { g.strokeStyle = c; g.lineWidth = sm ? 1 : 1.8; g.stroke(); continue; } g.fill(); if (e.colors) { g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = .5; g.stroke(); } }
         g.globalAlpha = 1;
       } else if (e.k === 'hist') {
         const { lo, w, counts } = e.bin;
@@ -1970,7 +2240,7 @@ class Plot {
       g.fillStyle = 'rgba(255,255,255,.88)'; g.strokeStyle = '#ccc'; g.fillRect(bx, by, lw, bh); g.strokeRect(bx + .5, by + .5, lw, bh);
       items.forEach((e, i) => {
         const y = by + fs * .3 + lh * (i + .5), c = col(e.color);
-        if (e.k === 'hl' || (e.k === 'line' && e.ls !== 'none')) { g.strokeStyle = c; g.lineWidth = 1.6; g.setLineDash(e.dash ? [5, 3] : []); g.beginPath(); g.moveTo(bx + 8, y); g.lineTo(bx + fs * 2.2, y); g.stroke(); g.setLineDash([]); }
+        if (e.k === 'hl' || e.k === 'vl' || (e.k === 'line' && e.ls !== 'none')) { g.strokeStyle = c; g.lineWidth = 1.6; g.setLineDash(e.dash ? [5, 3] : []); g.beginPath(); g.moveTo(bx + 8, y); g.lineTo(bx + fs * 2.2, y); g.stroke(); g.setLineDash([]); }
         else { g.fillStyle = c; g.beginPath(); g.arc(bx + fs * 1.3, y, 3.6, 0, 7); g.fill(); }
         g.fillStyle = '#222'; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText(e.label, bx + fs * 2.7, y);
       });
