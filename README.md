@@ -2,7 +2,7 @@
 
 Juego de repaso para **Física Computacional II** (USACH, 2026), con la materia de las clases 1 a 6 y las tareas 1 a 6: terminal y Git, Python, ciclos y condicionales, funciones, clases y decoradores, NumPy y broadcasting, Matplotlib, pandas, lectura/escritura de archivos, imágenes y fotometría.
 
-Incluye 168 ejercicios de completar código, 146 de opción múltiple, 23 programas para ordenar, 34 comandos de terminal y 20 figuras para depurar.
+Incluye 251 ejercicios de completar código, 250 de opción múltiple, 40 programas para ordenar, 53 comandos de terminal y 33 figuras para depurar.
 
 Todo el juego está en `index.html`, un solo archivo. Se abre en cualquier navegador; solo necesita internet para cargar las fuentes.
 

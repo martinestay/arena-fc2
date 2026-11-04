@@ -362,7 +362,7 @@ const S = {
 };
 
 /* =====================================================================
-   Banco de preguntas (contenidos de clases 1–5 y tareas 1–5)
+   Banco de preguntas (contenidos de clases 1–6 y tareas 1–6)
    ⟦respuesta|alternativa⟧ marca un espacio para completar
    ===================================================================== */
 const FILL = [
@@ -551,6 +551,98 @@ const FILL = [
   { t: 'plt', q: 'La misma escala de color en dos imágenes.', c: 'vmin, vmax = 0, np.percentile(senal, 99)\nax1.imshow(modelo, origin="lower", ⟦vmin⟧=vmin, ⟦vmax⟧=vmax)\nax2.imshow(senal, origin="lower", vmin=vmin, vmax=vmax)', ex: 'Sin límites iguales, un mismo color significaría intensidades distintas en cada panel.' },
   { t: 'plt', q: 'Barra de color en el panel derecho (Tarea 6).', c: 'sc = ax2.scatter(d_pc, F_bol, c=T_K, cmap="plasma")\nfig.colorbar(sc, ⟦ax⟧=ax2, label="Temperatura [K]")', ex: 'El argumento ax indica a qué panel le quita espacio la barra.' },
   { t: 'plt', q: 'Mantén la misma escala en ambos ejes.', c: 'ax.⟦set_aspect⟧("equal", adjustable="box")', ex: 'En una comparación 1:1, la diagonal queda realmente a 45°.' },
+  // Ampliación: más ejercicios de todos los temas
+  { t: 'py', q: 'Invierte el orden de una lista con una rebanada.', c: 'nombres = ["Sol", "Vega", "Sirio"]\nalreves = nombres[⟦::-1⟧]   # ["Sirio", "Vega", "Sol"]', ex: 'El paso -1 recorre la lista desde el final.' },
+  { t: 'py', q: 'Agrega una medición al final de la lista.', c: 'flujos = [1.2, 0.8]\nflujos.⟦append⟧(2.5)', ex: '<code>append</code> modifica la lista en su lugar y devuelve None.' },
+  { t: 'py', q: 'Separa una línea de CSV en sus columnas.', c: 'linea = "Vega,9602,40.1"\ncampos = linea.⟦split⟧(",")   # ["Vega", "9602", "40.1"]', ex: '<code>split</code> entrega una lista de textos: los números siguen siendo str hasta convertirlos.' },
+  { t: 'py', q: 'Une varios nombres en un solo texto.', c: 'texto = ", ".⟦join⟧(["Sol", "Vega"])   # "Sol, Vega"', ex: '<code>join</code> es un método del separador y recibe la lista.' },
+  { t: 'py', q: 'Quita los espacios y el salto de línea de un texto leído.', c: 'fila = "  Vega\\n".⟦strip⟧()   # "Vega"', ex: '<code>strip</code> elimina espacios y saltos de línea en ambos extremos.' },
+  { t: 'py', q: 'Muestra el flujo con tres decimales.', c: 'flujo = 0.123456\nprint(f"F = {flujo⟦:.3f⟧}")   # F = 0.123', ex: 'Lo que va después de <code>:</code> es el formato; <code>.3f</code> pide tres decimales.' },
+  { t: 'py', q: 'Convierte 135 minutos en 2 horas y 15 minutos.', c: 'horas = 135 ⟦//⟧ 60\nminutos = 135 ⟦%⟧ 60', ex: '<code>//</code> es la división entera y <code>%</code> entrega el resto.' },
+
+  { t: 'loop', q: 'Repite mientras el error sea mayor que la tolerancia.', c: 'error = 1.0\n⟦while⟧ error ⟦>⟧ 1e-3:\n    error = error / 2', ex: 'El ciclo sigue mientras la condición sea verdadera. Si escribes &lt;, no entra nunca.' },
+  { t: 'loop', q: 'Busca el mayor flujo sin usar max.', c: 'flujos = [1.2, 3.4, 0.8]\nmaximo = flujos[0]\nfor f in flujos:\n    ⟦if⟧ f > maximo:\n        maximo = ⟦f⟧', ex: 'Se parte del primer valor y se reemplaza cada vez que aparece uno mayor.' },
+  { t: 'loop', q: 'Diccionario por comprensión: número y su cuadrado.', c: 'cuadrados = {n: n**2 ⟦for⟧ n ⟦in⟧ range(4)}', ex: 'Es igual que una lista por comprensión, pero con llaves y el par clave: valor.' },
+  { t: 'loop', q: 'Método de Euler: simula 1 s de caída libre con dt = 0.01.', c: 'v, dt = 0.0, 0.01\nfor _ in range(⟦100⟧):\n    v = v - 9.8 * ⟦dt⟧', ex: '1 s / 0.01 s = 100 pasos. Cada paso cambia v en a·dt, y al final v = −9.8 m/s.' },
+  { t: 'loop', q: 'Recorre todos los pares de estrellas sin repetir ninguno.', c: 'n = 4\nfor i in range(n):\n    for j in range(⟦i + 1|i+1⟧, n):\n        print(i, j)', ex: 'Partir j en i + 1 evita los pares (i, i) y que el par (i, j) aparezca también como (j, i).' },
+  { t: 'loop', q: 'Promedio móvil de tres puntos, sin salirse de la lista.', c: 'f = [1.0, 2.0, 3.0, 4.0, 5.0]\nsuave = [(f[i] + f[i+1] + f[i+2]) / 3 for i in range(len(f) - ⟦2⟧)]', ex: 'El último i válido es len(f) − 3, porque se usa f[i+2]; range excluye su límite.' },
+  { t: 'loop', q: 'Numera las estrellas desde 1.', c: 'nombres = ["Sol", "Vega"]\nfor k, nombre in enumerate(nombres, ⟦start⟧=1):\n    print(k, nombre)', ex: '<code>enumerate</code> parte en 0, salvo que indiques <code>start</code>.' },
+  { t: 'loop', q: 'Ciclo infinito que se detiene desde adentro.', c: 'n = 1\nwhile ⟦True⟧:\n    n = n * 2\n    if n > 1000:\n        ⟦break⟧', ex: '<code>while True</code> no termina por sí solo: lo corta <code>break</code>.' },
+
+  { t: 'fn', q: 'Función que acepta cualquier cantidad de valores.', c: 'def promedio(⟦*⟧valores):\n    return sum(valores) / len(valores)\npromedio(1, 2, 3)', ex: '<code>*valores</code> junta los argumentos posicionales en una tupla.' },
+  { t: 'fn', q: 'Reenvía las opciones con nombre a plt.plot.', c: 'def dibujar(x, y, ⟦**⟧opciones):\n    plt.plot(x, y, ⟦**⟧opciones)\ndibujar([0, 1], [0, 1], color="tab:red")', ex: '<code>**opciones</code> junta los argumentos con nombre en un diccionario, y al llamar los vuelve a separar.' },
+  { t: 'fn', q: 'Una función puede recibir otra función.', c: 'def aplicar(f, x):\n    return ⟦f⟧(x)\naplicar(np.sqrt, 16.0)   # 4.0', ex: 'Las funciones son objetos: se pasan sin paréntesis y se llaman dentro.' },
+  { t: 'fn', q: 'Regla del trapecio para puntos equiespaciados.', c: 'def trapecio(y, dx):\n    return dx * (y[0] / 2 + y[1:-1].⟦sum⟧() + y[⟦-1⟧] / 2)', ex: 'Los extremos pesan la mitad y todos los puntos interiores pesan 1.' },
+  { t: 'fn', q: 'Derivada numérica centrada.', c: 'def derivada(f, x, h=1e-5):\n    return (f(x + h) - f(x - ⟦h⟧)) / (⟦2⟧ * h)', ex: 'Los dos puntos están separados por 2h, y por eso se divide por 2h.' },
+  { t: 'fn', q: 'Recibe los dos valores que devuelve la función.', c: 'def min_max(a):\n    return a.min(), a.max()\nbajo, alto = ⟦min_max⟧(np.array([3, 1, 2]))', ex: 'Devolver dos valores es devolver una tupla, que se desempaqueta al asignar.' },
+  { t: 'fn', q: 'Indica el tipo que devuelve la función.', c: 'def flujo(L: float, d: float) ⟦->⟧ float:\n    return L / (4 * np.pi * d**2)', ex: 'Las anotaciones documentan los tipos; Python no los comprueba al ejecutar.' },
+  { t: 'fn', q: 'Método de bisección para hallar una raíz.', c: 'def biseccion(f, a, b, tol=1e-6):\n    while b - a > tol:\n        c = (a + b) ⟦/⟧ 2\n        if f(a) * f(c) ⟦<=|<⟧ 0:\n            b = c\n        else:\n            a = ⟦c⟧\n    return (a + b) / 2', ex: 'Si f(a) y f(c) tienen signos opuestos, la raíz está en [a, c]; si no, en [c, b]. El intervalo se reduce a la mitad en cada vuelta.' },
+
+  { t: 'cls', q: 'La clase hija llama al constructor de la clase madre.', c: 'class Estrella:\n    def __init__(self, nombre, L):\n        self.nombre, self.L = nombre, L\n\nclass Enana(Estrella):\n    def __init__(self, nombre, L, color):\n        ⟦super⟧().__init__(nombre, L)\n        self.color = color', ex: '<code>super()</code> da acceso a los métodos de la clase madre.' },
+  { t: 'cls', q: 'Define cómo se muestra el objeto al imprimirlo.', c: 'class Estrella:\n    def __init__(self, nombre):\n        self.nombre = nombre\n    def ⟦__repr__|__str__⟧(self):\n        return f"Estrella({self.nombre})"', ex: '<code>print</code> usa <code>__str__</code> y, si no existe, <code>__repr__</code>.' },
+  { t: 'cls', q: 'Método que no necesita ni la instancia ni la clase.', c: 'class Unidades:\n    ⟦@staticmethod⟧\n    def a_parsec(d_m):\n        return d_m / 3.0857e16', ex: 'Un <code>@staticmethod</code> no recibe self ni cls: es una función guardada dentro de la clase.' },
+  { t: 'cls', q: 'Haz que len(catalogo) funcione.', c: 'class Catalogo:\n    def __init__(self, df):\n        self.df = df\n    def ⟦__len__⟧(self):\n        return len(self.df)', ex: '<code>len(objeto)</code> llama a <code>objeto.__len__()</code>.' },
+  { t: 'cls', q: 'Un método usa otro método de la misma clase.', c: 'class Estrella:\n    def __init__(self, L):\n        self.L = L\n    def en_soles(self):\n        return self.L / 3.828e26\n    def magnitud(self):\n        return 4.74 - 2.5 * np.log10(⟦self⟧.en_soles())', ex: 'Dentro de la clase, los otros métodos se llaman a través de <code>self</code>.' },
+  { t: 'cls', q: 'Decorador que conserva el nombre de la función original.', c: 'from functools import ⟦wraps⟧\n\ndef registrar(func):\n    @wraps(func)\n    def envoltura(*args, **kwargs):\n        print("Llamando a", func.__name__)\n        return ⟦func⟧(*args, **kwargs)\n    return ⟦envoltura⟧', ex: 'El decorador devuelve la envoltura sin llamarla; <code>wraps</code> le copia el nombre y el docstring de func.' },
+
+  { t: 'np', q: 'Intervalo entre mediciones consecutivas.', c: 't = np.array([0.0, 0.5, 1.5])\ndt = np.⟦diff⟧(t)   # array([0.5, 1. ])', ex: '<code>np.diff</code> resta cada elemento del siguiente, y devuelve uno menos.' },
+  { t: 'np', q: 'Flujo acumulado medición a medición.', c: 'flujo = np.array([1, 2, 3])\nacumulado = np.⟦cumsum⟧(flujo)   # array([1, 3, 6])', ex: '<code>cumsum</code> entrega todas las sumas parciales; <code>sum</code> solo la última.' },
+  { t: 'np', q: 'Deja como nan los flujos que no son positivos.', c: 'flujo = np.array([1.0, -2.0, 3.0])\nlimpio = np.⟦where⟧(flujo > 0, flujo, np.⟦nan⟧)', ex: 'Con tres argumentos, <code>np.where(condición, si_sí, si_no)</code> elige elemento a elemento.' },
+  { t: 'np', q: 'Promedio ignorando los valores nan.', c: 'flujo = np.array([1.0, np.nan, 3.0])\nprom = np.⟦nanmean⟧(flujo)   # 2.0', ex: '<code>np.mean</code> daría nan; <code>nanmean</code> descarta esos valores.' },
+  { t: 'np', q: 'Los tres flujos más altos, de menor a mayor.', c: 'flujo = np.array([5, 1, 4, 2, 3])\nmayores = np.⟦sort⟧(flujo)[⟦-3:⟧]   # array([3, 4, 5])', ex: '<code>np.sort</code> ordena de menor a mayor, y <code>[-3:]</code> toma los últimos tres.' },
+  { t: 'np', q: 'Limita el flujo al intervalo [0, 1].', c: 'flujo = np.array([-0.2, 0.5, 1.4])\nacotado = np.⟦clip⟧(flujo, 0, 1)   # array([0. , 0.5, 1. ])', ex: '<code>np.clip</code> lleva al límite cada valor que se sale del intervalo.' },
+  { t: 'np', q: 'Producto matricial de A y B.', c: 'A = np.ones((2, 3))\nB = np.ones((3, 4))\nC = A ⟦@⟧ B   # forma (2, 4)', ex: '<code>@</code> es el producto de matrices; <code>*</code> multiplica elemento a elemento.' },
+  { t: 'np', q: 'Resuelve el sistema lineal A x = b.', c: 'A = np.array([[2.0, 1.0], [1.0, 3.0]])\nb = np.array([3.0, 5.0])\nx = np.linalg.⟦solve⟧(A, b)', ex: '<code>np.linalg.solve</code> es más preciso y rápido que calcular la inversa.' },
+  { t: 'np', q: 'Ajusta una recta y = m x + n a los datos.', c: 'x = np.array([0.0, 1.0, 2.0, 3.0])\ny = 2 * x + 1\nm, n = np.⟦polyfit⟧(x, y, ⟦1⟧)', ex: 'El último argumento es el grado, y los coeficientes llegan desde la potencia mayor.' },
+  { t: 'np', q: 'Calcula un histograma sin dibujarlo.', c: 'datos = np.array([1, 1, 2, 3, 3, 3])\nconteos, bordes = np.⟦histogram⟧(datos, bins=3)', ex: 'Entrega conteos y bordes; siempre hay un borde más que barras.' },
+  { t: 'np', q: 'Chi cuadrado entre los datos y un modelo.', c: 'y = np.array([1.0, 2.0])\nmodelo = np.array([1.1, 1.8])\nsigma = 0.1\nchi2 = np.⟦sum⟧(((y - modelo) / sigma)⟦**⟧2)', ex: 'Es la suma de los residuos, medidos en sigmas y elevados al cuadrado.' },
+  { t: 'np', q: 'Cuenta cuántas estrellas superan el límite de detección.', c: 'flujo = np.array([1e-12, 5e-11, 2e-10])\nn_det = np.⟦sum|count_nonzero⟧(flujo >= 1e-11)   # 2', ex: 'Al sumar, True vale 1 y False vale 0.' },
+  { t: 'np', q: 'Une dos arreglos 1D en uno solo.', c: 'a, b = np.array([1, 2]), np.array([3])\nnp.⟦concatenate⟧([a, b])   # array([1, 2, 3])', ex: '<code>concatenate</code> no crea un eje nuevo, a diferencia de <code>stack</code>.' },
+  { t: 'np', q: 'Elige 10 índices distintos entre 500.', c: 'rng = np.random.default_rng(seed=1)\nindices = rng.⟦choice⟧(500, size=10, replace=⟦False⟧)', ex: 'Con <code>replace=False</code> ningún índice sale dos veces.' },
+
+  { t: 'plt', q: 'Escribe un texto apuntando a un punto de la figura.', c: 'fig, ax = plt.subplots()\nax.⟦annotate⟧("Tránsito", xy=(4.75, 0.98))', ex: '<code>annotate</code> ubica el texto usando las coordenadas de los datos.' },
+  { t: 'plt', q: 'Un segundo eje y con otra escala.', c: 'fig, ax = plt.subplots()\nax2 = ax.⟦twinx⟧()', ex: '<code>twinx</code> comparte el eje x y agrega un eje y a la derecha.' },
+  { t: 'plt', q: 'Sombrea la franja del tránsito.', c: 'fig, ax = plt.subplots()\nax.⟦axvspan⟧(4.5, 5.0, alpha=0.2)', ex: '<code>axvspan</code> pinta una franja vertical entre dos valores de x.' },
+  { t: 'plt', q: 'Dentro de un ciclo: libera cada figura después de guardarla.', c: 'fig, ax = plt.subplots()\nfig.savefig("figura.png")\nplt.⟦close⟧(fig)', ex: 'Las figuras abiertas siguen ocupando memoria hasta que se cierran.' },
+  { t: 'plt', q: 'Título general para toda la grilla.', c: 'fig, axs = plt.subplots(2, 2)\nfig.⟦suptitle⟧("Cuatro valores de σ")', ex: '<code>suptitle</code> es de la figura; <code>set_title</code> es de cada panel.' },
+  { t: 'plt', q: 'Elige la paleta de colores de la imagen.', c: 'fig, ax = plt.subplots()\nax.imshow(np.ones((4, 4)), ⟦cmap⟧="inferno")', ex: '<code>cmap</code> define el mapa de colores.' },
+  { t: 'plt', q: 'Imagen con color en escala logarítmica.', c: 'from matplotlib.colors import LogNorm\nfig, ax = plt.subplots()\nax.imshow(np.ones((4, 4)), ⟦norm⟧=⟦LogNorm⟧())', ex: 'Sirve cuando una estrella brillante opaca al resto de la imagen.' },
+  { t: 'plt', q: 'En magnitudes, lo más brillante va arriba: invierte el eje y.', c: 'fig, ax = plt.subplots()\nax.⟦invert_yaxis⟧()', ex: 'Una magnitud menor significa más brillo.' },
+  { t: 'plt', q: 'Histograma normalizado: el área total vale 1.', c: 'fig, ax = plt.subplots()\nax.hist([1, 2, 2, 3], bins=3, ⟦density⟧=True)', ex: 'Con <code>density=True</code> se puede comparar directamente con una densidad de probabilidad.' },
+  { t: 'plt', q: 'Recorre todos los paneles de una grilla 2×2.', c: 'fig, axs = plt.subplots(2, 2)\nsigmas = [0.5, 1, 2, 4]\nfor ax, sigma in zip(axs.⟦flat⟧, sigmas):\n    ax.set_title(f"σ = {sigma}")', ex: '<code>axs</code> tiene forma (2, 2), y <code>axs.flat</code> la recorre como una sola fila.' },
+
+  { t: 'pd', q: 'Nueva columna con la luminosidad en unidades solares.', c: 'df = pd.DataFrame({"L": [3.828e26, 7.656e26]})\ndf["L_sol"] = df["L"] ⟦/⟧ 3.828e26', ex: 'Las operaciones entre una columna y un número se aplican a toda la columna.' },
+  { t: 'pd', q: 'Filtra escribiendo la condición como texto.', c: 'df = pd.DataFrame({"T": [5772, 9602]})\ncalientes = df.⟦query⟧("T > 7000")', ex: '<code>query</code> evalúa la condición usando los nombres de las columnas.' },
+  { t: 'pd', q: 'Varias estadísticas por grupo a la vez.', c: 'df = pd.DataFrame({"clase": ["A", "A", "B"], "T": [1.0, 3.0, 5.0]})\ndf.groupby("clase")["T"].⟦agg⟧(["mean", "std"])', ex: '<code>agg</code> recibe la lista de funciones y entrega una columna por cada una.' },
+  { t: 'pd', q: 'Une dos tablas según el nombre de la estrella.', c: 'a = pd.DataFrame({"nombre": ["Sol"], "T": [5772]})\nb = pd.DataFrame({"nombre": ["Sol"], "L": [1.0]})\nc = a.⟦merge⟧(b, ⟦on⟧="nombre")', ex: 'Por defecto, <code>merge</code> conserva solo los nombres presentes en ambas tablas.' },
+  { t: 'pd', q: 'Cambia el nombre de una columna.', c: 'df = pd.DataFrame({"T": [5772]})\ndf = df.⟦rename⟧(columns={"T": "temperatura"})', ex: 'Sin reasignar, <code>df</code> no cambia: rename devuelve una tabla nueva.' },
+  { t: 'pd', q: 'Elimina una columna.', c: 'df = pd.DataFrame({"T": [5772], "ruido": [0.1]})\ndf = df.⟦drop⟧(columns=["ruido"])', ex: 'Con <code>columns=</code> queda claro que se eliminan columnas y no filas.' },
+  { t: 'pd', q: '¿Cuántas clases distintas hay?', c: 'df = pd.DataFrame({"clase": ["A", "A", "B"]})\nn = df["clase"].⟦nunique⟧()   # 2', ex: '<code>nunique</code> cuenta los valores distintos; <code>unique</code> los lista.' },
+  { t: 'pd', q: 'Usa el nombre de la estrella como índice.', c: 'df = pd.DataFrame({"nombre": ["Sol"], "T": [5772]})\ndf = df.⟦set_index⟧("nombre")\ndf.loc["Sol", "T"]', ex: 'Después de esto, <code>loc</code> busca por el nombre.' },
+  { t: 'pd', q: 'Flujo por sobre el cual está el 10 % superior.', c: 'df = pd.DataFrame({"F": [1.0, 2.0, 3.0]})\nlimite = df["F"].⟦quantile⟧(0.9)', ex: 'El cuantil 0.9 deja el 90 % de los datos por debajo.' },
+  { t: 'pd', q: 'Quita las estrellas repetidas.', c: 'df = pd.DataFrame({"nombre": ["Sol", "Sol"]})\ndf = df.⟦drop_duplicates⟧(subset="nombre")', ex: '<code>subset</code> indica qué columnas definen que dos filas son iguales.' },
+  { t: 'pd', q: 'Nombre de la estrella de mayor flujo.', c: 'df = pd.DataFrame({"nombre": ["Sol", "Vega"], "F": [1.0, 2.0]})\ndf.loc[df["F"].⟦idxmax⟧(), "nombre"]   # "Vega"', ex: '<code>idxmax</code> devuelve la etiqueta de la fila, justo lo que necesita <code>loc</code>.' },
+  { t: 'pd', q: 'Vuelve a tener una tabla después de un groupby.', c: 'df = pd.DataFrame({"clase": ["A", "B"], "F": [1.0, 2.0]})\nresumen = df.groupby("clase")["F"].mean().⟦reset_index⟧()', ex: '<code>reset_index</code> convierte el índice del grupo en una columna normal.' },
+  { t: 'pd', q: 'Proporción de estrellas de cada clase.', c: 'df = pd.DataFrame({"clase": ["A", "A", "B", "B"]})\ndf["clase"].value_counts(⟦normalize⟧=True)', ex: 'Con <code>normalize=True</code> entrega fracciones en lugar de conteos.' },
+
+  { t: 'fot', q: 'Centroide de una estrella: posición x ponderada por el brillo.', c: 'Y, X = np.mgrid[:9, :9]\nimagen = np.exp(-((X - 3)**2 + (Y - 5)**2) / 2)\nx_c = (imagen * X).sum() / imagen.⟦sum⟧()', ex: 'Es un promedio ponderado: cada píxel aporta su posición según cuánto brilla.' },
+  { t: 'fot', q: 'Estima el fondo con los píxeles fuera de la apertura.', c: 'imagen = np.ones((9, 9))\nY, X = np.mgrid[:9, :9]\nmascara = (X - 4)**2 + (Y - 4)**2 <= 4\nfondo = np.⟦median⟧(imagen[⟦~⟧mascara])', ex: 'La mediana casi no se ve afectada por otras estrellas, y <code>~</code> invierte la máscara.' },
+  { t: 'fot', q: 'Anillo entre los radios 12 y 16 para medir el fondo.', c: 'Y, X = np.mgrid[:48, :48]\nr = np.hypot(X - 24, Y - 24)\nanillo = (r >= 12) ⟦&⟧ (r < 16)', ex: 'Con arreglos se usa <code>&amp;</code>, con paréntesis en cada condición.' },
+  { t: 'fot', q: 'Distancia de cada píxel al centro de la estrella.', c: 'Y, X = np.mgrid[:9, :9]\nx0, y0 = 4, 4\nr = np.⟦hypot⟧(X - x0, Y - y0)', ex: '<code>np.hypot(a, b)</code> equivale a √(a² + b²).' },
+  { t: 'fot', q: 'Señal a ruido de una estrella (ruido de Poisson).', c: 'flujo, fondo, n_pix = 10000.0, 10.0, 197\nsnr = flujo / np.⟦sqrt⟧(flujo + n_pix * fondo)', ex: 'El ruido de Poisson es √(cuentas), y se cuentan tanto la estrella como el fondo.' },
+  { t: 'fot', q: 'FWHM de un perfil gaussiano.', c: 'sigma = 2.0\nfwhm = 2 * np.sqrt(2 * np.⟦log⟧(2)) * sigma   # ≈ 4.71', ex: '<code>np.log</code> es el logaritmo natural. FWHM ≈ 2.355 σ.' },
+  { t: 'fot', q: 'Fila y columna del píxel más brillante.', c: 'imagen = np.array([[1, 2, 3], [4, 9, 5]])\nfila, col = np.⟦unravel_index⟧(np.argmax(imagen), imagen.⟦shape⟧)   # 1, 1', ex: '<code>argmax</code> devuelve un índice del arreglo aplanado, y <code>unravel_index</code> lo convierte a (fila, columna).' },
+  { t: 'fot', q: 'Magnitud instrumental a partir del flujo.', c: 'flujo = 1000.0\nm = -2.5 * np.⟦log10⟧(flujo)   # -7.5', ex: 'La magnitud usa logaritmo en base 10, y el signo negativo hace que más flujo dé menos magnitud.' },
+
+  { t: 'io', q: 'Lee un JSON y recupera el diccionario.', c: 'import json\nwith open(ruta_json, encoding="utf-8") as f:\n    config = json.⟦load⟧(f)', ex: '<code>load</code> lee desde un archivo; <code>loads</code>, desde un texto.' },
+  { t: 'io', q: 'Lee una tabla numérica saltándose el encabezado.', c: 'datos = np.⟦loadtxt⟧(ruta_txt, ⟦skiprows⟧=1)', ex: '<code>skiprows</code> indica cuántas líneas iniciales hay que ignorar.' },
+  { t: 'io', q: 'Recorre todos los CSV de una carpeta.', c: 'from pathlib import Path\nCARPETA = Path(".")\nfor archivo in CARPETA.⟦glob⟧("*.csv"):\n    print(archivo.name)', ex: '<code>glob</code> busca por patrón, y <code>*</code> vale por cualquier texto.' },
+  { t: 'io', q: 'Comprueba que el archivo exista antes de leerlo.', c: 'from pathlib import Path\nruta = Path("catalogo.csv")\nif ruta.⟦exists⟧():\n    print("Listo")', ex: 'Así se evita un FileNotFoundError.' },
+  { t: 'io', q: 'Lee un archivo línea por línea, sin cargarlo entero.', c: 'with open(ruta_txt, encoding="utf-8") as archivo:\n    for linea ⟦in⟧ archivo:\n        print(linea.⟦strip⟧())', ex: 'El archivo se puede recorrer directamente. Cada línea trae su <code>\\n</code>, que <code>strip</code> elimina.' },
+  { t: 'io', q: 'Recupera un objeto guardado con pickle.', c: 'import pickle\nwith open(ruta_pkl, ⟦"rb"⟧) as f:\n    objeto = pickle.⟦load⟧(f)', ex: 'Pickle usa modo binario: <code>"rb"</code> para leer y <code>"wb"</code> para escribir.' },
+  { t: 'io', q: 'Nombre y extensión de un archivo.', c: 'from pathlib import Path\nruta = Path("datos/curva.csv")\nruta.⟦stem⟧     # "curva"\nruta.⟦suffix⟧   # ".csv"', ex: '<code>stem</code> no incluye la extensión; <code>name</code> sí.' },
+  { t: 'io', q: 'Lee todo el archivo de una vez usando pathlib.', c: 'from pathlib import Path\ncontenido = Path(ruta_txt).⟦read_text⟧(encoding="utf-8")', ex: '<code>read_text</code> abre, lee y cierra el archivo.' },
+  { t: 'io', q: 'Lee un CSV cuyas columnas van separadas por punto y coma.', c: 'df = pd.read_csv(ruta_pc, ⟦sep⟧=";")', ex: 'Sin <code>sep</code>, pandas deja todo en una sola columna.' },
 ];
 
 // o[0] siempre es la correcta; se baraja al mostrar
@@ -712,6 +804,120 @@ const MCQ = [
   { t: 'plt', q: '¿Por qué usar los mismos vmin y vmax en dos imágenes?', c: null, o: ['Para que un mismo color signifique la misma intensidad', 'Para que carguen más rápido', 'Para quitar el ruido', 'Porque imshow lo exige'], ex: 'Si cambian, las imágenes no se pueden comparar a simple vista.' },
   { t: 'plt', q: '¿Qué significa "u. a." en un eje de la clase?', c: 'ax.set(ylabel="Flujo relativo [u. a.]")', o: ['Unidades arbitrarias: el valor no está calibrado', 'Unidades astronómicas', 'Unidades absolutas', 'Unidades atómicas'], ex: 'El flujo relativo sirve para comparar, no como medida física.' },
   { t: 'unix', q: '¿Cómo conviene nombrar un archivo? (Clase 6)', c: null, o: ['Tarea_5.ipynb', 'Tarea 5.ipynb', 'Tarea 5 .ipynb', 'tarea 5 final.ipynb'], ex: 'La terminal separa los argumentos por espacios, así que "Tarea 5.ipynb" se leería como dos nombres.' },
+  // Ampliación: predecir la salida y razonar
+  { t: 'py', q: '¿Qué imprime?', c: 'a = [1, 2, 3]\nb = a\nb.append(4)\nprint(len(a))', o: ['4', '3', '1', 'NameError'], ex: 'b = a no copia la lista: ambos nombres apuntan a la misma. Para copiarla, usa a.copy().' },
+  { t: 'py', q: '¿Qué imprime?', c: 'print(7 // 2, 7 % 2, 7 / 2)', o: ['3 1 3.5', '3.5 1 3', '3 3 3.5', '3 1 3'], ex: '// es la división entera, % el resto y / la división normal.' },
+  { t: 'py', q: '¿Qué imprime? La potencia se evalúa de derecha a izquierda.', c: 'print(2 ** 3 ** 2)', o: ['512', '64', '12', '256'], ex: 'Primero 3 ** 2 = 9, y luego 2 ** 9 = 512.' },
+  { t: 'py', q: '¿Qué imprime?', c: 'print(0.1 + 0.2 == 0.3)', o: ['False', 'True', '0.3', 'TypeError'], ex: '0.1 y 0.2 no tienen representación binaria exacta. Para comparar decimales usa np.isclose.' },
+  { t: 'py', q: '¿Qué imprime? En Python, la potencia es ** y ^ es otra operación.', c: 'print(2 ^ 3, 2 ** 3)', o: ['1 8', '8 8', '8 1', '6 8'], ex: '^ compara los bits (XOR): 10 y 11 en binario dan 01, es decir 1. Para elevar se usa **.' },
+  { t: 'py', q: '¿Qué imprime?', c: 's = "Vega"\nprint(s[1:3], s[-1])', o: ['eg a', 'Ve a', 'eg g', 'ega a'], ex: 'La rebanada 1:3 toma las posiciones 1 y 2, y -1 es la última.' },
+  { t: 'py', q: '¿Qué imprime?', c: 'd = {"Sol": 5772}\nprint(d.get("Vega", 0), "Sol" in d)', o: ['0 True', 'None True', '0 False', 'KeyError'], ex: 'get no lanza error: entrega el valor de respaldo. in revisa las claves.' },
+  { t: 'py', q: '¿Qué pasa?', c: 'punto = (1, 2)\npunto[0] = 5', o: ['TypeError', 'punto queda (5, 2)', 'punto queda (5, 1, 2)', 'IndexError'], ex: 'Las tuplas no se pueden modificar.' },
+  { t: 'py', q: 'Leíste estos textos de un archivo. ¿Qué imprime?', c: 'a, b = "5", "7"\nprint(a + b, int(a) + int(b))', o: ['57 12', '12 12', '57 57', 'TypeError'], ex: 'Sumar textos los une. Lo leído de un archivo hay que convertirlo a número.' },
+
+  { t: 'loop', q: '¿Qué imprime?', c: 'for i in range(2, 10, 3):\n    print(i, end=" ")', o: ['2 5 8 ', '2 5 8 11 ', '2 3 4 5 6 7 8 9 ', '3 6 9 '], ex: 'Parte en 2, avanza de 3 en 3 y se detiene antes de 10.' },
+  { t: 'loop', q: '¿Qué imprime?', c: 'c = 0\nfor i in range(3):\n    for j in range(i):\n        c += 1\nprint(c)', o: ['3', '9', '6', '2'], ex: 'El ciclo interno da 0, 1 y 2 vueltas: 0 + 1 + 2 = 3.' },
+  { t: 'loop', q: '¿Qué imprime?', c: 'n = 10\npasos = 0\nwhile n > 1:\n    n = n // 2\n    pasos += 1\nprint(n, pasos)', o: ['1 3', '0 4', '1 4', '2 3'], ex: '10 → 5 → 2 → 1: tres pasos. Al llegar a 1 la condición falla.' },
+  { t: 'loop', q: 'El else de un for se ejecuta si no hubo break. ¿Qué imprime?', c: 'for x in [1, 3, 5]:\n    if x % 2 == 0:\n        print("par")\n        break\nelse:\n    print("sin pares")', o: ['sin pares', 'par', 'par\nsin pares', 'No imprime nada'], ex: 'Nunca se cumple el if, así que no hay break y corre el else.' },
+  { t: 'loop', q: '¿Qué imprime?', c: 'for i in range(5):\n    if i == 2:\n        continue\n    print(i, end="")', o: ['0134', '01', '01234', '012'], ex: 'continue salta solo la vuelta con i = 2. break habría terminado el ciclo.' },
+  { t: 'loop', q: '¿Qué imprime?', c: 'print(list(zip([1, 2, 3], "ab")))', o: ["[(1, 'a'), (2, 'b')]", "[(1, 'a'), (2, 'b'), (3, None)]", 'ValueError', "[1, 2, 3, 'a', 'b']"], ex: 'zip termina cuando se acaba la secuencia más corta, sin avisar.' },
+  { t: 'loop', q: 'Este ciclo intenta duplicar los valores. ¿Qué imprime?', c: 'L = [1, 2, 3]\nfor x in L:\n    x = x * 2\nprint(L)', o: ['[1, 2, 3]', '[2, 4, 6]', '[1, 2, 3, 1, 2, 3]', '6'], ex: 'x es solo un nombre para cada valor: reasignarlo no cambia la lista. Usa L[i] = ... o una comprensión.' },
+  { t: 'loop', q: '¿Qué imprime?', c: 'print([x for x in range(10) if x % 3 == 0])', o: ['[0, 3, 6, 9]', '[3, 6, 9]', '[0, 3, 6]', '[1, 4, 7]'], ex: '0 también es múltiplo de 3, y range(10) llega hasta 9.' },
+  { t: 'loop', q: 'Crecimiento de 50 % por paso. ¿Qué imprime?', c: 'x = 1.0\nfor _ in range(3):\n    x = x + 0.5 * x\nprint(x)', o: ['3.375', '2.5', '3.0', '1.5'], ex: 'Cada paso multiplica por 1.5: 1.5³ = 3.375.' },
+  { t: 'loop', q: '¿Cuántas líneas imprime?', c: 'for i in range(4):\n    for j in range(5):\n        if j == 2:\n            break\n        print(i, j)', o: ['8', '20', '12', '4'], ex: 'break corta solo el ciclo interno: j toma 0 y 1 en cada una de las 4 vueltas de i, y se imprimen 8 líneas.' },
+
+  { t: 'fn', q: 'Cuidado con el valor por defecto. ¿Qué imprime?', c: 'def agregar(x, L=[]):\n    L.append(x)\n    return L\nagregar(1)\nprint(agregar(2))', o: ['[1, 2]', '[2]', '[1]', 'TypeError'], ex: 'La lista por defecto se crea una sola vez y se comparte entre llamadas. Usa L=None y créala dentro.' },
+  { t: 'fn', q: '¿Qué imprime?', c: 'def suma(a, b=2, *resto):\n    return a + b + len(resto)\nprint(suma(1, 1, 1, 1))', o: ['4', '5', '3', 'TypeError'], ex: 'a = 1, b = 1 y resto = (1, 1): 1 + 1 + 2 = 4.' },
+  { t: 'fn', q: '¿Qué imprime?', c: 'x = 1\ndef cambiar():\n    x = 2\ncambiar()\nprint(x)', o: ['1', '2', 'None', 'NameError'], ex: 'x = 2 crea una variable local que desaparece al salir de la función.' },
+  { t: 'fn', q: '¿Qué pasa?', c: 'x = 1\ndef sumar():\n    x = x + 1\n    return x\nsumar()', o: ['UnboundLocalError', 'Devuelve 2', 'x global pasa a valer 2', 'Devuelve 1'], ex: 'Al asignar x dentro, Python la considera local, y se intenta leer antes de darle valor.' },
+  { t: 'fn', q: '¿Qué imprime?', c: 'print(sorted(["Vega", "Sol", "Sirio"], key=len))', o: ["['Sol', 'Vega', 'Sirio']", "['Sirio', 'Sol', 'Vega']", "['Vega', 'Sol', 'Sirio']", '[3, 4, 5]'], ex: 'key indica el criterio; devuelve los nombres, ordenados por su largo.' },
+  { t: 'fn', q: '¿Qué imprime?', c: 'def extremos():\n    return 1, 2\nprint(type(extremos()).__name__)', o: ['tuple', 'list', 'int', 'NoneType'], ex: 'Una función devuelve un solo objeto: en este caso, una tupla.' },
+  { t: 'fn', q: '¿Qué pasa?', c: 'def flujo(L, d):\n    return L / d**2\nflujo(d=2, 1)', o: ['SyntaxError', 'Devuelve 0.25', 'Devuelve 2.0', 'TypeError'], ex: 'Los argumentos posicionales van siempre antes de los con nombre.' },
+  { t: 'fn', q: '¿Qué imprime?', c: 'def fib(n):\n    return n if n < 2 else fib(n - 1) + fib(n - 2)\nprint(fib(6))', o: ['8', '13', '5', '6'], ex: 'La sucesión es 0, 1, 1, 2, 3, 5, 8: fib(6) = 8.' },
+  { t: 'fn', q: 'La función recibe un arreglo y escribe en él. ¿Qué imprime?', c: 'def marcar(a):\n    a[0] = 9\nx = np.zeros(2)\nmarcar(x)\nprint(x[0])', o: ['9.0', '0.0', 'None', 'TypeError'], ex: 'La función recibe el mismo arreglo, no una copia. Escribir en a[0] cambia x.' },
+  { t: 'fn', q: 'Ahora la función reasigna el nombre. ¿Qué imprime?', c: 'def duplicar(a):\n    a = a * 2\nx = np.ones(2)\nduplicar(x)\nprint(x)', o: ['[1. 1.]', '[2. 2.]', 'None', '[1. 1. 1. 1.]'], ex: 'a * 2 crea un arreglo nuevo y a pasa a nombrarlo; x no cambia. Falta un return.' },
+
+  { t: 'cls', q: '¿Qué imprime?', c: 'class Estrella:\n    total = 0\n    def __init__(self):\n        Estrella.total += 1\nEstrella()\nEstrella()\nprint(Estrella.total)', o: ['2', '0', '1', 'AttributeError'], ex: 'Un atributo de clase se comparte entre todas las instancias.' },
+  { t: 'cls', q: '¿Qué imprime?', c: 'class Estrella:\n    def __repr__(self):\n        return "Estrella sin nombre"\nprint(Estrella())', o: ['Estrella sin nombre', '__repr__', 'None', 'Estrella'], ex: 'print usa __str__ y, si no está, __repr__.' },
+  { t: 'cls', q: 'La hija redefine un método. ¿Qué imprime?', c: 'class Estrella:\n    def tipo(self):\n        return "estrella"\nclass Enana(Estrella):\n    def tipo(self):\n        return "enana " + super().tipo()\nprint(Enana().tipo())', o: ['enana estrella', 'estrella', 'enana', 'RecursionError'], ex: 'Se usa el método de la hija, y super() llama al de la madre.' },
+  { t: 'cls', q: '¿Qué pasa?', c: 'class Estrella:\n    def brillo():\n        return 1\nEstrella().brillo()', o: ['TypeError', 'Devuelve 1', 'AttributeError', 'Devuelve None'], ex: 'Python pasa la instancia como primer argumento, pero el método no declara self.' },
+  { t: 'cls', q: 'flujo es una @property sin setter. ¿Qué pasa?', c: 'class Estrella:\n    @property\n    def flujo(self):\n        return 1.0\ne = Estrella()\ne.flujo = 3.0', o: ['AttributeError', 'e.flujo pasa a valer 3.0', 'TypeError', 'Se ignora en silencio'], ex: 'Sin setter, la propiedad es de solo lectura.' },
+  { t: 'cls', q: '¿Qué imprime?', c: 'class Estrella:\n    pass\nclass Enana(Estrella):\n    pass\nprint(isinstance(Enana(), Estrella))', o: ['True', 'False', 'Enana', 'TypeError'], ex: 'Una instancia de la hija también lo es de la madre.' },
+  { t: 'cls', q: '¿Qué imprime?', c: 'def doble(f):\n    def g(x):\n        return 2 * f(x)\n    return g\n\n@doble\ndef siguiente(x):\n    return x + 1\n\nprint(siguiente(3))', o: ['8', '4', '7', '6'], ex: 'siguiente ahora es g: 2 * (3 + 1) = 8.' },
+  { t: 'cls', q: '¿Qué imprime?', c: 'class Catalogo:\n    def __init__(self, filas):\n        self.filas = filas\n    def __len__(self):\n        return len(self.filas)\nprint(len(Catalogo([1, 2, 3])))', o: ['3', '1', 'TypeError', '0'], ex: 'len(objeto) llama a __len__.' },
+
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.array([1, 2.5]).dtype)', o: ['float64', 'int64', 'object', 'float32'], ex: 'Todos los elementos comparten tipo: el entero pasa a float.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.arange(0, 1, 0.25))', o: ['[0.   0.25 0.5  0.75]', '[0.   0.25 0.5  0.75 1.  ]', '[0.25 0.5  0.75 1.  ]', '[0 1]'], ex: 'arange excluye el final, a diferencia de linspace.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'a = np.arange(6).reshape(2, 3)\nprint(a.sum(axis=0))', o: ['[3 5 7]', '[ 3 12]', '15', '[0 3 6]'], ex: 'axis=0 colapsa las filas: suma cada columna.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'a = np.array([1, 5, 2, 8])\nprint(a[a > 2])', o: ['[5 8]', '[False  True False  True]', '[1 3]', '[5 2 8]'], ex: 'Una máscara booleana conserva solo los elementos con True.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'a = np.array([10, 20, 30])\nprint(a[[0, 2]])', o: ['[10 30]', '[10 20]', '30', 'IndexError'], ex: 'Con una lista de índices se eligen posiciones sueltas.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.mean(np.array([1.0, np.nan])), np.nanmean(np.array([1.0, np.nan])))', o: ['nan 1.0', '1.0 1.0', '0.5 1.0', 'nan nan'], ex: 'Un solo nan contagia el promedio; nanmean lo ignora.' },
+  { t: 'np', q: '¿Qué imprime?', c: 'import warnings\nwarnings.simplefilter("ignore")\nprint(1 / np.array([0.0]), np.sqrt(np.array([-1.0])))', o: ['[inf] [nan]', 'ZeroDivisionError', '[0.] [-1.]', '[nan] [inf]'], ex: 'NumPy no lanza error: avisa y entrega inf o nan.' },
+  { t: 'np', q: '¿Qué pasa?', c: 'a = np.array([1, 2, 3])\nif a > 1:\n    print("mayor")', o: ['ValueError', 'Imprime mayor', 'No imprime nada', 'TypeError'], ex: 'a > 1 da tres valores, y if necesita uno solo. Usa (a > 1).any() o .all().' },
+  { t: 'np', q: '¿Qué imprime?', c: 'print(np.argsort(np.array([30, 10, 20])))', o: ['[1 2 0]', '[10 20 30]', '[2 0 1]', '[0 1 2]'], ex: 'Son las posiciones que ordenarían el arreglo: primero el 10 (posición 1), luego el 20 y el 30.' },
+  { t: 'np', q: '¿Qué forma tiene?', c: 'a = np.arange(12).reshape(3, 4)\nprint(a[1:, ::2].shape)', o: ['(2, 2)', '(2, 4)', '(3, 2)', '(1, 2)'], ex: 'Quedan las filas 1 y 2, y las columnas 0 y 2.' },
+  { t: 'np', q: '¿Qué forma tiene?', c: 'print((np.ones((2, 3)) @ np.ones((3, 4))).shape)', o: ['(2, 4)', '(3, 3)', '(2, 3, 4)', 'ValueError'], ex: 'En el producto de matrices, (n, m) @ (m, k) da (n, k).' },
+  { t: 'np', q: '¿Qué imprime?', c: 'x = np.array([0.0, 1.0, 2.0])\nprint(np.round(np.polyfit(x, 2 * x + 1, 1), 6))', o: ['[2. 1.]', '[1. 2.]', '[0. 2. 1.]', '[2.]'], ex: 'polyfit entrega primero el coeficiente de mayor grado: la pendiente y luego el intercepto.' },
+  { t: 'np', q: 'Una curva de luz tiene F̄ = 1 y σ = 0.002. ¿Cuánto vale el umbral F̄ − 3σ?', o: ['0.994', '0.998', '0.94', '1.006'], ex: '1 − 3 · 0.002 = 0.994.' },
+  { t: 'np', q: 'Con ruido gaussiano puro, ¿qué fracción de los puntos cae bajo F̄ − 3σ?', o: ['≈ 0.13 %', '≈ 0.3 %', '≈ 5 %', 'Ninguno'], ex: 'Entre ±3σ queda el 99.73 %. El 0.27 % restante se reparte entre ambas colas: 0.13 % en cada una.' },
+  { t: 'np', q: 'Dos estrellas tienen igual luminosidad, a 10 pc y a 100 pc. ¿Cuánto mayor es el flujo de la cercana?', o: ['100 veces', '10 veces', '1000 veces', '2 veces'], ex: 'F ∝ 1/d²: la distancia es 10 veces mayor, y el flujo es 100 veces menor.' },
+  { t: 'np', q: 'Si el radio de una estrella se duplica y T no cambia, la luminosidad…', o: ['se multiplica por 4', 'se duplica', 'se multiplica por 16', 'no cambia'], ex: 'L = 4πR²σT⁴: depende de R².' },
+  { t: 'np', q: 'Una diferencia de 5 magnitudes corresponde a un factor de flujo de…', o: ['100', '5', '10', '12.5'], ex: 'Δm = −2.5 log₁₀(F₁/F₂): con Δm = 5, el cociente es 10² = 100.' },
+  { t: 'np', q: '¿Cuál es el módulo de distancia m − M de una estrella a 100 pc?', o: ['5', '2', '10', '0'], ex: 'm − M = 5 log₁₀(d / 10 pc) = 5 log₁₀(10) = 5.' },
+  { t: 'np', q: 'El tránsito de un planeta bloquea el 1 % del flujo. Si el planeta tuviera el doble de radio, ¿qué profundidad tendría?', o: ['4 %', '2 %', '1 %', '8 %'], ex: 'ΔF = (Rp/R⋆)²: el doble de radio bloquea 4 veces más área.' },
+
+  { t: 'plt', q: '¿Qué dibuja plt.plot(y) si no le das x?', o: ['y contra sus índices 0, 1, 2, …', 'Nada: lanza TypeError', 'y contra sí misma', 'Un histograma de y'], ex: 'Sin x, Matplotlib usa la posición de cada elemento.' },
+  { t: 'plt', q: 'Haces plt.hist(datos, bins=10). ¿Cuántos elementos tiene el arreglo de bordes que devuelve?', o: ['11', '10', '9', '12'], ex: 'Para 10 barras se necesitan 11 bordes.' },
+  { t: 'plt', q: '¿Qué controla s en ax.scatter(x, y, s=T)?', o: ['El tamaño de cada punto', 'El color de cada punto', 'La transparencia', 'La forma del marcador'], ex: 's es el tamaño, c el color y alpha la transparencia.' },
+  { t: 'plt', q: 'Sin origin ni extent, ¿dónde dibuja imshow la fila 0?', o: ['Arriba', 'Abajo', 'Al centro', 'A la izquierda'], ex: 'Por defecto usa origin="upper": la fila 0 queda arriba.' },
+  { t: 'plt', q: '¿Qué indica «x and y must have same first dimension»?', o: ['x e y tienen distinto largo', 'Los datos no están ordenados', 'Falta plt.show()', 'x tiene valores nan'], ex: 'Revisa x.shape e y.shape: suele faltar aplicar una máscara a uno de ellos.' },
+  { t: 'plt', q: 'Graficas L ∝ T⁴ en escala log-log. ¿Qué pendiente tiene la recta?', o: ['4', '1', '10⁴', '0.25'], ex: 'log L = 4 log T + constante: el exponente se convierte en la pendiente.' },
+  { t: 'plt', q: 'Graficas F ∝ 1/d² en escala log-log. ¿Qué pendiente tiene la recta?', o: ['−2', '2', '−0.5', '1/2'], ex: 'log F = −2 log d + constante.' },
+  { t: 'plt', q: 'Graficas F = e^(−t/τ) con el eje y logarítmico y el x lineal. ¿Qué se ve?', o: ['Una recta descendente', 'Una parábola', 'Una recta horizontal', 'Una curva que crece'], ex: 'log F es lineal en t, con pendiente proporcional a −1/τ.' },
+  { t: 'plt', q: '¿Cómo inviertes el mapa de colores viridis?', o: ['cmap="viridis_r"', 'cmap="-viridis"', 'cmap="viridis", invert=True', 'cmap="reverse"'], ex: 'Casi todos los mapas tienen una versión invertida, que termina en _r.' },
+  { t: 'plt', q: '¿Para qué sirve fig.tight_layout()?', o: ['Ajusta los márgenes para que no se monten etiquetas', 'Comprime el archivo guardado', 'Quita los ejes', 'Hace la figura más pequeña en memoria'], ex: 'Se llama después de poner las etiquetas y antes de guardar.' },
+
+  { t: 'pd', q: '¿Qué imprime?', c: 's = pd.Series([1.0, np.nan, 3.0])\nprint(s.mean(), s.count(), len(s))', o: ['2.0 2 3', 'nan 3 3', '1.33 2 3', '2.0 3 3'], ex: 'pandas ignora los NaN en mean y count; len cuenta todas las filas.' },
+  { t: 'pd', q: 'Las rebanadas de loc incluyen el final; las de iloc, no. ¿Qué imprime?', c: 's = pd.Series([10, 20, 30])\nprint(s.loc[0:1].size, s.iloc[0:1].size)', o: ['2 1', '1 1', '2 2', '1 2'], ex: 'loc[0:1] incluye las etiquetas 0 y 1; iloc[0:1] funciona como en una lista.' },
+  { t: 'pd', q: '¿Qué pasa?', c: 'df = pd.DataFrame({"T": [5000, 6000]})\ndf[df["T"] > 5000 and df["T"] < 7000]', o: ['ValueError', 'Devuelve una fila', 'Devuelve dos filas', 'Devuelve una tabla vacía'], ex: 'and necesita un único True/False. Usa &, con paréntesis en cada condición.' },
+  { t: 'pd', q: '¿Qué imprime?', c: 'df = pd.DataFrame({"c": ["A", "B", "A"], "v": [1, 2, 3]})\nprint(df.groupby("c")["v"].sum().tolist())', o: ['[4, 2]', '[2, 4]', '[1, 2, 3]', '[6]'], ex: 'Los grupos quedan ordenados por su etiqueta: A = 1 + 3 y B = 2.' },
+  { t: 'pd', q: '¿Qué imprime?', c: 'df = pd.DataFrame({"n": ["Sol", "Vega"], "T": [5772, 9602]})\nprint(df.sort_values("T", ascending=False).iloc[0]["n"])', o: ['Vega', 'Sol', '9602', 'KeyError'], ex: 'Después de ordenar de mayor a menor, la primera posición es la más caliente.' },
+  { t: 'pd', q: 'Tras ordenar, ¿qué etiqueta tiene la primera fila?', c: 'df = pd.DataFrame({"T": [1, 3, 2]})\nprint(df.sort_values("T", ascending=False).index[0])', o: ['1', '0', '3', '2'], ex: 'Ordenar conserva las etiquetas originales. Por eso loc e iloc pueden dar filas distintas después.' },
+  { t: 'pd', q: '¿Qué forma tiene el resultado?', c: 'a = pd.DataFrame({"n": ["Sol", "Vega"], "T": [5772, 9602]})\nb = pd.DataFrame({"n": ["Vega", "Sirio"], "L": [40.1, 25.4]})\nprint(a.merge(b, on="n").shape)', o: ['(1, 3)', '(3, 3)', '(2, 3)', '(1, 4)'], ex: 'merge conserva solo a Vega, y las columnas son n, T y L.' },
+  { t: 'pd', q: '¿Qué imprime?', c: 'df = pd.DataFrame({"F": [1.0, np.nan]})\nprint(df["F"].isna().sum(), df.dropna().shape[0])', o: ['1 1', '1 2', '0 1', '2 1'], ex: 'Hay un NaN; al quitarlo queda una fila.' },
+  { t: 'pd', q: '¿Qué imprime?', c: 'df = pd.DataFrame({"T": [5000, 6000]})\ndf.rename(columns={"T": "temp"})\nprint(df.columns[0])', o: ['T', 'temp', 'None', 'KeyError'], ex: 'rename devuelve una tabla nueva: sin reasignarla, df no cambia.' },
+  { t: 'pd', q: '¿Qué imprime?', c: 's = pd.cut(pd.Series([1, 5, 9]), bins=[0, 4, 10], labels=["bajo", "alto"])\nprint(s.value_counts()["alto"])', o: ['2', '1', '3', '0'], ex: '5 y 9 caen en (4, 10]; 1 cae en (0, 4].' },
+
+  { t: 'fot', q: '¿Qué imprime?', c: 'y, x = np.ogrid[:11, :11]\nm = (x - 5)**2 + (y - 5)**2 <= 4\nprint(m.sum())', o: ['13', '9', '12', '25'], ex: 'Son los píxeles a distancia ≤ 2 del centro. π·2² ≈ 12.6: en una apertura pequeña, el conteo discreto se acerca a πR².' },
+  { t: 'fot', q: 'La suma dentro de la apertura es 5000, con 100 píxeles y fondo = 10 por píxel. ¿Cuál es el flujo neto?', o: ['4000', '4990', '5000', '500'], ex: 'Flujo neto = suma − n · fondo = 5000 − 100 · 10.' },
+  { t: 'fot', q: 'Una estrella tiene 10 000 cuentas y un fondo despreciable. ¿Cuál es aproximadamente su S/N?', o: ['100', '10 000', '1000', '10'], ex: 'Con ruido de Poisson, S/N = N/√N = √N.' },
+  { t: 'fot', q: 'Si aumentas mucho el radio de la apertura…', o: ['entra casi todo el flujo, pero también más ruido de fondo', 'siempre mejora la señal a ruido', 'el flujo neto baja a cero', 'el fondo deja de importar'], ex: 'El flujo se satura, pero el ruido del fondo sigue creciendo con el área.' },
+  { t: 'fot', q: 'Si el flujo es 100 veces mayor, ¿cuánto cambia la magnitud?', o: ['Baja en 5', 'Sube en 5', 'Baja en 100', 'Sube en 2.5'], ex: 'm = −2.5 log₁₀ F: −2.5 · 2 = −5. Más brillo significa menos magnitud.' },
+  { t: 'fot', q: '¿Cuánto vale aproximadamente el FWHM de una gaussiana con σ = 2 píxeles?', o: ['4.7 píxeles', '2 píxeles', '2.4 píxeles', '9.4 píxeles'], ex: 'FWHM = 2√(2 ln 2) σ ≈ 2.355 · 2.' },
+  { t: 'fot', q: '¿Qué imprime?', c: 'fila, col = np.unravel_index(5, (2, 3))\nprint(fila, col)', o: ['1 2', '2 1', '0 5', '1 1'], ex: 'En una matriz de 2×3, el elemento 5 del arreglo aplanado es el último: fila 1, columna 2.' },
+  { t: 'fot', q: '¿Qué imprime?', c: 'Y, X = np.mgrid[:5, :5]\nI = np.zeros((5, 5))\nI[1, 3] = 2.0\nprint((I * X).sum() / I.sum(), (I * Y).sum() / I.sum())', o: ['3.0 1.0', '1.0 3.0', '2.0 2.0', '6.0 2.0'], ex: 'Todo el brillo está en la fila 1 (y) y la columna 3 (x). La imagen se indexa como [y, x].' },
+
+  { t: 'io', q: 'Una tupla pasa por JSON. ¿Qué imprime?', c: 'import json\nprint(json.loads(json.dumps({"a": (1, 2)})))', o: ["{'a': [1, 2]}", "{'a': (1, 2)}", 'TypeError', "{'a': '(1, 2)'}"], ex: 'JSON no tiene tuplas: vuelven como listas.' },
+  { t: 'io', q: 'Las claves numéricas pasan por JSON. ¿Qué imprime?', c: 'import json\nprint(json.loads(json.dumps({1: "Sol"})))', o: ["{'1': 'Sol'}", "{1: 'Sol'}", 'TypeError', "['Sol']"], ex: 'En JSON todas las claves son textos.' },
+  { t: 'io', q: '¿Qué imprime?', c: 'from pathlib import Path\nr = Path("datos/curva.csv")\nprint(r.stem, r.suffix, r.parent)', o: ['curva .csv datos', 'curva.csv .csv datos', 'curva csv datos', 'datos .csv curva'], ex: 'stem es el nombre sin extensión; suffix, la extensión con punto; parent, la carpeta.' },
+  { t: 'io', q: '¿Qué pasa si el archivo no existe?', c: 'open("no_existe.txt", "r")', o: ['FileNotFoundError', 'Lo crea vacío', 'Devuelve None', 'Abre una versión anterior'], ex: 'El modo "r" exige que el archivo exista. "w" y "a" sí lo crean.' },
+  { t: 'io', q: 'Un archivo tiene las líneas a y b. ¿Qué devuelve readlines()?', o: ["['a\\n', 'b\\n']", "['a', 'b']", "'a\\nb\\n'", "[['a'], ['b']]"], ex: 'readlines conserva el salto de línea. Para quitarlo usa strip o read().splitlines().' },
+  { t: 'io', q: 'Guardas np.savez(ruta, flujo, t=t), sin nombre para flujo. ¿Con qué clave lo recuperas?', o: ['arr_0', 'flujo', '0', 'No se guarda'], ex: 'NumPy no conoce el nombre de la variable, así que usa arr_0, arr_1, etc. Mejor nombra cada arreglo.' },
+  { t: 'io', q: '¿Qué ventaja tiene np.save sobre np.savetxt?', o: ['Conserva tipo y forma exactos, sin perder decimales', 'El archivo se puede leer en un editor de texto', 'Funciona solo con listas', 'Siempre pesa más'], ex: '.npy es binario y exacto; un archivo de texto es legible, pero redondea según el formato.' },
+  { t: 'io', q: '¿Para qué sirve index=False en df.to_csv?', o: ['Evita guardar el índice como una columna extra', 'Ordena las filas', 'Borra los encabezados', 'Elimina los NaN'], ex: 'Sin él, al volver a leer aparece la columna «Unnamed: 0».' },
+
+  { t: 'unix', q: '¿Qué muestra ls -a además de lo normal?', o: ['Los archivos ocultos, cuyo nombre parte con punto', 'El tamaño de cada archivo', 'Las carpetas de otros usuarios', 'Solo los archivos recién creados'], ex: 'La -l muestra detalles; la -a, también los ocultos, como .git.' },
+  { t: 'unix', q: '¿Qué diferencia hay entre > y >> al redirigir la salida?', o: ['> reemplaza el archivo y >> agrega al final', '> agrega al final y >> reemplaza el archivo', 'Ninguna', '>> solo sirve con carpetas'], ex: 'Igual que los modos "w" y "a" de open.' },
+  { t: 'unix', q: '¿Qué hace ls | wc -l?', o: ['Cuenta los elementos que lista ls', 'Borra la lista', 'Guarda la lista en wc', 'Lista solo los archivos largos'], ex: 'La tubería | envía la salida de un comando a la entrada del siguiente.' },
+  { t: 'unix', q: '¿Qué significa ~ en una ruta?', o: ['Tu carpeta personal', 'La carpeta actual', 'La carpeta anterior', 'La raíz del disco'], ex: '. es la carpeta actual, .. la superior y / la raíz.' },
+  { t: 'unix', q: '¿Por qué tener cuidado con rm -r?', o: ['Borra carpetas completas sin pasar por la papelera', 'Es muy lento', 'Solo funciona con conexión a internet', 'Renombra los archivos'], ex: 'En la terminal, lo borrado no se recupera desde la papelera.' },
+  { t: 'unix', q: '¿Qué hace grep "Vega" catalogo.csv?', o: ['Muestra las líneas que contienen Vega', 'Borra las líneas con Vega', 'Crea un archivo llamado Vega', 'Cuenta las columnas'], ex: 'grep busca texto, y con -c cuenta las coincidencias.' },
+  { t: 'git', q: 'Hiciste git commit, pero no git push. ¿Dónde están tus cambios?', o: ['Solo en tu computador', 'En GitHub', 'En ninguna parte', 'En el computador de quien revisa'], ex: 'commit guarda localmente; push los envía al remoto.' },
+  { t: 'git', q: '¿Para qué sirve el archivo .gitignore?', o: ['Indica qué archivos no debe seguir Git', 'Lista los errores de Git', 'Guarda tu contraseña', 'Borra archivos del remoto'], ex: 'Sirve, por ejemplo, para excluir datos pesados o .ipynb_checkpoints.' },
+  { t: 'git', q: '¿Por qué git add no sube una carpeta vacía?', o: ['Git registra archivos, no carpetas', 'Faltan permisos', 'Hay que usar git add -f', 'Primero hay que hacer push'], ex: 'La carpeta aparece en Git cuando contiene al menos un archivo.' },
+  { t: 'git', q: 'git push responde «rejected… fetch first». ¿Qué conviene hacer?', o: ['git pull y luego git push', 'Borrar el repositorio', 'git push --force de inmediato', 'git init otra vez'], ex: 'El remoto tiene commits que no están en tu computador: primero hay que traerlos y combinarlos.' },
+  { t: 'git', q: '¿Qué diferencia hay entre git clone y git pull?', o: ['clone copia el repositorio por primera vez; pull actualiza uno que ya tienes', 'Son iguales', 'pull copia el repositorio por primera vez; clone sube cambios', 'clone borra los cambios locales'], ex: 'clone se hace una vez; pull, cada vez que hay novedades.' },
+  { t: 'git', q: '¿Qué hace git add entre tus cambios y el commit?', o: ['Prepara qué cambios entrarán en el próximo commit', 'Los sube a GitHub', 'Los borra si tienen errores', 'Crea una rama nueva'], ex: 'El área de preparación permite elegir qué se incluye en cada commit.' },
 ];
 
 // Ordenar el programa. l: una solución válida. dep[i]: líneas que deben ir antes de la i
@@ -740,6 +946,23 @@ const ORDER = [
   { t: 'pd', q: 'Resumen por grupo de temperatura (Tarea 6; df, L_SOL, PC y umbral ya definidos).', l: ['df["F"] = df["L"] * L_SOL / (4 * np.pi * (df["d"] * PC)**2)', 'df["detectada"] = df["F"] >= umbral', 'df["grupo"] = pd.cut(df["T"], bins=[0, 5000, 7500, np.inf], labels=["Fría", "Intermedia", "Caliente"], right=False)', 'resumen = df.groupby("grupo", observed=True).agg(n=("T", "size"), f_det=("detectada", "mean"))', 'resumen.plot.bar(y="f_det")'], dep: { 1: [0], 3: [1, 2], 4: [3] }, ex: 'El grupo solo depende de T, así que puede calcularse antes o después del flujo. El resumen necesita ambas columnas.' },
   { t: 'fot', q: 'Construye la imagen simulada (x0, y0 y A ya tienen forma (5, 1, 1)).', l: ['alto, ancho = 96, 96', 'Y, X = np.mgrid[:alto, :ancho]', 'cubo = moffat_2d(X[None, :, :], Y[None, :, :], x0, y0, A, alpha, beta)', 'modelo = cubo.sum(axis=0)', 'imagen = modelo + fondo + rng.normal(0, sigma_ruido, size=modelo.shape)', 'senal = imagen - fondo'], ex: 'Grilla, una imagen por estrella, suma, y al final fondo y ruido.' },
   { t: 'fot', q: 'Fotometría de apertura y comparación con el valor ideal.', l: ['yc, xc = np.ogrid[:alto, :ancho]', 'mascara = (xc - x0)**2 + (yc - y0)**2 <= radio**2', 'flujo = np.sum(imagen[mascara] - fondo)', 'flujo_total = np.pi * A * alpha**2 / (beta - 1)', 'fraccion = 1 - (1 + (radio / alpha)**2)**(1 - beta)', 'flujo_ideal = flujo_total * fraccion'], dep: { 1: [0], 2: [1], 5: [3, 4] }, ex: 'La medición y el cálculo teórico son independientes: solo el último paso necesita sus dos partes.' },
+  { t: 'py', q: 'Encuentra la estrella más caliente de un diccionario.', l: ['catalogo = {"Sol": 5772, "Vega": 9602, "Sirio": 9940}', 'mas_caliente = max(catalogo, key=catalogo.get)', 'print(mas_caliente, catalogo[mas_caliente])'], ex: 'max recorre las claves, y key indica con qué valor compararlas.' },
+  { t: 'loop', q: 'Método de Euler: ¿cuánto tarda en caer un objeto desde 100 m?', l: ['v, y, dt = 0.0, 100.0, 0.01', 't = 0.0', 'while y > 0:', '    v = v - 9.8 * dt', '    y = y + v * dt', '    t = t + dt', 'print(f"Tarda {t:.2f} s")'], dep: { 2: [0, 1], 3: [2], 4: [2], 5: [2], 6: [2] }, ex: 'Todo lo que cambia en cada paso va dentro del while, y el resultado se imprime al salir.' },
+  { t: 'loop', q: 'Cuenta cuántas estrellas hay por clase usando un diccionario (clases ya definida).', l: ['conteo = {}', 'for clase in clases:', '    if clase not in conteo:', '        conteo[clase] = 0', '    conteo[clase] += 1', 'print(conteo)'], ex: 'La clave se crea la primera vez, y el += queda fuera del if para que cuente siempre.' },
+  { t: 'fn', q: 'Integra sin(x) entre 0 y π con la regla del trapecio.', l: ['def trapecio(f, a, b, n):', '    x = np.linspace(a, b, n)', '    y = f(x)', '    dx = x[1] - x[0]', '    return dx * (y.sum() - (y[0] + y[-1]) / 2)', 'area = trapecio(np.sin, 0, np.pi, 1000)', 'print(round(area, 3))'], dep: { 1: [0], 2: [1], 3: [1], 4: [2, 3], 5: [0], 6: [5] }, ex: 'La integral exacta vale 2. La función se define antes de llamarla, y return va al final de su cuerpo.' },
+  { t: 'fn', q: 'Halla la raíz de cos(x) entre 1 y 2 por bisección.', l: ['def biseccion(f, a, b, tol=1e-6):', '    while b - a > tol:', '        c = (a + b) / 2', '        if f(a) * f(c) <= 0:', '            b = c', '        else:', '            a = c', '    return (a + b) / 2', 'print(biseccion(np.cos, 1, 2))'], ex: 'La respuesta es ≈ 1.5708, es decir π/2. El return queda fuera del while.' },
+  { t: 'cls', q: 'Define una clase hija que amplía a la madre, y úsala.', l: ['class Estrella:', '    def __init__(self, L):', '        self.L = L', 'class Enana(Estrella):', '    def __init__(self, L, color):', '        super().__init__(L)', '        self.color = color', 'e = Enana(0.1, "roja")', 'print(e.L, e.color)'], dep: { 1: [0], 2: [1], 3: [0], 4: [3], 5: [4], 6: [4], 7: [3], 8: [7] }, ex: 'La clase madre debe existir antes de heredar de ella.' },
+  { t: 'np', q: 'Ajusta una recta a datos con ruido y mide los residuos.', l: ['rng = np.random.default_rng(seed=1)', 'x = np.linspace(0, 10, 50)', 'y = 2 * x + 1 + rng.normal(0, 0.5, x.size)', 'm, n = np.polyfit(x, y, 1)', 'residuos = y - (m * x + n)', 'print(m, n, residuos.std())'], dep: { 2: [0, 1], 3: [2], 4: [3], 5: [4] }, ex: 'La desviación de los residuos debe acercarse al ruido que se puso, 0.5.' },
+  { t: 'np', q: 'Normaliza la curva de luz y estima el radio del planeta (t y flujo ya definidos).', l: ['fuera = (t < 4.5) | (t > 5.0)', 'base = np.median(flujo[fuera])', 'normal = flujo / base', 'delta_F = 1 - normal[~fuera].mean()', 'Rp_Rs = np.sqrt(delta_F)', 'print(f"Rp/R* = {Rp_Rs:.3f}")'], ex: 'La base se mide fuera del tránsito, y la profundidad, dentro.' },
+  { t: 'plt', q: 'Figura de dos paneles: curva de luz e histograma del flujo.', l: ['fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))', 'ax1.plot(t, flujo, ".")', 'ax1.set_xlabel("Tiempo [años]")', 'ax2.hist(flujo, bins=30)', 'ax2.set_xlabel("Flujo")', 'fig.tight_layout()', 'fig.savefig("paneles.png")'], dep: { 1: [0], 2: [0], 3: [0], 4: [0], 5: [1, 2, 3, 4], 6: [5] }, ex: 'Cada panel se puede llenar en cualquier orden, pero el ajuste y el guardado van al final.' },
+  { t: 'plt', q: 'Tres gaussianas de distinto σ, con leyenda.', l: ['fig, ax = plt.subplots()', 'x = np.linspace(-5, 5, 200)', 'for sigma in [0.5, 1, 2]:', '    y = np.exp(-x**2 / (2 * sigma**2))', '    ax.plot(x, y, label=f"σ = {sigma}")', 'ax.legend()', 'plt.show()'], dep: { 2: [1], 3: [2], 4: [0, 3], 5: [0, 2], 6: [5] }, ex: 'plot va dentro del ciclo para dibujar una curva por vuelta, y legend después del ciclo.' },
+  { t: 'pd', q: 'Las tres estrellas con mayor flujo (L_SOL ya definida).', l: ['df = pd.read_csv("catalogo.csv")', 'df = df.dropna(subset=["flujo"])', 'df["L_sol"] = df["L"] / L_SOL', 'top = df.sort_values("flujo", ascending=False).head(3)', 'print(top[["nombre", "L_sol"]])'], dep: { 1: [0], 2: [0], 3: [1], 4: [2, 3] }, ex: 'Hay que limpiar antes de ordenar. La columna nueva debe existir antes de imprimirla.' },
+  { t: 'pd', q: 'Une dos catálogos y conserva las estrellas con flujo positivo.', l: ['posiciones = pd.read_csv("posiciones.csv")', 'brillos = pd.read_csv("brillos.csv")', 'df = posiciones.merge(brillos, on="nombre")', 'df = df[df["flujo"] > 0]', 'print(df.shape)'], dep: { 2: [0, 1], 3: [2], 4: [3] }, ex: 'Los dos archivos se pueden leer en cualquier orden; deben estar ambos antes del merge.' },
+  { t: 'io', q: 'Guarda la configuración en JSON y vuelve a leerla.', l: ['import json', 'from pathlib import Path', 'ruta = Path("resultados") / "config.json"', 'ruta.parent.mkdir(exist_ok=True)', 'with ruta.open("w") as f:', '    json.dump({"seed": 2026}, f)', 'with ruta.open() as f:', '    config = json.load(f)', 'print(config["seed"])'], dep: { 2: [1], 3: [2], 4: [3], 5: [0, 4], 6: [5], 7: [0, 6], 8: [7] }, ex: 'La carpeta debe existir antes de abrir el archivo para escribir.' },
+  { t: 'fot', q: 'Calcula el centroide de una estrella simulada (A ya definida).', l: ['Y, X = np.mgrid[:96, :96]', 'imagen = A * np.exp(-((X - 40)**2 + (Y - 55)**2) / (2 * 3**2))', 'total = imagen.sum()', 'x_c = (X * imagen).sum() / total', 'y_c = (Y * imagen).sum() / total', 'print(x_c, y_c)'], dep: { 1: [0], 2: [1], 3: [2], 4: [2], 5: [3, 4] }, ex: 'Debe dar ≈ (40, 55). x_c e y_c se pueden calcular en cualquier orden.' },
+  { t: 'fot', q: 'Fotometría con fondo medido en un anillo (X, Y, x0, y0 e imagen ya definidos).', l: ['r = np.hypot(X - x0, Y - y0)', 'apertura = r <= 8', 'anillo = (r > 12) & (r <= 16)', 'fondo = np.median(imagen[anillo])', 'flujo = (imagen[apertura] - fondo).sum()', 'print(flujo)'], dep: { 1: [0], 2: [0], 3: [2], 4: [1, 3], 5: [4] }, ex: 'Primero se mide el fondo en el anillo, y luego se le resta a cada píxel de la apertura.' },
+  { t: 'git', q: 'Crea una rama con tu corrección y súbela.', l: ['git pull', 'git switch -c correccion', 'git add tarea6.ipynb', 'git commit -m "Corrige la tarea 6"', 'git push -u origin correccion'], ex: 'Conviene partir de lo más reciente. El push -u deja enlazada la rama con el remoto.' },
+  { t: 'unix', q: 'Ordena la tarea descargada en su carpeta.', l: ['mkdir -p tareas/tarea6', 'cd tareas/tarea6', 'cp ~/Downloads/tarea6.ipynb .', 'ls'], ex: 'El punto significa «aquí», en la carpeta actual.' },
 ];
 
 // Comandos de terminal
@@ -778,6 +1001,25 @@ const TERM = [
   { t: 'unix', q: 'Crea tareas/tarea6, incluyendo las carpetas padre si faltan.', a: ['mkdir -p tareas/tarea6'], out: '' },
   { t: 'unix', q: 'Renombra "Tarea 5.ipynb" como Tarea_5.ipynb (el nombre tiene un espacio).', a: ['mv "Tarea 5.ipynb" Tarea_5.ipynb', 'mv Tarea\\ 5.ipynb Tarea_5.ipynb'], out: '' },
   { t: 'git', q: 'Guarda los cambios con el mensaje "tarea 6".', a: ['git commit -m "tarea 6"'], out: '[main 8c1d2e4] tarea 6\n 2 files changed, 310 insertions(+)' },
+  { t: 'unix', q: 'Muestra todo el contenido de notas.txt.', a: ['cat notas.txt'], out: 'Entrega el viernes' },
+  { t: 'unix', q: 'Muestra las primeras 5 líneas de catalogo.csv.', a: ['head -n 5 catalogo.csv', 'head -5 catalogo.csv', 'head -n5 catalogo.csv'], out: 'nombre,T,L\nSol,5772,1.0\nVega,9602,40.1\nSirio,9940,25.4\nAltair,7670,10.6' },
+  { t: 'unix', q: 'Muestra las últimas 3 líneas de catalogo.csv.', a: ['tail -n 3 catalogo.csv', 'tail -3 catalogo.csv', 'tail -n3 catalogo.csv'], out: 'Vega,9602,40.1\nSirio,9940,25.4\nAltair,7670,10.6' },
+  { t: 'unix', q: 'Busca las líneas que contienen Vega en catalogo.csv.', a: ['grep Vega catalogo.csv', 'grep "Vega" catalogo.csv', "grep 'Vega' catalogo.csv"], out: 'Vega,9602,40.1' },
+  { t: 'unix', q: 'Cuenta las líneas de catalogo.csv.', a: ['wc -l catalogo.csv', 'wc -l < catalogo.csv', 'cat catalogo.csv | wc -l'], out: '5 catalogo.csv' },
+  { t: 'unix', q: 'Crea el archivo vacío notas.txt.', a: ['touch notas.txt'], out: '' },
+  { t: 'unix', q: 'Guarda la palabra hola en saludo.txt, reemplazando su contenido.', a: ['echo hola > saludo.txt', 'echo "hola" > saludo.txt', "echo 'hola' > saludo.txt"], out: '' },
+  { t: 'unix', q: 'Agrega la palabra chao al final de saludo.txt.', a: ['echo chao >> saludo.txt', 'echo "chao" >> saludo.txt', "echo 'chao' >> saludo.txt"], out: '' },
+  { t: 'unix', q: 'Ejecuta el programa analisis.py con Python.', a: ['python analisis.py', 'python3 analisis.py'], out: 'Listo' },
+  { t: 'unix', q: 'Desactiva el ambiente conda actual.', a: ['conda deactivate'], out: '' },
+  { t: 'unix', q: 'Instala pandas en el ambiente con conda.', a: ['conda install pandas', 'conda install -y pandas'], out: '' },
+  { t: 'unix', q: 'Lista los paquetes instalados con pip.', a: ['pip list', 'pip3 list', 'python -m pip list'], out: 'numpy  2.4.1\npandas 2.3.3' },
+  { t: 'git', q: 'Convierte la carpeta actual en un repositorio de Git.', a: ['git init'], out: 'Initialized empty Git repository' },
+  { t: 'git', q: 'Prepara solo el archivo tarea6.ipynb para el commit.', a: ['git add tarea6.ipynb'], out: '' },
+  { t: 'git', q: 'Crea la rama entrega y cámbiate a ella.', a: ['git switch -c entrega', 'git checkout -b entrega'], out: "Switched to a new branch 'entrega'" },
+  { t: 'git', q: 'Muestra el historial con un commit por línea.', a: ['git log --oneline'], out: 'a2401a0 Tarea 6\nad58652 Tarea 5' },
+  { t: 'git', q: 'Descarta tus cambios sin guardar en notas.txt.', a: ['git restore notas.txt', 'git checkout -- notas.txt'], out: '' },
+  { t: 'git', q: 'Muestra a qué repositorio remoto está conectada la carpeta.', a: ['git remote -v'], out: 'origin  https://github.com/<tu-usuario>/fiscompii (fetch)\norigin  https://github.com/<tu-usuario>/fiscompii (push)' },
+  { t: 'git', q: 'Sube la rama entrega por primera vez, dejándola enlazada al remoto.', a: ['git push -u origin entrega', 'git push --set-upstream origin entrega'], out: "branch 'entrega' set up to track 'origin/entrega'." },
 ];
 
 /* =====================================================================
@@ -1243,6 +1485,274 @@ const PLOTS = [
     },
     fixes: ['M_bol = 4.74 - 2.5 * log_L', 'M_bol = 4.74 - 2.5 * 10**log_L', 'M_bol = -4.74 + 2.5 * log_L', 'M_bol = 2.5 - 4.74 * log_L'],
     ex: 'La magnitud es una escala invertida: M_bol = 4.74 − 2.5 log₁₀(L/L☉). A mayor luminosidad, menor magnitud.'
+  },
+  {
+    id: 'lista_x', t: 'py', titulo: 'La lista que se repitió',
+    obj: 'La recta y = 2x, con cinco puntos, de x = 0 a x = 4.',
+    build(ok) {
+      const x = [0, 1, 2, 3, 4], y = x.map(v => 2 * v);
+      return [
+        { c: ok ? 'x = np.array([0, 1, 2, 3, 4])' : 'x = [0, 1, 2, 3, 4]', ops: [O.v('x', x)], bug: true },
+        { c: 'y = x * 2', ops: [O.v('y', ok ? y : [...x, ...x])] },
+        ok ? { c: 'plt.plot(x, y, "o-", color="tab:blue")', ops: [O.line(x, y, { mk: 'o', color: 'tab:blue' })] }
+          : { c: 'plt.plot(x, y, "o-", color="tab:blue")', ops: [O.err('Traceback (most recent call last):\n  plt.plot(x, y, "o-", color="tab:blue")\nValueError: x and y must have same first dimension, but have shapes (5,) and (10,)')] },
+        { c: 'plt.xlabel("x")', ops: [O.xl('x')] },
+        { c: 'plt.ylabel("y = 2x")', ops: [O.yl('y = 2x')] },
+      ];
+    },
+    fixes: ['x = np.array([0, 1, 2, 3, 4])', 'x = [0, 1, 2, 3, 4, 0, 1, 2, 3, 4]', 'x = list(range(5))', 'x = (0, 1, 2, 3, 4)'],
+    ex: 'Multiplicar una lista la repite: y queda con 10 elementos. Con un arreglo NumPy, <code>x * 2</code> multiplica cada elemento. Una tupla o range tendrían el mismo problema.'
+  },
+  {
+    id: 'euler', t: 'loop', titulo: 'La caída que sube',
+    obj: 'Un objeto parte en y = 100 m, en reposo, y cae bajo la gravedad: y(t) debe ser una parábola descendente.',
+    build(ok) {
+      const g = ok ? -9.8 : 9.8, dt = 0.02, ts = [0], ys = [100]; let v = 0, y = 100;
+      for (let i = 0; i < 200; i++) { v += g * dt; y += v * dt; ts.push((i + 1) * dt); ys.push(y); }
+      return [
+        { c: 'v, y, dt = 0.0, 100.0, 0.02', ops: [O.v('v', 0), O.v('y', 100), O.v('dt', dt)] },
+        { c: 'ts, ys = [0.0], [y]', ops: [O.v('ts', [0]), O.v('ys', [100])] },
+        { c: 'for i in range(200):', ops: [] },
+        { c: ok ? '    v = v - 9.8 * dt' : '    v = v + 9.8 * dt', ops: [O.v('v', v)], bug: true },
+        { c: '    y = y + v * dt', ops: [O.v('y', y)] },
+        { c: '    ts.append((i + 1) * dt)', ops: [O.v('ts', ts)] },
+        { c: '    ys.append(y)', ops: [O.v('ys', ys)] },
+        { c: 'plt.plot(ts, ys, color="tab:green")', ops: [O.line(ts, ys, { color: 'tab:green', lw: 2 })] },
+        { c: 'plt.xlabel("t [s]")', ops: [O.xl('t [s]')] },
+        { c: 'plt.ylabel("y [m]")', ops: [O.yl('y [m]')] },
+      ];
+    },
+    fixes: ['    v = v - 9.8 * dt', '    v = -9.8 * dt', '    v = v - 9.8', '    v = v * 9.8 * dt'],
+    ex: 'La gravedad apunta hacia abajo, así que resta a la velocidad en cada paso. <code>v = -9.8 * dt</code> no acumula: la velocidad quedaría constante y la caída, recta.'
+  },
+  {
+    id: 'acumula', t: 'loop', titulo: 'La suma que no acumula',
+    obj: 'El flujo acumulado debe crecer de forma sostenida, hasta cerca de 100 tras 100 mediciones de valor ≈ 1.',
+    build(ok) {
+      R.seed(21);
+      const f = R.arr(100, () => R.normal(1, 0.1)), a = []; let tot = 0;
+      for (const x of f) { tot = ok ? tot + x : x; a.push(tot); }
+      const n = a.map((_, i) => i);
+      return [
+        { c: 'rng = np.random.default_rng(seed=21)', ops: [O.v('rng', 'Generator(PCG64)')] },
+        { c: 'flujo = rng.normal(1, 0.1, 100)', ops: [O.v('flujo', f)] },
+        { c: 'total, curva = 0.0, []', ops: [O.v('total', 0), O.v('curva', [])] },
+        { c: 'for f in flujo:', ops: [] },
+        { c: ok ? '    total = total + f' : '    total = f', ops: [O.v('total', tot)], bug: true },
+        { c: '    curva.append(total)', ops: [O.v('curva', a)] },
+        { c: 'plt.plot(curva, color="tab:blue")', ops: [O.line(n, a, { color: 'tab:blue', lw: 2 })] },
+        { c: 'plt.xlabel("Medición")', ops: [O.xl('Medición')] },
+        { c: 'plt.ylabel("Flujo acumulado")', ops: [O.yl('Flujo acumulado')] },
+      ];
+    },
+    fixes: ['    total = total + f', '    total = total * f', '    total = total - f', '    f = total + f'],
+    ex: 'Con <code>total = f</code>, cada vuelta borra lo anterior y la curva copia el flujo. Acumular es sumar sobre el valor que ya había.'
+  },
+  {
+    id: 'mu', t: 'fn', titulo: 'El parámetro ignorado',
+    obj: 'Tres gaussianas, centradas en μ = −2, 0 y 2.',
+    build(ok) {
+      const x = linspace(-8, 8, 240), cols = ['tab:blue', 'tab:orange', 'tab:green'];
+      const g = m => x.map(v => Math.exp(-((v - (ok ? m : 0)) ** 2) / 2));
+      const curvas = [-2, 0, 2].map((m, k) => O.line(x, g(m), { color: cols[k], label: `μ = ${m}` }));
+      return [
+        { c: 'def gaussiana(x, mu, sigma):', ops: [O.v('gaussiana', 'function')] },
+        { c: ok ? '    return np.exp(-(x - mu)**2 / (2 * sigma**2))' : '    return np.exp(-x**2 / (2 * sigma**2))', ops: [], bug: true },
+        { c: 'x = np.linspace(-8, 8, 240)', ops: [O.v('x', x)] },
+        { c: 'for mu in [-2, 0, 2]:', ops: [O.v('mu', '-2 → 0 → 2')] },
+        { c: '    plt.plot(x, gaussiana(x, mu, 1), label=f"μ = {mu}")', ops: curvas },
+        { c: 'plt.xlabel("x")', ops: [O.xl('x')] },
+        { c: 'plt.legend()', ops: [O.legend()] },
+      ];
+    },
+    fixes: ['    return np.exp(-(x - mu)**2 / (2 * sigma**2))', '    return np.exp(-(x + mu)**2 / (2 * sigma**2))', '    return mu * np.exp(-x**2 / (2 * sigma**2))', '    return np.exp(-x**2 / (2 * mu**2))'],
+    ex: 'La función recibe <code>mu</code>, pero no lo usa. Python no avisa de un parámetro sin usar. Con <code>x + mu</code>, los centros quedarían invertidos: la curva «μ = 2» aparecería en −2.'
+  },
+  {
+    id: 'planck', t: 'fn', titulo: 'Un cuerpo negro sin máximo',
+    obj: 'La ley de Planck para T = 5800 K debe tener un máximo cerca de 500 nm, como predice la ley de Wien.',
+    build(ok) {
+      const C = 0.014388, T = 5800, nm = linspace(100, 2500, 300), lam = nm.map(v => v * 1e-9);
+      const B0 = lam.map(l => (ok ? 1 / l ** 5 : 1) / (Math.exp(C / (l * T)) - 1));
+      const mx = Math.max(...B0), B = B0.map(v => v / mx);
+      return [
+        { c: 'C = 0.014388   # h c / k_B [m K]', ops: [O.v('C', C)] },
+        { c: 'def planck(lam, T):', ops: [O.v('planck', 'function')] },
+        { c: ok ? '    return lam**-5 / (np.exp(C / (lam * T)) - 1)' : '    return 1 / (np.exp(C / (lam * T)) - 1)', ops: [], bug: true },
+        { c: 'nm = np.linspace(100, 2500, 300)', ops: [O.v('nm', nm)] },
+        { c: 'B = planck(nm * 1e-9, 5800)', ops: [O.v('B', B0)] },
+        { c: 'plt.plot(nm, B / B.max(), color="tab:red")', ops: [O.line(nm, B, { color: 'tab:red', lw: 2 })] },
+        { c: 'plt.axvline(2.8978e-3 / 5800 * 1e9, color="k", ls=":")', ops: [O.vl(499.6, { color: 'k', dash: true })] },
+        { c: 'plt.xlabel("λ [nm]")', ops: [O.xl('λ [nm]')] },
+        { c: 'plt.ylabel("B normalizado")', ops: [O.yl('B normalizado')] },
+      ];
+    },
+    fixes: ['    return lam**-5 / (np.exp(C / (lam * T)) - 1)', '    return lam**5 / (np.exp(C / (lam * T)) - 1)', '    return 1 / np.exp(C / (lam * T))', '    return lam**-5 * (np.exp(C / (lam * T)) - 1)'],
+    ex: 'Sin el factor λ⁻⁵, la curva crece sin llegar a un máximo. Con ese factor, B cae en ambos extremos y el pico coincide con λ_max = b/T ≈ 500 nm.'
+  },
+  {
+    id: 'metodo', t: 'cls', titulo: 'El método sin paréntesis',
+    obj: 'Flujo de cinco estrellas iguales a distintas distancias: en escala logarítmica cae como 1/d².',
+    build(ok) {
+      const d = [1, 2, 4, 8, 16], F = d.map(v => 1 / (4 * Math.PI * v * v));
+      return [
+        { c: 'class Estrella:', ops: [O.v('Estrella', 'class')] },
+        { c: '    def __init__(self, L, d):', ops: [] },
+        { c: '        self.L, self.d = L, d', ops: [] },
+        { c: '    def flujo(self):', ops: [] },
+        { c: '        return self.L / (4 * np.pi * self.d**2)', ops: [] },
+        { c: 'd = [1, 2, 4, 8, 16]', ops: [O.v('d', d)] },
+        { c: 'estrellas = [Estrella(1.0, x) for x in d]', ops: [O.v('estrellas', '[Estrella × 5]')] },
+        { c: ok ? 'F = [e.flujo() for e in estrellas]' : 'F = [e.flujo for e in estrellas]', ops: [O.v('F', ok ? F : '[<bound method> × 5]')], bug: true },
+        ok ? { c: 'plt.plot(d, F, "o-", color="tab:purple")', ops: [O.line(d, F, { mk: 'o', color: 'tab:purple' })] }
+          : { c: 'plt.plot(d, F, "o-", color="tab:purple")', ops: [O.err("Traceback (most recent call last):\n  plt.plot(d, F, \"o-\", color=\"tab:purple\")\nTypeError: float() argument must be a string or a real number, not 'method'")] },
+        { c: 'plt.yscale("log")', ops: [O.ylog()] },
+        { c: 'plt.xlabel("d")', ops: [O.xl('d')] },
+        { c: 'plt.ylabel("Flujo")', ops: [O.yl('Flujo')] },
+      ];
+    },
+    fixes: ['F = [e.flujo() for e in estrellas]', 'F = [e.flujo(e) for e in estrellas]', 'F = [Estrella.flujo for e in estrellas]', 'F = estrellas.flujo()'],
+    ex: 'Sin paréntesis, <code>e.flujo</code> es el método y no su resultado. Solo una <code>@property</code> se lee sin paréntesis. Una lista tampoco tiene <code>.flujo()</code>.'
+  },
+  {
+    id: 'plegado', t: 'np', titulo: 'La curva sin plegar',
+    obj: 'Con P = 5 días, todos los tránsitos deben caer uno sobre otro en una sola caída, en fase 0 a 5.',
+    build(ok) {
+      R.seed(33);
+      const P = 5, t = linspace(0, 30, 900), f = t.map(v => 1 + R.normal(0, 0.0015) - ((v % P) >= 2 && (v % P) < 2.6 ? 0.012 : 0));
+      const fase = t.map(v => ok ? v % P : v / P);
+      return [
+        { c: 'P = 5.0   # período en días', ops: [O.v('P', P)] },
+        { c: 't = np.linspace(0, 30, 900)', ops: [O.v('t', t)] },
+        { c: '# flujo ya simulado: un tránsito cada P días', ops: [O.v('flujo', f)] },
+        { c: ok ? 'fase = t % P' : 'fase = t / P', ops: [O.v('fase', fase)], bug: true },
+        { c: 'plt.plot(fase, flujo, ".", ms=2, color="tab:blue")', ops: [O.line(fase, f, { mk: '.', ls: 'none', color: 'tab:blue' })] },
+        { c: 'plt.xlabel("Fase [días]")', ops: [O.xl('Fase [días]')] },
+        { c: 'plt.ylabel("Flujo normalizado")', ops: [O.yl('Flujo normalizado')] },
+      ];
+    },
+    fixes: ['fase = t % P', 'fase = t // P', 'fase = t * P', 'fase = t - P'],
+    ex: 'El resto <code>t % P</code> lleva cada tiempo a su posición dentro del período, y así se apilan los tránsitos. <code>t / P</code> solo cambia la escala; <code>t // P</code> numera los ciclos.'
+  },
+  {
+    id: 'ajuste', t: 'np', titulo: 'La recta que no ajusta',
+    obj: 'La recta ajustada debe pasar por los datos: y ≈ 2x + 1.',
+    build(ok) {
+      R.seed(12);
+      const x = linspace(0, 10, 40), y = x.map(v => 2 * v + 1 + R.normal(0, 1));
+      const fit = (a, b) => { const n = a.length, ma = a.reduce((s, v) => s + v, 0) / n, mb = b.reduce((s, v) => s + v, 0) / n; let u = 0, w = 0; a.forEach((v, i) => { u += (v - ma) * (b[i] - mb); w += (v - ma) ** 2; }); const m = u / w; return [m, mb - m * ma]; };
+      const [m, n] = ok ? fit(x, y) : fit(y, x);
+      const ym = x.map(v => m * v + n);
+      return [
+        { c: 'rng = np.random.default_rng(seed=12)', ops: [O.v('rng', 'Generator(PCG64)')] },
+        { c: 'x = np.linspace(0, 10, 40)', ops: [O.v('x', x)] },
+        { c: 'y = 2 * x + 1 + rng.normal(0, 1, 40)', ops: [O.v('y', y)] },
+        { c: ok ? 'm, n = np.polyfit(x, y, 1)' : 'm, n = np.polyfit(y, x, 1)', ops: [O.v('m', m), O.v('n', n)], bug: true },
+        { c: 'plt.plot(x, y, "o", color="0.6", label="Datos")', ops: [O.line(x, y, { mk: 'o', ls: 'none', color: '0.6', label: 'Datos' })] },
+        { c: 'plt.plot(x, m * x + n, color="tab:red", label="Ajuste")', ops: [O.line(x, ym, { color: 'tab:red', lw: 2, label: 'Ajuste' })] },
+        { c: 'plt.xlabel("x")', ops: [O.xl('x')] },
+        { c: 'plt.legend()', ops: [O.legend()] },
+      ];
+    },
+    fixes: ['m, n = np.polyfit(x, y, 1)', 'n, m = np.polyfit(x, y, 1)', 'm, n = np.polyfit(y, x, 2)', 'm, n = np.polyfit(x, x, 1)'],
+    ex: '<code>polyfit(x, y, grado)</code> espera primero x, y entrega primero la pendiente. Al invertir x e y se ajusta x(y), que tiene pendiente ≈ 0.5.'
+  },
+  {
+    id: 'garabato', t: 'pd', titulo: 'El garabato',
+    obj: 'La curva de luz debe recorrerse en orden de tiempo, y verse como una sola sinusoide suave.',
+    build(ok) {
+      R.seed(8);
+      const t0 = R.arr(120, () => R.uniform(0, 10)), f0 = t0.map(v => 1 + 0.2 * Math.sin(v));
+      const orden = t0.map((_, i) => i).sort((a, b) => ok ? t0[a] - t0[b] : f0[a] - f0[b]);
+      const t = orden.map(i => t0[i]), f = orden.map(i => f0[i]);
+      return [
+        { c: 'df = pd.read_csv("curva.csv")', ops: [O.v('df', 'DataFrame (120, 2)')] },
+        { c: ok ? 'df = df.sort_values("t")' : 'df = df.sort_values("flujo")', ops: [O.v('t', t), O.v('flujo', f)], bug: true },
+        { c: 'plt.plot(df["t"], df["flujo"], color="tab:blue")', ops: [O.line(t, f, { color: 'tab:blue', lw: 1.4 })] },
+        { c: 'plt.xlabel("t [días]")', ops: [O.xl('t [días]')] },
+        { c: 'plt.ylabel("Flujo")', ops: [O.yl('Flujo')] },
+      ];
+    },
+    fixes: ['df = df.sort_values("t")', 'df = df.sort_index()', 'df = df.sort_values("flujo", ascending=False)', 'df = df.dropna()'],
+    ex: '<code>plt.plot</code> une los puntos en el orden en que vienen. Para una curva en el tiempo, hay que ordenar por tiempo. El índice sigue el orden del archivo, que aquí está desordenado.'
+  },
+  {
+    id: 'semilog', t: 'plt', titulo: 'La exponencial que debía ser recta',
+    obj: 'El decaimiento F = e^(−t/2) debe verse como una recta descendente.',
+    build(ok) {
+      const t = linspace(0, 12, 100), F = t.map(v => Math.exp(-v / 2));
+      return [
+        { c: 't = np.linspace(0, 12, 100)', ops: [O.v('t', t)] },
+        { c: 'F = np.exp(-t / 2)', ops: [O.v('F', F)] },
+        { c: 'plt.plot(t, F, color="tab:orange", lw=2)', ops: [O.line(t, F, { color: 'tab:orange', lw: 2 })] },
+        { c: ok ? 'plt.yscale("log")' : 'plt.yscale("linear")', ops: ok ? [O.ylog()] : [], bug: true },
+        { c: 'plt.xlabel("t")', ops: [O.xl('t')] },
+        { c: 'plt.ylabel("F")', ops: [O.yl('F')] },
+      ];
+    },
+    fixes: ['plt.yscale("log")', 'plt.xscale("log")', 'plt.yscale("exp")', 'plt.yticks([])'],
+    ex: 'Como ln F = −t/2 es lineal en t, basta el eje y logarítmico. Con el eje x logarítmico la curva sigue doblada, y «exp» no es una escala de Matplotlib.'
+  },
+  {
+    id: 'bins', t: 'plt', titulo: 'Un histograma de tres barras',
+    obj: 'Las temperaturas tienen dos poblaciones, en torno a 4500 K y 8000 K: deben verse dos picos.',
+    build(ok) {
+      R.seed(40);
+      const T = [...R.arr(500, () => R.normal(4500, 500)), ...R.arr(500, () => R.normal(8000, 700))];
+      const b = ok ? 40 : 3;
+      return [
+        { c: 'rng = np.random.default_rng(seed=40)', ops: [O.v('rng', 'Generator(PCG64)')] },
+        { c: 'T = np.concatenate([rng.normal(4500, 500, 500),', ops: [] },
+        { c: '                    rng.normal(8000, 700, 500)])', ops: [O.v('T', T)] },
+        { c: ok ? 'plt.hist(T, bins=40, color="tab:blue")' : 'plt.hist(T, bins=3, color="tab:blue")', ops: [O.hist(T, { bins: b, color: 'tab:blue' })], bug: true },
+        { c: 'plt.xlabel("T [K]")', ops: [O.xl('T [K]')] },
+        { c: 'plt.ylabel("Número de estrellas")', ops: [O.yl('Número de estrellas')] },
+      ];
+    },
+    fixes: ['plt.hist(T, bins=40, color="tab:blue")', 'plt.hist(T, bins=1, color="tab:blue")', 'plt.plot(T, color="tab:blue")', 'plt.bar(T, 40, color="tab:blue")'],
+    ex: 'Con muy pocas barras, la forma de la distribución se pierde y los dos picos se funden. El número de barras se elige mirando los datos.'
+  },
+  {
+    id: 'crecimiento', t: 'fot', titulo: 'La curva de crecimiento sin techo',
+    obj: 'Al aumentar el radio de la apertura, el flujo neto de la estrella debe estabilizarse cerca de 1.',
+    build(ok) {
+      const a = 2.6, b = 3.2, A = 280, Finf = Math.PI * A * a * a / (b - 1), fondo = 10;
+      const R_ = linspace(1, 30, 60);
+      const estrella = R_.map(r => Finf * (1 - (1 + (r / a) ** 2) ** (1 - b)));
+      const fondoAp = R_.map(r => fondo * Math.PI * r * r);
+      const brutos = estrella.map((v, i) => v + fondoAp[i]);
+      const netos = ok ? estrella : brutos;
+      const y = netos.map(v => v / Finf);
+      return [
+        { c: 'radios = np.linspace(1, 30, 60)', ops: [O.v('radios', R_)] },
+        { c: 'n_pix = np.pi * radios**2', ops: [O.v('n_pix', fondoAp.map(v => v / fondo))] },
+        { c: '# brutos: suma en cada apertura; fondo = 10; F_inf ya calculado', ops: [O.v('brutos', brutos)] },
+        { c: ok ? 'netos = brutos - fondo * n_pix' : 'netos = brutos', ops: [O.v('netos', netos)], bug: true },
+        { c: 'plt.plot(radios, netos / F_inf, color="tab:blue", lw=2)', ops: [O.line(R_, y, { color: 'tab:blue', lw: 2 })] },
+        { c: 'plt.axhline(1, color="gray", ls="--")', ops: [O.hl(1, { color: 'gray', dash: true })] },
+        { c: 'plt.xlabel("Radio [píxeles]")', ops: [O.xl('Radio [píxeles]')] },
+        { c: 'plt.ylabel("Flujo / F∞")', ops: [O.yl('Flujo / F∞')] },
+      ];
+    },
+    fixes: ['netos = brutos - fondo * n_pix', 'netos = brutos - fondo', 'netos = brutos / n_pix', 'netos = brutos + fondo * n_pix'],
+    ex: 'El fondo crece con el área (πR²), y sin restarlo el flujo nunca se estabiliza. Hay que restar el fondo de <em>cada píxel</em>: restar una sola vez no alcanza.'
+  },
+  {
+    id: 'loadtxt', t: 'io', titulo: 'Las columnas cruzadas',
+    obj: 'El archivo curva.txt trae el tiempo en la primera columna y el flujo en la segunda: el tránsito debe verse como una caída.',
+    build(ok) {
+      const { t, f } = transitData(-1);
+      const x = ok ? t : f, y = ok ? f : t;
+      return [
+        { c: '# curva.txt: columna 1 = tiempo, columna 2 = flujo', ops: [] },
+        { c: ok ? 't, flujo = np.loadtxt("curva.txt", unpack=True)' : 'flujo, t = np.loadtxt("curva.txt", unpack=True)', ops: [O.v('t', x), O.v('flujo', y)], bug: true },
+        { c: 'plt.plot(t, flujo, ".", ms=2, color="tab:blue")', ops: [O.line(x, y, { mk: '.', ls: 'none', color: 'tab:blue' })] },
+        { c: 'plt.xlabel("Tiempo [años]")', ops: [O.xl('Tiempo [años]')] },
+        { c: 'plt.ylabel("Flujo normalizado")', ops: [O.yl('Flujo normalizado')] },
+      ];
+    },
+    fixes: ['t, flujo = np.loadtxt("curva.txt", unpack=True)', 't, flujo = np.loadtxt("curva.txt", skiprows=2, unpack=True)', 't = np.loadtxt("curva.txt", unpack=True)', 'flujo, t = np.loadtxt("curva.txt")'],
+    ex: 'Con <code>unpack=True</code>, cada columna se entrega por separado y en orden. Los nombres se asignan por posición: el nombre no le dice a NumPy qué columna tomar.'
   },
 ];
 
