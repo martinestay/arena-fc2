@@ -1,4 +1,4 @@
-# Arena FC-2
+# Tres Sigma
 
 Juego de repaso para **Física Computacional II** (USACH, 2026), con la materia de las clases 1 a 6 y las tareas 1 a 6: terminal y Git, Python, ciclos y condicionales, funciones, clases y decoradores, NumPy y broadcasting, Matplotlib, pandas, lectura/escritura de archivos, imágenes y fotometría.
 
@@ -21,7 +21,7 @@ Vidas a elección: muerte súbita (1), 3, 5 o ilimitadas. Los récords se guarda
 
 ## Publicar con GitHub Pages
 
-En el repositorio: **Settings → Pages**, «Source» = rama `main`, carpeta `/ (root)`. Queda en `https://TU-USUARIO.github.io/arena-fc2/`.
+En el repositorio: **Settings → Pages**, «Source» = rama `main`, carpeta `/ (root)`. Queda en `https://TU-USUARIO.github.io/tres-sigma/`.
 
 ---
 
