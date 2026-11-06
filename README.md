@@ -12,12 +12,15 @@ Todo el juego está en `index.html`, un solo archivo. Se abre en cualquier naveg
 - **Completar código en grupo**: turnos con reloj y vidas compartidas.
 - **Depurar gráficos**: el código se ejecuta línea a línea y la figura se construye en vivo; encuentra el error y corrígelo.
 - **Duelo**: 1 contra 1 o por equipos en el mismo teclado (Q W E R contra U I O P).
+- **Contra la IA**: compites ronda a ronda contra uno de cuatro rivales simulados, cada uno con su forma de razonar y su dificultad: Gemini Argón (nivel 1, visual), GPT 6 Astra (nivel 2, veloz e intuitiva), Fable 5.1 (nivel 3, metódica, paso a paso) y Grok Heavy (nivel 4, tres agentes que votan). Ves su razonamiento en vivo, pero su respuesta queda oculta hasta que contestas. *Los rivales son simulados: el juego no se conecta a ningún modelo real.*
 - **Predecir la salida**: anticipa el resultado del código sin ejecutarlo.
 - **Ordenar el programa**: ordena las líneas; se acepta cualquier orden que Python ejecutaría bien.
 - **Comandos de terminal**: Unix, conda y Git.
 - **Simulacro de prueba**: 15 preguntas en 12 minutos, nota de 1,0 a 7,0.
 
 Vidas a elección: muerte súbita (1), 3, 5 o ilimitadas. Los récords se guardan solo en el navegador de cada persona.
+
+Al terminar cada partida aparece un repaso con las preguntas que fallaste, su respuesta y su explicación. En el inicio, cada tema muestra tu porcentaje de aciertos, y el juego sugiere practicar los dos temas más débiles.
 
 ## Publicar con GitHub Pages
 

@@ -271,13 +271,81 @@ table.t th{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:va
 .bar{height:8px;border-radius:99px;background:var(--night);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--azul)}
 
+/* ---------- contra la IA ---------- */
+.rivals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rival{--ia:var(--azul);text-align:left;background:var(--panel-2);border:1.5px solid var(--rule);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rival:hover{border-color:var(--muted)}
+.rival[aria-checked="true"]{border-color:var(--ia);background:color-mix(in srgb,var(--ia) 11%,var(--panel-2))}
+.rival p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.45}
+.rival .rec{margin-top:auto}
+.rtop{display:flex;align-items:center;gap:10px;min-width:0}
+.rtop b{display:block;font-family:var(--display);font-weight:600;font-size:.98rem}
+.rtop small{color:var(--muted);font-size:.78rem}
+.mono-av{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:.84rem;color:var(--night);background:var(--ia)}
+.lvl{margin-left:auto;display:flex;gap:3px;align-self:flex-start;flex:none}
+.lvl i{width:6px;height:16px;border-radius:2px;background:var(--rule)}
+.lvl i.on{background:var(--ia)}
+.aviso{margin:0;color:var(--muted);font-size:.8rem;line-height:1.45;border-left:2px solid var(--rule);padding-left:10px}
+.iascore{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:10px 16px;margin-bottom:14px}
+.iascore .who{display:flex;flex-direction:column;min-width:0}
+.iascore .who small{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iascore .who b{font-family:var(--mono);font-size:1.6rem;font-variant-numeric:tabular-nums;line-height:1.15}
+.iascore .me b{color:var(--sol)}
+.iascore .ai{text-align:right}.iascore .ai b{color:var(--ia)}
+.iascore .mid{text-align:center}
+.iascore .mid small{display:block;color:var(--muted);font-size:.76rem}
+.iascore .mid span{font-family:var(--display);font-weight:600;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.vsia{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
+.iaq{min-width:0}
+.aipanel{display:flex;flex-direction:column;gap:12px;position:sticky;top:12px}
+.aihead{display:flex;gap:10px;align-items:center}
+.aihead b{display:block;font-family:var(--display);font-weight:600}
+.aihead small{color:var(--muted);font-size:.78rem}
+.aistat{display:flex;gap:8px;align-items:center;font-size:.88rem;color:var(--muted)}
+.aistat .spin{flex:none;width:12px;height:12px;border-radius:50%;border:2px solid var(--rule);border-top-color:var(--ia);animation:spin .8s linear infinite}
+.aistat.ready{color:var(--fg)}
+.aistat.ready .spin{animation:none;border-color:var(--ia);background:var(--ia)}
+.aistat.ok .spin{background:var(--verde);border-color:var(--verde)}
+.aistat.bad .spin{background:var(--roja);border-color:var(--roja)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ailog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:.86rem;min-height:2.6em}
+.ailog li{border-left:2px solid var(--ia);padding-left:9px;animation:rise .25s ease-out;overflow-wrap:anywhere}
+.ailog li code{font-size:.8rem;color:var(--muted)}
+.agents{display:grid;gap:8px}
+.agent{background:var(--panel-2);border:1px solid var(--rule);border-radius:10px;padding:8px 10px}
+.agent>b{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:5px}
+.agent .ailog{min-height:0;font-size:.82rem}
+.aians:empty{display:none}
+.aians{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--rule);padding-top:10px}
+.aiansv{font-family:var(--mono);font-size:.86rem;white-space:pre-wrap;border-radius:8px;padding:8px 10px;background:var(--panel-2);border:1.5px solid var(--rule);overflow-wrap:anywhere}
+.aiansv.ok{border-color:var(--verde)}.aiansv.bad{border-color:var(--roja)}
+.aians small{color:var(--muted);font-size:.78rem}
+.vote{display:flex;gap:8px;font-size:.82rem;align-items:baseline}
+.vote b{flex:none;width:82px;color:var(--muted);font-weight:700}
+.vote span{font-family:var(--mono);overflow-wrap:anywhere}
+.vote.ok span{color:var(--verde)}.vote.bad span{color:var(--roja)}
+/* ---------- repaso y progreso ---------- */
+.review{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:12px 16px}
+.review summary{cursor:pointer;font-weight:700}
+.rv{border-top:1px solid var(--rule);margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.rvh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.rv p{margin:0;color:var(--muted);font-size:.9rem}
+.rv .code{font-size:.82rem;padding:10px 12px}
+.chip .pct{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.weak{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:-14px 0 26px;color:var(--muted);font-size:.88rem}
+
 @media (max-width:860px){
+  .vsia{grid-template-columns:1fr}
+  .aipanel{position:static}
   .hero{grid-template-columns:1fr}
   .lab{grid-template-columns:1fr}
   .duel{grid-template-columns:1fr 1fr}
   .duel .center{grid-column:1/-1;order:-1}
 }
 @media (max-width:560px){
+  .rivals{grid-template-columns:1fr}
+  .iascore{padding:8px 12px;gap:8px}
+  .iascore .who b{font-size:1.3rem}
   .hud{grid-template-columns:1fr auto;grid-template-areas:"who stats" "timer timer"}
   .hud .who{grid-area:who}.hud .stats{grid-area:stats}.hud .tw{grid-area:timer}
   .stats{gap:10px}
@@ -2109,8 +2177,8 @@ function feedback(card, { ok, title, ex, answer, showAnswer, next, nextLabel = '
    Estado de juego y HUD
    ===================================================================== */
 const Game = {
-  mode: null, cfg: null, score: 0, streak: 0, best: 0, ok: 0, bad: 0, lives: null, cleanups: [], keyHandler: null,
-  reset() { this.cleanups.forEach(f => f()); this.cleanups = []; if (this.keyHandler) document.removeEventListener('keydown', this.keyHandler); this.keyHandler = null; Timer.stop(); this.score = 0; this.streak = 0; this.best = 0; this.ok = 0; this.bad = 0; },
+  mode: null, cfg: null, score: 0, streak: 0, best: 0, ok: 0, bad: 0, lives: null, cleanups: [], keyHandler: null, misses: [],
+  reset() { this.cleanups.forEach(f => f()); this.cleanups = []; if (this.keyHandler) document.removeEventListener('keydown', this.keyHandler); this.keyHandler = null; Timer.stop(); this.misses = []; this.score = 0; this.streak = 0; this.best = 0; this.ok = 0; this.bad = 0; },
   onKeys(fn) { if (this.keyHandler) document.removeEventListener('keydown', this.keyHandler); this.keyHandler = fn; document.addEventListener('keydown', fn); },
   hud() { $('#hudScore').textContent = this.score; $('#hudStreak').textContent = this.streak >= 2 ? `${this.streak} ×${this.mult()}` : this.streak; },
   mult() { return Math.min(5, 1 + Math.floor(this.streak / 3)); },
@@ -2147,11 +2215,13 @@ const ICONS = {
   grade: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z"/><path d="M20 3v6h6M11 16l3 3 6-6M11 24h10"/></svg>',
 };
 
+ICONS.ia = '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="16" height="16" rx="3"/><path d="M13 13h6v6h-6zM12 3v5M20 3v5M12 24v5M20 24v5M3 12h5M3 20h5M24 12h5M24 20h5"/></svg>';
 const MODES = [
   { id: 'reloj', name: 'Completar código', ico: 'clock', desc: 'Llena los espacios del código antes de que termine el tiempo. Cada 3 aciertos el reloj se acorta.', tags: [['Contra reloj'], ['Individual']] },
   { id: 'grupo', name: 'Completar código en grupo', ico: 'team', desc: 'Turnos con reloj y vidas compartidas. Cada acierto suma 8 segundos al reloj del grupo.', tags: [['Contra reloj'], ['Grupo']] },
   { id: 'lab', name: 'Depurar gráficos', ico: 'chart', desc: 'El código se ejecuta línea a línea y la figura se construye en vivo. Encuentra la línea con el error y corrígela.', tags: [['Matplotlib'], ['Individual']] },
   { id: 'duelo', name: 'Duelo', ico: 'vs', desc: 'Dos jugadores o dos equipos en el mismo teclado. Suma el punto quien acierta primero.', tags: [['1 contra 1'], ['Equipos']] },
+  { id: 'ia', name: 'Contra la IA', ico: 'ia', desc: 'Compite contra cuatro rivales simulados con distintas formas de razonar y dificultad: Gemini Argón, GPT 6 Astra, Fable 5.1 y Grok Heavy, con 3 agentes que votan.', tags: [['Tú contra la IA'], ['4 niveles']] },
   { id: 'oraculo', name: 'Predecir la salida', ico: 'eye', desc: 'Lee el código y anticipa el resultado sin ejecutarlo.', tags: [['Contra reloj'], ['Individual']] },
   { id: 'orden', name: 'Ordenar el programa', ico: 'list', desc: 'Las líneas llegan desordenadas. Ordénalas para que el programa funcione; se acepta cualquier orden válido.', tags: [['Individual']] },
   { id: 'terminal', name: 'Comandos de terminal', ico: 'term', desc: 'Escribe el comando de Unix, conda o Git que corresponde a cada tarea.', tags: [['Contra reloj'], ['Unix · Git']] },
@@ -2172,27 +2242,35 @@ function renderHome() {
   const sample = hl('t = np.linspace(0, 10, 500)\nflujo = 1 + rng.normal(0, 0.002, 500)\nflujo[(t >= 4.5) & (t <= 5.0)] -= 0.02\numbral = flujo.mean() - 3 * flujo.std()\n# ¿cuántos puntos caen bajo el umbral?');
   home.append(
     h('div', { class: 'hero' },
-      h('div', {}, h('h1', { html: 'Física Computacional II' }), h('p', {}, 'Práctica con la materia de las clases 1 a 6: terminal y Git, Python, ciclos, funciones, clases, NumPy, Matplotlib, pandas, archivos, imágenes y fotometría. Elige los temas, el modo y las vidas.')),
+      h('div', {}, h('h1', { html: 'Física Computacional II' }), h('p', {}, 'Práctica con la materia de las clases 1 a 6: terminal y Git, Python, ciclos, funciones, clases, NumPy, Matplotlib, pandas, archivos, imágenes y fotometría. Elige los temas, el modo y las vidas, o enfréntate a uno de los cuatro rivales de IA.')),
       h('div', { class: 'hero-code', html: sample })),
     h('div', { class: 'label' }, 'Temas en juego'));
   const tp = h('div', { class: 'topics' });
+  const prog = Progress.all();
+  const pct = k => { const v = prog[k]; return v && v[1] >= 3 ? Math.round(100 * v[0] / v[1]) : null; };
   for (const [k, v] of Object.entries(TOPICS)) {
     const b = h('button', { class: 'chip', type: 'button', 'aria-pressed': String(S.topics.includes(k)), onclick: () => {
       const on = S.topics.includes(k);
       if (on && S.topics.length === 1) { toast('Deja al menos un tema', true); return; }
       S.topics = on ? S.topics.filter(x => x !== k) : [...S.topics, k];
       b.setAttribute('aria-pressed', String(!on)); store.set('topics', S.topics);
-    } }, h('span', { class: 'dot' }), v);
+    } }, h('span', { class: 'dot' }), v, pct(k) != null ? h('small', { class: 'pct', title: `${prog[k][0]} de ${prog[k][1]} correctas` }, pct(k) + '\u00a0%') : null);
     tp.append(b);
   }
   tp.append(h('button', { class: 'ghost', type: 'button', style: 'font-size:.8rem', onclick: () => { S.topics = Object.keys(TOPICS); store.set('topics', S.topics); renderHome(); } }, 'Todos'));
-  home.append(tp, h('div', { class: 'label', style: 'margin-bottom:10px' }, 'Modos de juego'));
+  home.append(tp);
+  const debiles = Object.entries(prog).filter(([k, v]) => k in TOPICS && v[1] >= 5).map(([k, v]) => [k, v[0] / v[1]]).sort((a, b) => a[1] - b[1]).slice(0, 2);
+  if (debiles.length === 2) home.append(h('div', { class: 'weak' },
+    h('span', {}, 'Tus temas más débiles: ' + debiles.map(([k, r]) => `${TOPICS[k]} (${Math.round(r * 100)}\u00a0%)`).join(' · ')),
+    h('button', { class: 'ghost', type: 'button', style: 'font-size:.8rem', onclick: () => { S.topics = debiles.map(d => d[0]); store.set('topics', S.topics); renderHome(); toast('Quedan activos solo esos dos temas'); } }, 'Practicar solo esos')));
+  home.append(h('div', { class: 'label', style: 'margin-bottom:10px' }, 'Modos de juego'));
   const grid = h('div', { class: 'modes' });
   for (const m of MODES) {
     const recs = LIFE_OPTS.map(o => [o, store.get(recKey(m.id, o.n), null)]).filter(([, r]) => r != null);
     let recTxt = 'Sin récord todavía';
     if (m.id === 'simulacro') { const r = store.get('rec.simulacro', null); if (r) recTxt = `Mejor nota: ${r.toFixed(1).replace('.', ',')}`; }
     else if (m.id === 'duelo') { const r = store.get('rec.duelo', null); if (r) recTxt = `Último: ${r}`; }
+    else if (m.id === 'ia') { const H = Object.values(store.get('ia.hist', {})); if (H.length) { const g = H.reduce((a, v) => a + v.g, 0), p = H.reduce((a, v) => a + v.p, 0); recTxt = `Ganadas: ${g} · perdidas: ${p}`; } }
     else if (recs.length) { const [o, r] = recs.reduce((a, b) => b[1] > a[1] ? b : a); recTxt = `Récord: ${r} pts · ${o.name.toLowerCase()}`; }
     grid.append(h('button', { class: 'mode', type: 'button', onclick: () => { Snd.init(); openSetup(m); } },
       h('span', { class: 'ico', html: ICONS[m.ico] }),
@@ -2222,7 +2300,7 @@ function openSetup(m) {
   const box = $('#setup'); box.innerHTML = '';
   const card = h('div', { class: 'setup' }, h('div', {}, h('div', { class: 'label' }, 'Modo'), h('h2', {}, m.name), h('p', { class: 'desc' }, m.desc)));
   let lp = null, extra = {};
-  if (m.id !== 'simulacro') { lp = lifePicker(); card.append(h('div', { class: 'label' }, m.id === 'duelo' ? 'Vidas de cada lado' : (m.id === 'grupo' ? 'Vidas del equipo' : 'Vidas')), lp.el); }
+  if (!['simulacro', 'ia'].includes(m.id)) { lp = lifePicker(); card.append(h('div', { class: 'label' }, m.id === 'duelo' ? 'Vidas de cada lado' : (m.id === 'grupo' ? 'Vidas del equipo' : 'Vidas')), lp.el); }
   if (['reloj', 'grupo'].includes(m.id)) {
     const cb = h('input', { type: 'checkbox', id: 'bankChk' }); cb.checked = store.get('bank', true);
     cb.onchange = () => store.set('bank', cb.checked);
@@ -2278,6 +2356,29 @@ function openSetup(m) {
       return { kind, sides: [side(1, 'rojo'), side(2, 'azul')], target: +tgt.value };
     };
   }
+  if (m.id === 'ia') {
+    let sel = store.get('ia.rival', 'astra'), rondas = store.get('ia.rounds', 10);
+    const H = store.get('ia.hist', {});
+    const cards = RIVALS.map(r => {
+      const v = H[r.id];
+      return h('button', { class: 'rival', type: 'button', role: 'radio', 'aria-checked': String(r.id === sel), style: `--ia:${r.color}`, onclick: () => { sel = r.id; store.set('ia.rival', sel); cards.forEach((c, i) => c.setAttribute('aria-checked', String(RIVALS[i].id === sel))); } },
+        h('div', { class: 'rtop' }, h('span', { class: 'mono-av' }, r.ini), h('div', {}, h('b', {}, rivalName(r)), h('small', {}, `${r.nivelTxt} · ${r.estilo}`)),
+          h('span', { class: 'lvl', role: 'img', 'aria-label': `Dificultad ${r.nivel} de 4` }, [1, 2, 3, 4].map(k => h('i', { class: k <= r.nivel ? 'on' : '' })))),
+        h('p', {}, r.desc),
+        h('small', { class: 'rec' }, v ? `Tú ${v.g} · ${r.name} ${v.p}${v.e ? ` · empates ${v.e}` : ''}` : 'Aún no se enfrentan'));
+    });
+    const seg = h('div', { class: 'seg', role: 'group', 'aria-label': 'Rondas' });
+    const rb = [7, 10, 15].map(n => h('button', { type: 'button', 'aria-pressed': String(n === rondas), onclick: () => { rondas = n; store.set('ia.rounds', n); rb.forEach((b, i) => b.setAttribute('aria-pressed', String([7, 10, 15][i] === n))); } }, `${n} rondas`));
+    seg.append(...rb);
+    const cb = h('input', { type: 'checkbox', id: 'iaBank' }); cb.checked = store.get('ia.bank', true);
+    cb.onchange = () => store.set('ia.bank', cb.checked);
+    card.append(h('div', { class: 'label' }, 'Rival'), h('div', { class: 'rivals', role: 'radiogroup', 'aria-label': 'Rival' }, cards),
+      h('div', { class: 'label' }, 'Formato'), seg,
+      h('p', { class: 'desc', style: 'margin:0' }, 'En cada ronda, tú y la IA responden la misma pregunta. Ves su razonamiento en vivo, pero su respuesta queda oculta hasta que contestes. Acertar da 100 puntos, más hasta 50 por rapidez. Gana quien sume más al final.'),
+      h('label', { class: 'toggle', for: 'iaBank' }, cb, 'Mostrar banco de palabras en las preguntas de completar código.'),
+      h('p', { class: 'aviso' }, AVISO_IA));
+    extra.ia = () => ({ rival: sel, rounds: rondas, bank: cb.checked });
+  }
   card.append(h('div', { class: 'actions' },
     h('button', { class: 'btn alt', type: 'button', onclick: () => { show('home'); } }, 'Volver'),
     h('button', { class: 'btn', type: 'button', id: 'startBtn', onclick: () => {
@@ -2285,6 +2386,7 @@ function openSetup(m) {
       if (extra.bank) cfg.bank = extra.bank();
       if (extra.players) { cfg.players = extra.players(); cfg.time = extra.time(); if (!cfg.players.length) { toast('Escribe al menos un nombre', true); $('#grpNames').focus(); return; } }
       if (extra.duel) Object.assign(cfg, extra.duel());
+      if (extra.ia) Object.assign(cfg, extra.ia());
       start(m, cfg);
     } }, 'Jugar')));
   box.append(card); show('setup');
@@ -2295,7 +2397,7 @@ function start(m, cfg) {
   Game.reset(); Game.mode = m; Game.cfg = cfg;
   $('#stage').innerHTML = ''; restoreHud(); show('game');
   Game.lives = cfg.lives ? new LifeBar($('#hudLives'), cfg.lives) : null;
-  ({ reloj: Solo, oraculo: Solo, orden: Solo, terminal: Solo, grupo: Group, lab: Lab, duelo: Duel, simulacro: Exam })[m.id].start(m, cfg);
+  ({ reloj: Solo, oraculo: Solo, orden: Solo, terminal: Solo, grupo: Group, lab: Lab, duelo: Duel, simulacro: Exam, ia: VsIA })[m.id].start(m, cfg);
 }
 
 /* ---------- Modos individuales (Contrarreloj, ¿Qué imprime?, Ordena, Terminal) ---------- */
@@ -2316,7 +2418,7 @@ const Solo = {
     $('#hudSub').textContent = `Nivel ${this.level} · pregunta ${this.n}`;
     const total = this.time(); let r;
     const done = res => {
-      Timer.pause();
+      Timer.pause(); track(q, res.ok);
       const frac = Timer.left / total;
       if (res.ok) {
         Game.right(this.m.id === 'orden' ? 150 : 100, frac, res.partial);
@@ -2348,6 +2450,7 @@ function endSolo(extraKpis = []) {
     isRec ? h('div', {}, h('span', { class: 'newrec' }, 'Nuevo récord')) : h('div', { class: 'sub' }, `Récord en este formato: ${prev} puntos`),
     h('div', { class: 'grid3' },
       kpi('Aciertos', Game.ok), kpi('Errores', Game.bad), kpi('Mejor racha', Game.best), ...extraKpis),
+    reviewBlock(),
     endActions(m, cfg)));
   Game.cleanups.forEach(f => f()); Game.cleanups = [];
   show('end');
@@ -2381,6 +2484,7 @@ const Group = {
     const q = useMcq ? this.mcq() : this.fill();
     const done = res => {
       if (this.over) return;
+      track(q, res.ok);
       if (res.ok) {
         p.ok++; p.pts += Game.right(100, 0, res.partial); Timer.add(8); setTimeout(() => toast('+8 s'), 300);
         this.turn++; setTimeout(() => this.next(), 650);
@@ -2533,7 +2637,7 @@ const Exam = {
     const stage = $('#stage'); stage.innerHTML = '';
     const done = res => {
       const v = res.ok ? (res.partial ? .5 : 1) : 0;
-      this.pts += v;
+      this.pts += v; track(q, res.ok);
       const bt = this.byTopic[q.t] || (this.byTopic[q.t] = [0, 0]); bt[0] += v; bt[1]++;
       res.ok ? Snd.ok() : Snd.bad();
       feedback(res.card, { ok: res.ok, ex: res.ex, answer: res.answer, showAnswer: kind === 'mcq', next: () => this.next(), nextLabel: this.i < this.items.length ? 'Siguiente' : 'Entregar' });
@@ -2555,8 +2659,246 @@ const Exam = {
       h('div', { style: 'display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap' }, h('div', { class: 'nota', style: `color:${color}` }, nota.toFixed(1).replace('.', ',')), h('div', { class: 'sub' }, `${this.pts.toString().replace('.', ',')} de ${n} puntos · escala al 60 %`, h('br'), nota >= 4 ? 'Aprobado.' : 'Bajo 4,0: repasa los temas en rojo.')),
       h('div', { class: 'tablewrap' }, h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', {}, 'Tema'), h('th', {}, 'Logro'), h('th', { style: 'width:40%' }, ''))),
         h('tbody', {}, Object.entries(this.byTopic).map(([k, [a, b]]) => { const r = a / b; const bar = h('div', { class: 'bar' }, h('i', { style: `width:${r * 100}%;background:${r >= .6 ? 'var(--verde)' : 'var(--roja)'}` })); return h('tr', {}, h('td', {}, TOPICS[k]), h('td', {}, `${String(a).replace('.', ',')}/${b}`), h('td', {}, bar)); })))),
+      reviewBlock(),
       endActions(this.m, this.cfg)));
     Game.cleanups.forEach(f => f()); Game.cleanups = []; Game.onKeys(() => {});
+    show('end');
+  }
+};
+
+/* ---------- Progreso por tema y repaso de errores ---------- */
+const Progress = {
+  all() { return store.get('prog', {}); },
+  add(t, ok) { const p = this.all(); const v = p[t] || [0, 0]; v[0] += ok ? 1 : 0; v[1]++; p[t] = v; store.set('prog', p); },
+};
+function track(q, ok) { if (!q || !q.t) return; Progress.add(q.t, ok); if (!ok) Game.misses.push(q); }
+function solText(q) {
+  if (q.l) return q.l.join('\n');
+  if (q.a) return q.a[0];
+  if (q.o) return q.o[0];
+  return q.c.replace(/⟦([^⟧|]+)[^⟧]*⟧/g, '$1');
+}
+function reviewBlock() {
+  const ms = Game.misses; if (!ms.length) return null;
+  const list = ms.slice(-10).reverse();
+  return h('details', { class: 'review' },
+    h('summary', {}, `Para repasar · ${ms.length} ${ms.length === 1 ? 'pregunta' : 'preguntas'}${ms.length > 10 ? ' (se muestran las 10 últimas)' : ''}`),
+    list.map(q => h('div', { class: 'rv' },
+      h('div', { class: 'rvh' }, h('b', {}, q.q), h('span', { class: 'topicpill' }, TOPICS[q.t])),
+      q.o && q.c ? h('div', { class: 'code', html: hl(q.c) }) : null,
+      h('div', { class: 'code', html: (q.o ? '<span style="color:var(--muted)"># respuesta</span>\n' : '') + hl(solText(q)) }),
+      q.ex ? h('p', { html: q.ex }) : null)));
+}
+
+/* ---------- Contra la IA ---------- */
+// Rivales simulados: no se conectan a ningún modelo. Cada uno sigue sus propias reglas de precisión y tiempo.
+const AVISO_IA = 'Rivales simulados: el juego no se conecta a ningún modelo real. Los nombres solo indican el estilo de razonamiento que imita cada rival, con reglas propias de precisión y velocidad.';
+const RIVALS = [
+  { id: 'gemini', name: 'Gemini Argón', ini: 'Ar', nivel: 1, nivelTxt: 'Nivel 1 · Accesible', estilo: 'Razonamiento visual', color: '#8fb1e8',
+    desc: 'Razona con imágenes: imagina la forma de los arreglos y de la figura antes de leer el detalle. Fuerte en gráficos, NumPy y fotometría; se enreda con clases, funciones y Git.',
+    acc: .58, fuerte: { plt: .2, fot: .18, np: .12 }, debil: { cls: -.16, fn: -.14, git: -.12, unix: -.08 }, tiempo: [7, 11], porLinea: .35 },
+  { id: 'astra', name: 'GPT 6 Astra', ini: 'As', nivel: 2, nivelTxt: 'Nivel 2 · Veloz', estilo: 'Intuición rápida', color: '#5fc99a',
+    desc: 'Responde por reconocimiento de patrones, en pocos segundos y siempre muy segura. Domina la sintaxis, la terminal y Git, pero se apresura cuando hay que seguir un ciclo o una función paso a paso.',
+    acc: .74, fuerte: { py: .14, unix: .16, git: .16, pd: .1, io: .1 }, debil: {}, traza: -.26, tiempo: [2.5, 5], porLinea: .08 },
+  { id: 'fable', name: 'Fable 5.1', ini: 'Fa', nivel: 3, nivelTxt: 'Nivel 3 · Metódico', estilo: 'Paso a paso', color: '#e8b25a',
+    desc: 'Lee el código línea por línea y lleva la cuenta de cada variable antes de contestar. Casi no falla al predecir salidas, pero tarda más mientras más largo es el código.',
+    acc: .85, fuerte: { loop: .08, fn: .08, cls: .06 }, debil: { unix: -.06, git: -.06 }, traza: .08, tiempo: [5, 8], porLinea: .9 },
+  { id: 'grok', name: 'Grok Heavy', sub: '3 agentes', ini: 'Gk', nivel: 4, nivelTxt: 'Nivel 4 · Máximo', estilo: 'Consenso de 3 agentes', color: '#e8675f',
+    desc: 'Tres agentes resuelven en paralelo (Código, Física y Verificador) y después votan. Si dos coinciden, manda la mayoría; si los tres difieren, decide el Verificador.',
+    agentes: [
+      { n: 'Código', acc: .8, fuerte: { py: .1, loop: .1, fn: .1, cls: .1, io: .06 }, traza: .06 },
+      { n: 'Física', acc: .76, fuerte: { np: .14, fot: .16, plt: .1 }, debil: { unix: -.12, git: -.12 } },
+      { n: 'Verificador', acc: .8, fuerte: { pd: .08, unix: .08, git: .08 } },
+    ],
+    tiempo: [5, 8], porLinea: .35 },
+];
+const rivalName = r => r.sub ? `${r.name} (${r.sub})` : r.name;
+const rnd = (a, b) => a + Math.random() * (b - a);
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const corta = (s, n = 46) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+
+const VsIA = {
+  tok: 0,
+  start(m, cfg) {
+    this.m = m; this.cfg = cfg; this.r = RIVALS.find(x => x.id === cfg.rival) || RIVALS[1];
+    this.round = 0; this.tok++; this.hist = [];
+    this.me = { pts: 0, ok: 0, t: [], wins: 0 }; this.ai = { pts: 0, ok: 0, t: [], wins: 0 };
+    this.mcq = deck(MCQ); this.fill = deck(FILL);
+    setHud(m.name, '', { lives: false, stats: false });
+    this.next();
+  },
+
+  // Decide de antemano qué responde la IA, cuánto tarda y qué "piensa" mientras tanto.
+  plan(q, kind, limit) {
+    const r = this.r;
+    const lines = q.c ? q.c.split('\n').length : 1;
+    const blanks = kind === 'fill' ? parseFill(q.c).answers : null;
+    const traza = kind === 'mcq' && !!q.c && /\b(for|while|def|print|class)\b/.test(q.c);
+    const prob = a => clamp(a.acc + (a.fuerte?.[q.t] || 0) + (a.debil?.[q.t] || 0) + (traza ? a.traza || 0 : 0) - (blanks ? .05 * (blanks.length - 1) : 0), .08, .97);
+    const tiempo = () => rnd(...r.tiempo) + r.porLinea * lines + (blanks ? 1.2 * blanks.length : 0);
+    const correcta = () => kind === 'mcq' ? q.o[0] : blanks.map(b => b[0]).join(' · ');
+    const erronea = () => {
+      if (kind === 'mcq') { const u = Math.random(); return q.o[u < .5 ? 1 : u < .8 ? 2 : 3]; }
+      const pool = [...new Set(FILL.filter(o => o.t === q.t && o !== q).flatMap(o => parseFill(o.c).answers.map(a => a[0])))];
+      const malo = b => { const c = pool.filter(w => !b.some(a => norm(a) === norm(w))); return c.length ? c[Math.floor(Math.random() * c.length)] : '…'; };
+      let mal = blanks.map(() => Math.random() < .6); if (!mal.some(Boolean)) mal[Math.floor(Math.random() * blanks.length)] = true;
+      return blanks.map((b, i) => mal[i] ? malo(b) : b[0]).join(' · ');
+    };
+    const resolver = a => { const ok = Math.random() < prob(a); return { ok, ans: ok ? correcta() : erronea() }; };
+    const codeLines = q.c ? q.c.replace(/⟦[^⟧]*⟧/g, '___').split('\n').filter(l => l.trim()) : [];
+    const area = TOPICS[q.t];
+    let p;
+    if (r.agentes) {
+      const votes = r.agentes.map(a => ({ n: a.n, ...resolver(a), t: tiempo() }));
+      const cuenta = {}; votes.forEach(v => cuenta[v.ans] = (cuenta[v.ans] || 0) + 1);
+      const [top, nTop] = Object.entries(cuenta).sort((x, y) => y[1] - x[1])[0];
+      const elegido = nTop >= 2 ? votes.find(v => v.ans === top) : votes[2];
+      const t = Math.max(...votes.map(v => v.t)) + 1.2;
+      p = { ok: elegido.ok, ans: elegido.ans, t, votes,
+        consenso: nTop === 3 ? 'Los 3 agentes coinciden' : nTop === 2 ? '2 de 3 agentes coinciden' : 'Sin mayoría: decide el Verificador',
+        conf: Math.round(nTop === 3 ? rnd(94, 99) : nTop === 2 ? rnd(70, 86) : rnd(40, 55)) };
+      const guion = [
+        [traza ? 'Ejecuto el código mentalmente.' : codeLines.length ? 'Reviso la sintaxis de cada línea.' : 'Busco qué concepto de programación se evalúa.', blanks ? `Propongo ${blanks.length === 1 ? 'una palabra' : blanks.length + ' palabras'} que compilen.` : 'Descarto las opciones imposibles.'],
+        [['np', 'fot', 'plt'].includes(q.t) ? 'Pienso en la forma de los arreglos.' : 'Reviso unidades y órdenes de magnitud.', `Contrasto con lo visto en ${area}.`],
+        ['Espero las propuestas de los otros dos.', 'Busco un contraejemplo para cada una.'],
+      ];
+      p.log = votes.flatMap((v, a) => [...guion[a].map((s, k) => ({ a, s, at: v.t * (k + 1) / (guion[a].length + 1) })), { a, s: 'Voto listo.', at: v.t }]);
+    } else {
+      const res = resolver(r);
+      p = { ...res, t: tiempo() };
+      if (r.id === 'astra') {
+        p.conf = Math.round(rnd(88, 98));
+        p.log = ['Leo el enunciado en diagonal.', `Patrón reconocido: ${area}.`, blanks ? 'Las palabras que faltan me resultan conocidas.' : 'Ya sé cuál es: no hace falta ejecutar.', `Confianza: ${p.conf} %`];
+      } else if (r.id === 'fable') {
+        p.conf = Math.round(res.ok ? rnd(82, 96) : rnd(46, 66));
+        const ls = codeLines.slice(0, 5).map((l, i) => ({ code: corta(l.trim()), s: `Línea ${i + 1}: ` }));
+        p.log = ['Leo el enunciado completo.', ...ls, ...(codeLines.length > 5 ? [`…y ${codeLines.length - 5} líneas más.`] : []),
+          traza ? 'Sigo el valor de cada variable en cada vuelta.' : blanks ? 'Reviso qué exige Python en cada espacio.' : 'Descarto opción por opción.',
+          'Reviso los casos borde antes de responder.', `Confianza: ${p.conf} %`];
+      } else {
+        p.conf = Math.round(rnd(58, 86));
+        p.log = ['Visualizo el problema antes de leer el detalle.', codeLines.length ? `Imagino los datos de estas ${codeLines.length} líneas.` : 'Imagino la situación física.',
+          q.t === 'plt' ? 'Me imagino cómo quedaría la figura.' : ['np', 'fot'].includes(q.t) ? 'Pienso en la forma de los arreglos.' : 'Busco la respuesta que «se ve» correcta.',
+          blanks ? 'Elijo las palabras que mejor encajan.' : 'Comparo las cuatro opciones de una vez.', `Confianza: ${p.conf} %`];
+      }
+      p.log = p.log.map((x, k, all) => ({ ...(typeof x === 'string' ? { s: x } : x), at: p.t * (k + .6) / (all.length + .2) }));
+    }
+    p.t = Math.min(p.t, limit - 1);
+    p.log.forEach(it => it.at = Math.min(it.at, p.t));
+    return p;
+  },
+
+  panel(r) {
+    const status = h('div', { class: 'aistat' }, h('i', { class: 'spin' }), h('span', {}, 'Pensando…'));
+    const log = h('ol', { class: 'ailog', 'aria-live': 'polite' });
+    const cols = r.agentes ? r.agentes.map(a => { const ul = h('ol', { class: 'ailog' }); return { box: h('div', { class: 'agent' }, h('b', {}, 'Agente ' + a.n), ul), ul }; }) : null;
+    const ans = h('div', { class: 'aians' });
+    const el = h('aside', { class: 'card aipanel', style: `--ia:${r.color}`, 'aria-label': 'Rival' },
+      h('div', { class: 'aihead' }, h('span', { class: 'mono-av' }, r.ini), h('div', {}, h('b', {}, rivalName(r)), h('small', {}, r.nivelTxt + ' · ' + r.estilo))),
+      status, cols ? h('div', { class: 'agents' }, cols.map(c => c.box)) : log, ans,
+      h('p', { class: 'aviso' }, 'Rival simulado: no es el modelo real.'));
+    return { el, status, log, cols, ans };
+  },
+
+  next() {
+    const tok = ++this.tok; this.round++;
+    const r = this.r, N = this.cfg.rounds;
+    $('#hudSub').textContent = `Ronda ${this.round} de ${N} · contra ${r.name}`;
+    const kind = Math.random() < .6 ? 'mcq' : 'fill';
+    const q = kind === 'mcq' ? this.mcq() : this.fill();
+    const nb = kind === 'fill' ? parseFill(q.c).answers.length : 0;
+    const limit = kind === 'mcq' ? 40 : 55 + 8 * Math.max(0, nb - 1);
+    const plan = this.plan(q, kind, limit);
+
+    const stage = $('#stage'); stage.innerHTML = '';
+    const board = h('div', { class: 'iascore', style: `--ia:${r.color}` },
+      h('div', { class: 'who me' }, h('small', {}, 'Tú'), h('b', {}, String(this.me.pts))),
+      h('div', { class: 'mid' }, h('small', {}, `Ronda ${this.round} de ${N}`), h('span', {}, `${this.me.wins} – ${this.ai.wins}`)),
+      h('div', { class: 'who ai' }, h('small', {}, r.name), h('b', {}, String(this.ai.pts))));
+    const left = h('div', { class: 'iaq' });
+    const P = this.panel(r);
+    stage.append(board, h('div', { class: 'vsia' }, left, P.el));
+
+    // pensamiento en vivo
+    let shown = 0, ready = false;
+    const timers = [];
+    const later = (s, f) => timers.push(setTimeout(() => { if (tok === this.tok) f(); }, s * 1000));
+    const addLine = it => {
+      const li = h('li', {}, it.s, it.code ? h('code', {}, it.code) : null);
+      (P.cols ? P.cols[it.a].ul : P.log).append(li);
+    };
+    const order = plan.log.map((it, i) => i).sort((a, b) => plan.log[a].at - plan.log[b].at);
+    order.forEach(i => later(plan.log[i].at, () => { addLine(plan.log[i]); shown++; }));
+    const aiReady = quiet => {
+      if (ready) return; ready = true;
+      P.status.classList.add('ready');
+      $('span', P.status).textContent = `Ya respondió · ${plan.t.toFixed(1)} s`;
+      if (!quiet) { Snd.tick(); toast(`${r.name} ya respondió`); }
+    };
+    if (plan.votes) later(Math.max(0, plan.t - 1.2), () => { if (!ready) $('span', P.status).textContent = 'Votando…'; });
+    later(plan.t, () => aiReady(false));
+
+    const t0 = performance.now(); let finished = false;
+    const done = res => {
+      if (finished || tok !== this.tok) return; finished = true;
+      Timer.stop(); Game.onKeys(() => {});
+      timers.forEach(clearTimeout);
+      order.slice(shown).forEach(i => addLine(plan.log[i]));
+      aiReady(true);
+      const tMe = Math.min(limit, (performance.now() - t0) / 1000);
+      const pts = (ok, t, half) => ok ? Math.round((100 + 50 * Math.max(0, 1 - t / limit)) * (half ? .5 : 1)) : 0;
+      const pm = pts(res.ok, tMe, res.partial), pa = pts(plan.ok, plan.t);
+      track(q, res.ok);
+      this.me.pts += pm; this.ai.pts += pa;
+      if (res.ok) { this.me.ok++; this.me.t.push(tMe); }
+      if (plan.ok) { this.ai.ok++; this.ai.t.push(plan.t); }
+      const win = pm > pa ? 'me' : pa > pm ? 'ai' : 'tie';
+      if (win === 'me') this.me.wins++; else if (win === 'ai') this.ai.wins++;
+      this.hist.push({ q, me: { ok: res.ok, t: tMe, pts: pm }, ai: { ok: plan.ok, t: plan.t, pts: pa } });
+      // revelar la respuesta de la IA
+      P.status.classList.add(plan.ok ? 'ok' : 'bad');
+      $('span', P.status).textContent = `${plan.ok ? 'Acertó' : 'Se equivocó'} · ${plan.t.toFixed(1)} s`;
+      P.ans.append(h('div', { class: 'label' }, 'Su respuesta'), h('div', { class: 'aiansv ' + (plan.ok ? 'ok' : 'bad') }, plan.ans));
+      if (plan.votes) {
+        P.ans.append(...plan.votes.map(v => h('div', { class: 'vote ' + (v.ok ? 'ok' : 'bad') }, h('b', {}, v.n), h('span', {}, corta(v.ans, 60)))), h('small', {}, plan.consenso));
+      }
+      P.ans.append(h('small', {}, `Confianza declarada: ${plan.conf} %`));
+      $('.who.me b', board).textContent = this.me.pts; $('.who.ai b', board).textContent = this.ai.pts;
+      $('.mid span', board).textContent = `${this.me.wins} – ${this.ai.wins}`;
+      if (win === 'me') { Snd.ok(); flash(true); } else if (win === 'ai') { Snd.bad(); flash(false); }
+      const title = win === 'me' ? `Ronda para ti · +${pm} contra +${pa}` : win === 'ai' ? `Ronda para ${r.name} · +${pa} contra +${pm}` : (pm ? `Empate · +${pm} cada uno` : 'Empate: nadie acertó');
+      const last = this.round >= N;
+      feedback(res.card, { ok: res.ok && win !== 'ai', title, ex: (res.ok ? '' : (tMe >= limit ? 'Se acabó el tiempo. ' : '')) + (q.ex || ''), answer: res.answer, showAnswer: kind === 'mcq', next: () => last ? this.end() : this.next(), nextLabel: last ? 'Ver resultado' : 'Siguiente ronda' });
+    };
+    let rr;
+    if (kind === 'mcq') { rr = renderMCQ(left, q, { onDone: done }); Game.onKeys(e => { if (/^[1-4]$/.test(e.key)) rr.keys(+e.key - 1); }); }
+    else { Game.onKeys(() => {}); rr = renderFill(left, q, { bank: this.cfg.bank, onDone: done }); }
+    Timer.start(limit, () => rr.check(true));
+  },
+
+  end(quit) {
+    this.tok++; Timer.stop(); Game.onKeys(() => {});
+    const r = this.r, me = this.me, ai = this.ai, n = this.hist.length;
+    const res = me.pts > ai.pts ? 'g' : me.pts < ai.pts ? 'p' : 'e';
+    if (!quit) { const H = store.get('ia.hist', {}); const v = H[r.id] || { g: 0, p: 0, e: 0 }; v[res]++; H[r.id] = v; store.set('ia.hist', H); }
+    res === 'g' ? Snd.win() : Snd.over();
+    const avg = a => a.length ? (a.reduce((s, x) => s + x, 0) / a.length).toFixed(1).replace('.', ',') + ' s' : '—';
+    const mark = x => `${x.ok ? '✓' : '✗'} ${x.t.toFixed(1).replace('.', ',')} s · +${x.pts}`;
+    const end = $('#end'); end.innerHTML = '';
+    end.append(h('div', { class: 'end', style: `--ia:${r.color}` },
+      h('div', { class: 'label' }, `Contra la IA · ${rivalName(r)}${quit ? ' · partida abandonada' : ''}`),
+      h('div', { class: 'big', style: `color:${res === 'g' ? 'var(--verde)' : res === 'p' ? 'var(--ia)' : 'var(--fg)'}` }, res === 'g' ? `Le ganaste a ${r.name}` : res === 'p' ? `Ganó ${r.name}` : 'Empate'),
+      h('div', { class: 'sub' }, `${me.pts} – ${ai.pts} puntos · rondas ganadas ${me.wins} – ${ai.wins}`),
+      h('div', { class: 'grid3' }, kpi('Tus aciertos', `${me.ok}/${n}`), kpi(`Aciertos de ${r.name}`, `${ai.ok}/${n}`), kpi('Tu tiempo al acertar', avg(me.t)), kpi('Su tiempo al acertar', avg(ai.t))),
+      h('div', { class: 'tablewrap' }, h('table', { class: 't' },
+        h('thead', {}, h('tr', {}, h('th', {}, '#'), h('th', {}, 'Tema'), h('th', {}, 'Tú'), h('th', {}, r.name))),
+        h('tbody', {}, this.hist.map((x, i) => h('tr', {}, h('td', {}, i + 1), h('td', {}, TOPICS[x.q.t]),
+          h('td', { style: `color:${x.me.pts > x.ai.pts ? 'var(--verde)' : 'inherit'}` }, mark(x.me)),
+          h('td', { style: `color:${x.ai.pts > x.me.pts ? 'var(--ia)' : 'inherit'}` }, mark(x.ai))))))),
+      reviewBlock(),
+      h('p', { class: 'aviso' }, AVISO_IA),
+      endActions(this.m, this.cfg)));
+    Game.cleanups.forEach(f => f()); Game.cleanups = [];
     show('end');
   }
 };
@@ -2913,7 +3255,8 @@ function confirmQuit(btn) {
   if (btn.dataset.armed) {
     delete btn.dataset.armed;
     const id = Game.mode?.id, played = Game.ok + Game.bad > 0;
-    Lab.tok = (Lab.tok || 0) + 1; Group.over = true;
+    Lab.tok = (Lab.tok || 0) + 1; Group.over = true; VsIA.tok++;
+    if (id === 'ia' && VsIA.hist?.length) return VsIA.end(true);
     if (played && ['reloj', 'oraculo', 'orden', 'terminal', 'lab'].includes(id)) return endSolo(id === 'lab' ? [kpi('Figuras', Lab.n)] : []);
     if (played && id === 'grupo') return Group.end();
     if (id === 'simulacro' && Exam.i > 1) return Exam.end();
