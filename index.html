@@ -315,6 +315,8 @@ table.t th{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:va
 .agent{background:var(--panel-2);border:1px solid var(--rule);border-radius:10px;padding:8px 10px}
 .agent>b{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:5px}
 .agent .ailog{min-height:0;font-size:.82rem}
+.agent.lead{border-color:var(--ia);background:color-mix(in srgb,var(--ia) 9%,var(--panel-2))}
+.agent.lead>b{color:var(--ia)}
 .aians:empty{display:none}
 .aians{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--rule);padding-top:10px}
 .aiansv{font-family:var(--mono);font-size:.86rem;white-space:pre-wrap;border-radius:8px;padding:8px 10px;background:var(--panel-2);border:1.5px solid var(--rule);overflow-wrap:anywhere}
@@ -2704,10 +2706,10 @@ const RIVALS = [
     desc: 'Lee el código línea por línea y lleva la cuenta de cada variable antes de contestar. Casi no falla al predecir salidas, pero tarda más mientras más largo es el código.',
     acc: .85, fuerte: { loop: .08, fn: .08, cls: .06 }, debil: { unix: -.06, git: -.06 }, traza: .08, tiempo: [5, 8], porLinea: .9 },
   { id: 'grok', name: 'Grok Heavy', sub: '3 agentes', ini: 'Gk', nivel: 4, nivelTxt: 'Nivel 4 · Máximo', estilo: 'Consenso de 3 agentes', color: '#e8675f',
-    desc: 'Tres agentes resuelven en paralelo (Código, Física y Verificador) y después votan. Si dos coinciden, manda la mayoría; si los tres difieren, decide el Verificador.',
+    desc: 'Tres agentes resuelven en paralelo (Código, Física y Verificador) y después votan. En física no se equivoca: el agente de Física comprueba la ley y las unidades, y tiene la última palabra. En lo demás manda la mayoría.',
     agentes: [
       { n: 'Código', acc: .8, fuerte: { py: .1, loop: .1, fn: .1, cls: .1, io: .06 }, traza: .06 },
-      { n: 'Física', acc: .76, fuerte: { np: .14, fot: .16, plt: .1 }, debil: { unix: -.12, git: -.12 } },
+      { n: 'Física', acc: .76, fuerte: { np: .14, fot: .16, plt: .1 }, debil: { unix: -.12, git: -.12 }, infalibleEnFisica: true },
       { n: 'Verificador', acc: .8, fuerte: { pd: .08, unix: .08, git: .08 } },
     ],
     tiempo: [5, 8], porLinea: .35 },
@@ -2716,6 +2718,31 @@ const rivalName = r => r.sub ? `${r.name} (${r.sub})` : r.name;
 const rnd = (a, b) => a + Math.random() * (b - a);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const corta = (s, n = 46) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+
+// Leyes y conceptos físicos que el agente de Física de Grok reconoce (y comprueba) en una pregunta.
+const LEYES = [
+  [/wien|lambda_max|λ_max|2\.8978e-3/i, 'Ley de Wien: λ_max = b / T, con b = 2.898·10⁻³ m·K.', 'Más caliente → máximo en λ más corta.'],
+  [/stefan|sigma_sb|T\*\*4|T⁴|radio (estelar|de una estrella)|T☉/i, 'Stefan-Boltzmann: L = 4πR²σT⁴.', 'L crece como R² y como T⁴.'],
+  [/magnitud(?! de)|módulo de distancia|log10\((flujo|L)|-2\.5|2\.5 \*/i, 'Magnitudes: m = −2,5·log₁₀ F; 5 mag = factor 100.', 'Más brillante → magnitud menor.'],
+  [/4 \* np\.pi \* (d|\(d)|4πd|se duplica|flujo observado|flujo bolom|W\/m|L \/ d\*\*2/i, 'Inverso del cuadrado: F = L / (4πd²).', 'Doble distancia → un cuarto del flujo.'],
+  [/euler|caída|9\.8|aceleraci/i, 'Euler explícito: v ← v + a·dt, t ← t + dt.', 'N pasos de dt cubren N·dt segundos.'],
+  [/energ[ií]a|½mv|0\.5 \* m|joule/i, 'Energía cinética: Ek = ½·m·v², en joules.', 'v debe estar en m/s antes de elevar.'],
+  [/km\/h|m\/s|parsec|\bpc\b|L_SOL|L☉|unidades (f[ií]sicas|solares)|nanómetro|kelvin|\bK\]/i, 'Análisis dimensional: convierto todo a SI.', 'Las unidades del resultado deben cerrar.'],
+  [/señal a ruido|snr|poisson/i, 'Ruido de Poisson: σ = √N, S/R = F / √(F + n·fondo).', 'Más fotones → mejor S/R, como √N.'],
+  [/fwhm|gaussian|σ|3σ|sigma\b/i, 'Gaussiana: FWHM = 2√(2 ln 2)·σ ≈ 2,355σ.', 'Bajo F̄ − 3σ cae ≈ 0,13 % de los puntos.'],
+  [/moffat|apertura|fondo|centroide|psf|fotometr|anillo|píxel/i, 'Fotometría de apertura: flujo = Σ(imagen − fondo) dentro del radio.', 'El fondo se resta píxel a píxel.'],
+  [/luminosidad|temperatura|estrella/i, 'Reviso las magnitudes físicas en juego y sus rangos razonables.', 'El orden de magnitud tiene que tener sentido.'],
+];
+const leyDe = q => {
+  const txt = [q.q, q.c || '', q.ex || ''].join(' ');
+  const l = LEYES.find(([re]) => re.test(txt));
+  if (l) return l;
+  return q.t === 'fot' ? LEYES[9] : LEYES[LEYES.length - 1];
+};
+// ¿La pregunta tiene física? Imágenes y fotometría siempre; en el resto, si el enunciado pregunta por física
+// (no basta con que el código use una fórmula: «¿qué imprime?» sigue siendo una pregunta de Python).
+const FIS_ENUNCIADO = /\bley\b|magnitud(?! de)|(igual )?luminosidad(,| de una| aumenta| en unidades)|flujo (observado|bolom)|wien|stefan|λ|L☉|T☉|módulo de distancia|joule|energ[ií]a|km\/h|m\/s|W\/m|caída|euler|radio (estelar|de una estrella)|se duplica|se multiplica|σ|señal a ruido/i;
+const esFisica = q => q.t === 'fot' || FIS_ENUNCIADO.test(q.q);
 
 const VsIA = {
   tok: 0,
@@ -2744,7 +2771,8 @@ const VsIA = {
       let mal = blanks.map(() => Math.random() < .6); if (!mal.some(Boolean)) mal[Math.floor(Math.random() * blanks.length)] = true;
       return blanks.map((b, i) => mal[i] ? malo(b) : b[0]).join(' · ');
     };
-    const resolver = a => { const ok = Math.random() < prob(a); return { ok, ans: ok ? correcta() : erronea() }; };
+    const fisica = esFisica(q), ley = fisica ? leyDe(q) : null;
+    const resolver = a => { const ok = (fisica && a.infalibleEnFisica) || Math.random() < prob(a); return { ok, ans: ok ? correcta() : erronea() }; };
     const codeLines = q.c ? q.c.replace(/⟦[^⟧]*⟧/g, '___').split('\n').filter(l => l.trim()) : [];
     const area = TOPICS[q.t];
     let p;
@@ -2752,17 +2780,21 @@ const VsIA = {
       const votes = r.agentes.map(a => ({ n: a.n, ...resolver(a), t: tiempo() }));
       const cuenta = {}; votes.forEach(v => cuenta[v.ans] = (cuenta[v.ans] || 0) + 1);
       const [top, nTop] = Object.entries(cuenta).sort((x, y) => y[1] - x[1])[0];
-      const elegido = nTop >= 2 ? votes.find(v => v.ans === top) : votes[2];
+      const fis = votes[r.agentes.findIndex(a => a.infalibleEnFisica)];
+      const elegido = fisica ? fis : nTop >= 2 ? votes.find(v => v.ans === top) : votes[2];
       const t = Math.max(...votes.map(v => v.t)) + 1.2;
-      p = { ok: elegido.ok, ans: elegido.ans, t, votes,
-        consenso: nTop === 3 ? 'Los 3 agentes coinciden' : nTop === 2 ? '2 de 3 agentes coinciden' : 'Sin mayoría: decide el Verificador',
-        conf: Math.round(nTop === 3 ? rnd(94, 99) : nTop === 2 ? rnd(70, 86) : rnd(40, 55)) };
+      const acuerdo = votes.filter(v => v.ans === elegido.ans).length;
+      p = { ok: elegido.ok, ans: elegido.ans, t, votes, fisica,
+        consenso: fisica ? (acuerdo === 3 ? 'Pregunta de física: los 3 agentes coinciden' : `Pregunta de física: manda el agente de Física (${acuerdo} de 3 coinciden)`)
+          : nTop === 3 ? 'Los 3 agentes coinciden' : nTop === 2 ? '2 de 3 agentes coinciden' : 'Sin mayoría: decide el Verificador',
+        conf: Math.round(fisica ? rnd(97, 99.4) : nTop === 3 ? rnd(94, 99) : nTop === 2 ? rnd(70, 86) : rnd(40, 55)) };
       const guion = [
         [traza ? 'Ejecuto el código mentalmente.' : codeLines.length ? 'Reviso la sintaxis de cada línea.' : 'Busco qué concepto de programación se evalúa.', blanks ? `Propongo ${blanks.length === 1 ? 'una palabra' : blanks.length + ' palabras'} que compilen.` : 'Descarto las opciones imposibles.'],
-        [['np', 'fot', 'plt'].includes(q.t) ? 'Pienso en la forma de los arreglos.' : 'Reviso unidades y órdenes de magnitud.', `Contrasto con lo visto en ${area}.`],
-        ['Espero las propuestas de los otros dos.', 'Busco un contraejemplo para cada una.'],
+        fisica ? ['Hay física en la pregunta: tomo el mando.', ley[1], ley[2], 'Compruebo unidades y orden de magnitud.']
+          : [['np', 'fot', 'plt'].includes(q.t) ? 'Pienso en la forma de los arreglos.' : 'Reviso unidades y órdenes de magnitud.', `Contrasto con lo visto en ${area}.`],
+        fisica ? ['Espero las propuestas de los otros dos.', 'Contrasto cada una con el agente de Física.'] : ['Espero las propuestas de los otros dos.', 'Busco un contraejemplo para cada una.'],
       ];
-      p.log = votes.flatMap((v, a) => [...guion[a].map((s, k) => ({ a, s, at: v.t * (k + 1) / (guion[a].length + 1) })), { a, s: 'Voto listo.', at: v.t }]);
+      p.log = votes.flatMap((v, a) => [...guion[a].map((s, k) => ({ a, s, at: v.t * (k + 1) / (guion[a].length + 1) })), { a, s: fisica && a === 1 ? 'Voto listo: la física cuadra.' : 'Voto listo.', at: v.t }]);
     } else {
       const res = resolver(r);
       p = { ...res, t: tiempo() };
@@ -2817,6 +2849,7 @@ const VsIA = {
       h('div', { class: 'who ai' }, h('small', {}, r.name), h('b', {}, String(this.ai.pts))));
     const left = h('div', { class: 'iaq' });
     const P = this.panel(r);
+    if (plan.fisica) { const k = r.agentes.findIndex(a => a.infalibleEnFisica); P.cols[k].box.classList.add('lead'); P.cols[k].box.firstChild.textContent = `Agente ${r.agentes[k].n} · tiene la última palabra`; }
     stage.append(board, h('div', { class: 'vsia' }, left, P.el));
 
     // pensamiento en vivo
